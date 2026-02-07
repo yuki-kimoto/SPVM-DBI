@@ -3,4 +3,59 @@
 
 class DBI::Db {
   version_from DBI;
+
+  use DBI::Db;
+  use Hash;
+  use Go::Context;
+  use DBI::St;
+  use Re;
+
+  # --- Fields ---
+  
+  # The Name attribute (e.g., the 'dbname' part of the DSN).
+  # Usually read-only after the connection is established.
+  has Name : public ro string;
+
+  # The Username used for the connection.
+  has Username : public ro string;
+
+  # The AutoCommit attribute. 
+  # If true, database changes are committed immediately.
+  has AutoCommit : public rw byte;
+  
+  # --- Instance Methods ---
+
+  # Create a new database handle (DBI::Db).
+  # This method must be overridden by the child class (e.g., DBD::SQLite::Dr).
+  method connect : DBI::Db ($ctx : Go::Context, $dsn : string, $user : string = undef, $password : string = undef, $attrs : object[] = undef) {
+    
+    die "'connect' method is not implemented.";
+  }
+  
+  protected method init : void ($attrs : object[] = undef, $dsn : string = undef) {
+    # DSN is mandatory for initialization.
+    unless ($dsn) {
+      die "The data source name $dsn must be defined.";
+    }
+
+    # Redefine $attrs as a Hash.
+    my $attrs = Fn->to_hash($attrs);
+    
+    # Parse Name and Username from DSN
+    # Extract everything after "dbi:driver:" as Name
+    if (my $m = Re->m($dsn, "^dbi:[^:]+:(.+)")) {
+      $self->{Name} = $m->cap(1);
+    }
+    
+    # Extract user from "dbi:driver:db;user=xxx" or similar patterns
+    if (my $m = Re->m($dsn, ["[;:]user=([^;:]+)", "i"])) {
+      $self->{Username} = $m->cap(1);
+    }
+    
+    # Map AutoCommit attribute from options
+    if ($attrs->exists("AutoCommit")) {
+      $self->{AutoCommit} = $attrs->get("AutoCommit")->(byte);
+    }
+  }
+  
 }
