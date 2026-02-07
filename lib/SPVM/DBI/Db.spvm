@@ -58,9 +58,9 @@ class DBI::Db {
 
   # Execute a statement immediately.
   # This can be overridden for optimization, but provides a default via prepare/execute.
-  method do : int ($ctx : Go::Context, $sql : string, $attrs : object[] = undef) {
+  method do : int ($ctx : Go::Context, $sql : string, $attrs : object[] = undef, $bind_values : object[] = undef) {
     my $sth = $self->prepare($ctx, $sql, $attrs);
-    my $rows = $sth->execute($ctx);
+    my $rows = $sth->execute($ctx, $bind_values);
     return $rows;
   }
   
