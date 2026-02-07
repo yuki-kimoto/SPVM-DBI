@@ -56,6 +56,17 @@ class DBI::Db {
     die DBI::Error::SQLState "IM001: 'prepare' method is not implemented.";
   }
 
+  # Initialize common statement handle attributes.
+  # This is intended to be called by driver's prepare method.
+  protected method prepare_common : void ($sth : DBI::St, $ctx : Go::Context, $sql : string, $attrs : object[] = undef) {
+    
+    # Set the parent database handle.
+    $sth->{Database} = (DBI::Db)$self;
+    
+    # Set the original SQL statement.
+    $sth->{Statement} = $sql;
+  }
+  
   # Execute a statement immediately.
   # This can be overridden for optimization, but provides a default via prepare/execute.
   method do : int ($ctx : Go::Context, $sql : string, $attrs : object[] = undef, $bind_values : object[] = undef) {
