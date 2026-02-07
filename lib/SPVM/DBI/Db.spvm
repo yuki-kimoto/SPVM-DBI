@@ -24,14 +24,6 @@ class DBI::Db {
   has AutoCommit : public rw byte;
   
   # --- Instance Methods ---
-
-  # Create a new database handle (DBI::Db).
-  # This method must be overridden by the child class (e.g., DBD::SQLite::Dr).
-  method connect : DBI::Db ($ctx : Go::Context, $dsn : string, $user : string = undef, $password : string = undef, $attrs : object[] = undef) {
-    
-    die "'connect' method is not implemented.";
-  }
-  
   protected method init : void ($attrs : object[] = undef, $dsn : string = undef) {
     # DSN is mandatory for initialization.
     unless ($dsn) {
