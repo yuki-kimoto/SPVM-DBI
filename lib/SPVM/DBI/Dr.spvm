@@ -8,6 +8,7 @@ class DBI::Dr {
   use Hash;
   use Go::Context;
   use DBI::St;
+  use Re;
 
   # --- Fields ---
   
@@ -28,26 +29,31 @@ class DBI::Dr {
   # This method must be overridden by the child class (e.g., DBD::SQLite::Dr).
   method connect : DBI::Db ($ctx : Go::Context, $dsn : string, $user : string = undef, $password : string = undef, $options : object[] = undef) {
     
-    $self->init($options, $dsn);
-    
     die "'connect' method is not implemented.";
   }
   
-  protected method init : void ($options : object[] = undef, $dns : string = undef) {
-    # Redefine $options as a Hash. Fn->to_hash converts the array.
+  protected method init : void ($options : object[] = undef, $dsn : string = undef) {
+    # DSN is mandatory for initialization.
+    unless ($dsn) {
+      die "The data source name $dsn must be defined.";
+    }
+
+    # Redefine $options as a Hash.
     my $options = Fn->to_hash($options);
     
-    # Map attributes to fields using the postfix cast syntax
-    if ($options->exists("Name")) {
-      $self->{Name} = $options->get("Name")->(string);
+    # Parse Name and Username from DSN
+    # Extract everything after "dbi:driver:" as Name
+    if (my $m = Re->m($dsn, "^dbi:[^:]+:(.+)")) {
+      $self->{Name} = $m->cap(1);
     }
     
-    if ($options->exists("Username")) {
-      $self->{Username} = $options->get("Username")->(string);
+    # Extract user from "dbi:driver:db;user=xxx" or similar patterns
+    if (my $m = Re->m($dsn, ["[;:]user=([^;:]+)", "i"])) {
+      $self->{Username} = $m->cap(1);
     }
     
+    # Map AutoCommit attribute from options
     if ($options->exists("AutoCommit")) {
-      # Get the value as an object and cast it to byte
       $self->{AutoCommit} = $options->get("AutoCommit")->(byte);
     }
   }
