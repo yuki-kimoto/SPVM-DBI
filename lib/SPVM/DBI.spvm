@@ -9,11 +9,6 @@ class DBI {
   use Hash;
   use Go::Context;
 
-  # --- Global Variables (Matching Perl's 'our' variables) ---
-  
-  # This corresponds to $DBI::rows
-  our $rows : public rw int;
-  
   # This is for internal driver management.
   our $driver_registry : private Hash;
   
