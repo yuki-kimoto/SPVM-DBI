@@ -7,6 +7,12 @@ class DBI::St {
   use DBI::Error::SQLState;
   
   # --- Fields ---
+  # The parent database handle ($dbh) of the statement handle. (Read-only)
+  has Database : public ro DBI::Db;
+
+  # The statement string passed to the "prepare" method. (Read-only)
+  has Statement : public ro string;
+
   method NUM_OF_FIELDS : int () {
     die DBI::Error::SQLState "IM001: 'NUM_OF_FIELDS' attribute is not implemented.";
   }
