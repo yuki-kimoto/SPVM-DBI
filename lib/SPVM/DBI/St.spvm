@@ -3,4 +3,16 @@
 
 class DBI::St {
   version_from DBI;
+  
+  use DBI::Error::SQLState;
+  
+  # Execute the prepared statement.
+  # This method must be overridden by the driver class.
+  method execute : int ($ctx : Go::Context, $params : object[] = undef) {
+    
+    # Throws an exception if the subclass does not implement this method.
+    # SQLSTATE 'IM001' indicates the driver does not support this function.
+    die DBI::Error::SQLState "IM001: 'execute' method is not implemented..";
+  }
+  
 }

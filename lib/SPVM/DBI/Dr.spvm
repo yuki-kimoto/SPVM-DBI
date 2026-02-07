@@ -7,27 +7,47 @@ class DBI::Dr {
   use DBI::Db;
   use Hash;
   use Go::Context;
+  use DBI::St;
 
+  # --- Fields ---
+  
+  # The Name attribute (e.g., the 'dbname' part of the DSN).
+  # Usually read-only after the connection is established.
+  has Name : public ro string;
+
+  # The Username used for the connection.
+  has Username : public ro string;
+
+  # The AutoCommit attribute. 
+  # If true, database changes are committed immediately.
+  has AutoCommit : public rw byte;
+  
   # --- Instance Methods ---
 
   # Create a new database handle (DBI::Db).
   # This method must be overridden by the child class (e.g., DBD::SQLite::Dr).
-  public method connect : DBI::Db ($ctx : Go::Context, $dsn : string, $user : string = undef, $password : string = undef, $options : object[] = undef) {
-    die "The \"connect\" method is not implemented in this driver.";
+  method connect : DBI::Db ($ctx : Go::Context, $dsn : string, $user : string = undef, $password : string = undef, $options : object[] = undef) {
+    $self->init($options);
+    
+    die "'connect' method is not implemented.";
+  }
+  
+  protected method init : void ($options : object[] = undef) {
+    
+  }
+  
+  # Prepare a statement for execution.
+  # This method must be overridden by the driver.
+  method prepare : DBI::St ($sql : string, $options : object[] = undef) {
+    die DBI::Error::SQLState "IM001: 'prepare' method is not implemented.";
+  }
+  
+  # Execute a statement immediately.
+  # This can be overridden for optimization, but provides a default via prepare/execute.
+  method do : int ($ctx : Go::Context, $sql : string, $options : object[] = undef) {
+    my $sth = $self->prepare($sql, $options);
+    my $rows = $sth->execute($ctx);
+    return $rows;
   }
 
-  # Return a list of available data sources for this driver.
-  public method data_sources : string[] ($ctx : Go::Context, $options : Hash = undef) {
-    die "The \"data_sources\" method is not implemented in this driver.";
-  }
-
-  # Return the driver-specific attributes.
-  public method get_attributes : Hash ($ctx : Go::Context) {
-    die "The \"get_attributes\" method is not implemented in this driver.";
-  }
-
-  # Disconnect all active database handles managed by this driver.
-  public method disconnect_all : void ($ctx : Go::Context) {
-    die "The \"disconnect_all\" method is not implemented in this driver.";
-  }
 }
