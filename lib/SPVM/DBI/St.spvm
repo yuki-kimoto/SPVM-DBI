@@ -6,13 +6,38 @@ class DBI::St {
   
   use DBI::Error::SQLState;
   
+  # --- Fields ---
+  method NUM_OF_FIELDS : int () {
+    die DBI::Error::SQLState "IM001: 'NUM_OF_FIELDS' attribute is not implemented.";
+  }
+
+  method NAME : string[] () {
+    die DBI::Error::SQLState "IM001: 'NAME' attribute is not implemented.";
+  }
+
+  method NULLABLE : int[] () {
+    die DBI::Error::SQLState "IM001: 'NULLABLE' attribute is not implemented.";
+  }
+
+  method TYPE : int[] () {
+    die DBI::Error::SQLState "IM001: 'TYPE' attribute is not implemented.";
+  }
+  
+  method PRECISION : int[] () {
+    die DBI::Error::SQLState "IM001: 'PRECISION' attribute is not implemented.";
+  }
+  
+  method SCALE : int[] () {
+    die DBI::Error::SQLState "IM001: 'SCALE' attribute is not implemented.";
+  }
+
+  # --- Instance Methods ---
+
   # Execute the prepared statement.
   # This method must be overridden by the driver class.
   method execute : int ($ctx : Go::Context, $bind_values : object[] = undef) {
-    
     # Throws an exception if the subclass does not implement this method.
     # SQLSTATE 'IM001' indicates the driver does not support this function.
-    die DBI::Error::SQLState "IM001: 'execute' method is not implemented..";
+    die DBI::Error::SQLState "IM001: 'execute' method is not implemented.";
   }
-  
 }
