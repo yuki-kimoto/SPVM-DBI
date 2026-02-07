@@ -12,22 +12,22 @@ class DBI::Dr {
 
   # Create a new database handle (DBI::Db).
   # This method must be overridden by the child class (e.g., DBD::SQLite::Dr).
-  public method connect : DBI::Db ($context : Go::Context, $dsn : string, $user : string = undef, $password : string = undef, $attr : Hash = undef) {
+  public method connect : DBI::Db ($ctx : Go::Context, $dsn : string, $user : string = undef, $password : string = undef, $options : object[] = undef) {
     die "The \"connect\" method is not implemented in this driver.";
   }
 
   # Return a list of available data sources for this driver.
-  public method data_sources : string[] ($context : Go::Context, $attr : Hash = undef) {
+  public method data_sources : string[] ($ctx : Go::Context, $options : Hash = undef) {
     die "The \"data_sources\" method is not implemented in this driver.";
   }
 
   # Return the driver-specific attributes.
-  public method get_attributes : Hash ($context : Go::Context) {
+  public method get_attributes : Hash ($ctx : Go::Context) {
     die "The \"get_attributes\" method is not implemented in this driver.";
   }
 
   # Disconnect all active database handles managed by this driver.
-  public method disconnect_all : void ($context : Go::Context) {
+  public method disconnect_all : void ($ctx : Go::Context) {
     die "The \"disconnect_all\" method is not implemented in this driver.";
   }
 }
