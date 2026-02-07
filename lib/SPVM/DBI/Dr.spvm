@@ -28,12 +28,12 @@ class DBI::Dr {
   # This method must be overridden by the child class (e.g., DBD::SQLite::Dr).
   method connect : DBI::Db ($ctx : Go::Context, $dsn : string, $user : string = undef, $password : string = undef, $options : object[] = undef) {
     
-    $self->init($options);
+    $self->init($options, $dsn);
     
     die "'connect' method is not implemented.";
   }
   
-  protected method init : void ($options : object[] = undef) {
+  protected method init : void ($options : object[] = undef, $dns : string = undef) {
     # Redefine $options as a Hash. Fn->to_hash converts the array.
     my $options = Fn->to_hash($options);
     
