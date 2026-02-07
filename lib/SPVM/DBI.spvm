@@ -13,7 +13,7 @@ class DBI {
   
   # The primary gateway to establish a connection.
   # Corresponds to DBI->connect(...)
-  static method connect : DBI::Db ($ctx : Go::Context, $dsn : string, $user : string = undef, $password : string = undef, $options : object[] = undef) {
+  static method connect : DBI::Db ($ctx : Go::Context, $dsn : string, $user : string = undef, $password : string = undef, $attrs : object[] = undef) {
     
     unless ($dsn) {
       die "DSN must be defined.";
@@ -33,7 +33,7 @@ class DBI {
     my $dr = (DBI::Dr)Native::MethodCall->call_class_method($driver_class_name, "new");
     
     # 3. Request the driver to create a database handle (db)
-    my $dbh = $dr->connect($ctx, $dsn, $user, $password, $options);
+    my $dbh = $dr->connect($ctx, $dsn, $user, $password, $attrs);
     
     return $dbh;
   }

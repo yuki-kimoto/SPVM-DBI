@@ -27,19 +27,19 @@ class DBI::Dr {
 
   # Create a new database handle (DBI::Db).
   # This method must be overridden by the child class (e.g., DBD::SQLite::Dr).
-  method connect : DBI::Db ($ctx : Go::Context, $dsn : string, $user : string = undef, $password : string = undef, $options : object[] = undef) {
+  method connect : DBI::Db ($ctx : Go::Context, $dsn : string, $user : string = undef, $password : string = undef, $attrs : object[] = undef) {
     
     die "'connect' method is not implemented.";
   }
   
-  protected method init : void ($options : object[] = undef, $dsn : string = undef) {
+  protected method init : void ($attrs : object[] = undef, $dsn : string = undef) {
     # DSN is mandatory for initialization.
     unless ($dsn) {
       die "The data source name $dsn must be defined.";
     }
 
-    # Redefine $options as a Hash.
-    my $options = Fn->to_hash($options);
+    # Redefine $attrs as a Hash.
+    my $attrs = Fn->to_hash($attrs);
     
     # Parse Name and Username from DSN
     # Extract everything after "dbi:driver:" as Name
@@ -53,21 +53,21 @@ class DBI::Dr {
     }
     
     # Map AutoCommit attribute from options
-    if ($options->exists("AutoCommit")) {
-      $self->{AutoCommit} = $options->get("AutoCommit")->(byte);
+    if ($attrs->exists("AutoCommit")) {
+      $self->{AutoCommit} = $attrs->get("AutoCommit")->(byte);
     }
   }
   
   # Prepare a statement for execution.
   # This method must be overridden by the driver.
-  method prepare : DBI::St ($sql : string, $options : object[] = undef) {
+  method prepare : DBI::St ($sql : string, $attrs : object[] = undef) {
     die DBI::Error::SQLState "IM001: 'prepare' method is not implemented.";
   }
   
   # Execute a statement immediately.
   # This can be overridden for optimization, but provides a default via prepare/execute.
-  method do : int ($ctx : Go::Context, $sql : string, $options : object[] = undef) {
-    my $sth = $self->prepare($sql, $options);
+  method do : int ($ctx : Go::Context, $sql : string, $attrs : object[] = undef) {
+    my $sth = $self->prepare($sql, $attrs);
     my $rows = $sth->execute($ctx);
     return $rows;
   }
