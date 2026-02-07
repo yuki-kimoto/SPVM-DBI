@@ -37,8 +37,8 @@ WriteMakefile(
     resources => {
       repository => {
         type => 'git',
-        url  => '',
-        web  => '',
+        url  => 'https://github.com/yuki-kimoto/SPVM-DBI.git',
+        web  => 'https://github.com/yuki-kimoto/SPVM-DBI',
       },
     },
     no_index => {
