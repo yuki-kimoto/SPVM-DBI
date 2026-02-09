@@ -216,4 +216,10 @@ class DBI::Db {
     return $tables_list->to_array;
   }
   
+  # Version with type hint is not yet supported in this interface.
+  method quote : string ($str : string, $type : int) {
+    die "quote with a type hint is not yet implemented. Use the single-argument version.";
+  }
+  
+  
 }
