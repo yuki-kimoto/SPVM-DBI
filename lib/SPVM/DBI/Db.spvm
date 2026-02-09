@@ -68,5 +68,18 @@ class DBI::Db {
     die DBI::Error::SQLState "IM001: 'rollback' method is not implemented.";
   }
   
+  # Disconnect from the database.
+  # This method must be overridden by the driver to release database-level resources.
+  method disconnect : void () {
+    # SQLSTATE 'IM001' indicates the driver does not support this function.
+    die DBI::Error::SQLState "IM001: 'disconnect' method is not implemented.";
+  }
 
+  # Destructor to ensure the connection is closed.
+  method DESTROY : void () {
+    # We call disconnect to safely close the connection.
+    # In some drivers, this might involve sending a QUIT packet with a default timeout.
+    $self->disconnect;
+  }
+  
 }
