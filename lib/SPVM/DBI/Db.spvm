@@ -165,4 +165,15 @@ class DBI::Db {
     die DBI::Error::SQLState "IM001: 'ping' method is not implemented.";
   }
   
+  # Get information about the database and driver capabilities.
+  # $ctx: The context for managing timeouts and cancellations.
+  # $info_type: An integer constant representing the type of information.
+  # Returns an object containing the requested information, or undef if unavailable.
+  method get_info : object ($ctx : Go::Context, $info_type : int) {
+    # Default implementation returns undef.
+    # Drivers should override this and use $ctx for any potential DB communication.
+    return undef;
+  }
+  
+  
 }
