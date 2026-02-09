@@ -195,4 +195,25 @@ class DBI::Db {
     die DBI::Error::SQLState "IM001: 'column_info' method is not implemented.";
   }
   
+  # Get a list of table names.
+  # Returns an array of formatted table names.
+  # $ctx: Context for timeout and cancellation.
+  method tables : string[] ($ctx : Go::Context, $catalog : string, $schema : string, $table : string, $type : string, $attr : object[] = undef) {
+    my $sth = $self->table_info($ctx, $catalog, $schema, $table, $type, $attr);
+    
+    my $tables_list = StringList->new;
+    
+    # In table_info, the table name is usually in the 3rd column (index 2)
+    # or accessible via the key 'TABLE_NAME'
+    while (my $row = $sth->fetchrow_array($ctx)) {
+      # For simplicity, we assume the driver returns the full table name
+      my $table_name = (string)$row->[2]; 
+      $tables_list->push($table_name);
+    }
+    
+    $sth->finish;
+    
+    return $tables_list->to_array;
+  }
+  
 }
