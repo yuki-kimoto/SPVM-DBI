@@ -49,7 +49,7 @@ class DBI::St {
   
   # finish: Indicates that no more data will be fetched from this statement handle.
   # This must be overridden by the driver to release statement-level resources.
-  method finish : void ($ctx : Go::Context) {
+  method finish : void () {
     # SQLSTATE 'IM001' indicates the driver does not support this function.
     die DBI::Error::SQLState "IM001: 'finish' method is not implemented.";
   }
@@ -83,4 +83,10 @@ class DBI::St {
     die DBI::Error::SQLState "IM001: 'rows' method is not implemented.";
   }
   
+  # Destructor to ensure resources are released.
+  method DESTROY : void () {
+    # We call a native method to safely finalize the statement.
+    $self->finish;
+  }
+
 }
