@@ -89,4 +89,23 @@ class DBI::Db {
     die DBI::Error::SQLState "IM001: 'last_insert_id' method is not implemented.";
   }
   
+  # Fetch a single row as an array of objects.
+  # This is a convenient wrapper for prepare, execute, and fetch.
+  method selectrow_array : object[] ($ctx : Go::Context, $sql : string, $attrs : object[] = undef, $bind_values : object[] = undef) {
+    
+    # 1. Prepare
+    my $sth = $self->prepare($ctx, $sql, $attrs);
+    
+    # 2. Execute
+    $sth->execute($ctx, $bind_values);
+    
+    # 3. Fetch the first row
+    my $row = $sth->fetchrow_array($ctx);
+    
+    # 4. Finish (Ensure resources are released immediately)
+    $sth->finish;
+    
+    return $row;
+  }
+  
 }
