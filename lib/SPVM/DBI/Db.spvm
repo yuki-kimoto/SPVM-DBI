@@ -52,4 +52,21 @@ class DBI::Db {
     return $rows;
   }
   
+  # Commit the current transaction.
+  # This method must be overridden by the driver class.
+  method commit : void ($ctx : Go::Context) {
+    # Throws an exception if the subclass does not implement this method.
+    # SQLSTATE 'IM001' indicates the driver does not support this function.
+    die DBI::Error::SQLState "IM001: 'commit' method is not implemented.";
+  }
+
+  # Roll back the current transaction.
+  # This method must be overridden by the driver class.
+  method rollback : void ($ctx : Go::Context) {
+    # Throws an exception if the subclass does not implement this method.
+    # SQLSTATE 'IM001' indicates the driver does not support this function.
+    die DBI::Error::SQLState "IM001: 'rollback' method is not implemented.";
+  }
+  
+
 }
