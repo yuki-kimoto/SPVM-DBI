@@ -221,5 +221,8 @@ class DBI::Db {
     die "quote with a type hint is not yet implemented. Use the single-argument version.";
   }
   
-  
+  # Multi-argument version for schema.table etc.
+  method quote_identifier : string ($catalog : string, $schema : string, $table : string, $attr : object[] = undef) {
+    die "Multi-argument quote_identifier is not yet implemented.";
+  }
 }
