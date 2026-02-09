@@ -3,7 +3,9 @@
 
 class DBI::Db {
   version_from DBI;
-
+  
+  allow DBI::Dr;
+  
   use DBI::Db;
   use Hash;
   use Go::Context;
@@ -24,31 +26,6 @@ class DBI::Db {
   has AutoCommit : public rw byte;
   
   # --- Instance Methods ---
-  protected method init : void ($attrs : object[] = undef, $dsn : string = undef) {
-    # DSN is mandatory for initialization.
-    unless ($dsn) {
-      die "The data source name $dsn must be defined.";
-    }
-
-    # Redefine $attrs as a Hash.
-    my $attrs = Fn->to_hash($attrs);
-    
-    # Parse Name and Username from DSN
-    # Extract everything after "dbi:driver:" as Name
-    if (my $m = Re->m($dsn, "^dbi:[^:]+:(.+)")) {
-      $self->{Name} = $m->cap(1);
-    }
-    
-    # Extract user from "dbi:driver:db;user=xxx" or similar patterns
-    if (my $m = Re->m($dsn, ["[;:]user=([^;:]+)", "i"])) {
-      $self->{Username} = $m->cap(1);
-    }
-    
-    # Map AutoCommit attribute from options
-    if ($attrs->exists("AutoCommit")) {
-      $self->{AutoCommit} = $attrs->get("AutoCommit")->(byte);
-    }
-  }
   
   # Prepare a statement for execution.
   # This method must be overridden by the driver.

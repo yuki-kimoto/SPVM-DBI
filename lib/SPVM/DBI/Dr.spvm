@@ -3,4 +3,38 @@
 
 class DBI::Dr {
   version_from DBI;
+  
+  use DBI::Db;
+  
+  method connect : DBI::Db ($ctx : Go::Context, $dsn : string, $user : string = undef, $password : string = undef, $attrs : object[] = undef) {
+    die DBI::Error::SQLState "IM001: 'connect' method is not implemented.";
+  }
+  
+  protected method connect_common : void ($dbh : DBI::Db, $ctx : Go::Context, $dsn : string, $user : string = undef, $password : string = undef, $attrs : object[] = undef) {
+    
+    # DSN is mandatory for initialization.
+    unless ($dsn) {
+      die "The data source name $dsn must be defined.";
+    }
+
+    # Redefine $attrs as a Hash.
+    my $attrs = Fn->to_hash($attrs);
+    
+    # Parse Name and Username from DSN
+    # Extract everything after "dbi:driver:" as Name
+    if (my $m = Re->m($dsn, "^dbi:[^:]+:(.+)")) {
+      $dbh->{Name} = $m->cap(1);
+    }
+    
+    # Extract user from "dbi:driver:db;user=xxx" or similar patterns
+    if (my $m = Re->m($dsn, ["[;:]user=([^;:]+)", "i"])) {
+      $dbh->{Username} = $m->cap(1);
+    }
+    
+    # Map AutoCommit attribute from options
+    if ($attrs->exists("AutoCommit")) {
+      $dbh->{AutoCommit} = $attrs->get("AutoCommit")->(byte);
+    }
+  }
+
 }

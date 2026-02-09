@@ -29,9 +29,10 @@ class DBI {
     
     # 2. Retrieve or load the driver manager (dr)
     my $driver_class_name = "DBD::" . $driver_name;
+    my $driver = (DBI::Dr)Native::MethodCall->call_class_method($driver_class_name, "new");
     
     # 3. Request the driver to create a database handle (db)
-    my $dbh = (DBI::Db)Native::MethodCall->call_class_method($driver_class_name, "connect", [(object)$ctx, $dsn, $user, $password, $attrs]);
+    my $dbh = $driver->connect($ctx, $dsn, $user, $password, $attrs);
     
     return $dbh;
   }
