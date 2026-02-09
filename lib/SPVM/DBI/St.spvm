@@ -70,7 +70,7 @@ class DBI::St {
     
     my $hash = Hash->new;
     for (my $i = 0; $i < @$names; $i++) {
-      $hash->set($names->[$i], $row->[$i]);
+      $hash->{$names->[$i]} = $row->[$i];
     }
     return $hash;
   }
