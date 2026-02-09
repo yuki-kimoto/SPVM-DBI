@@ -158,4 +158,11 @@ class DBI::Db {
     return (Hash[])$rows_list->to_array;
   }
   
+  # Check if the database connection is still alive.
+  # This usually involves a small round-trip to the server.
+  method ping : int ($ctx : Go::Context) {
+    # SQLSTATE 'IM001' indicates the driver does not support this function.
+    die DBI::Error::SQLState "IM001: 'ping' method is not implemented.";
+  }
+  
 }
