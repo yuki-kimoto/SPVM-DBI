@@ -128,4 +128,34 @@ class DBI::Db {
     return $row_hash;
   }
   
+  # Fetch all rows as an array of object arrays.
+  method selectall_array : object[] ($ctx : Go::Context, $sql : string, $attrs : object[] = undef, $bind_values : object[] = undef) {
+    my $sth = $self->prepare($ctx, $sql, $attrs);
+    $sth->execute($ctx, $bind_values);
+    
+    my $rows_list = List->new;
+    while (my $row = $sth->fetchrow_array($ctx)) {
+      $rows_list->push($row);
+    }
+    
+    $sth->finish;
+    
+    return (object[])$rows_list->to_array;
+  }
+  
+  # Fetch all rows as an array of Hash objects.
+  method selectall_hash : Hash[] ($ctx : Go::Context, $sql : string, $attrs : object[] = undef, $bind_values : object[] = undef) {
+    my $sth = $self->prepare($ctx, $sql, $attrs);
+    $sth->execute($ctx, $bind_values);
+    
+    my $rows_list = List->new;
+    while (my $row_hash = $sth->fetchrow_hash($ctx)) {
+      $rows_list->push($row_hash);
+    }
+    
+    $sth->finish;
+    
+    return (Hash[])$rows_list->to_array;
+  }
+  
 }
