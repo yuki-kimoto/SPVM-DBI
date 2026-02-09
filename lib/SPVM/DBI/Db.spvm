@@ -175,5 +175,16 @@ class DBI::Db {
     return undef;
   }
   
+  # Get a list of table names and metadata.
+  # Returns a DBI::St object that can be used to fetch the table information.
+  # $ctx: Context for timeout and cancellation.
+  # $catalog, $schema, $table: Search patterns for filtering.
+  # $type: Table types (e.g., "TABLE", "VIEW").
+  # $attr: Additional attributes for the query.
+  method table_info : DBI::St ($ctx : Go::Context, $catalog : string, $schema : string, $table : string, $type : string, $attr : object[] = undef) {
+    # SQLSTATE 'IM001' indicates the driver does not support this function.
+    die DBI::Error::SQLState "IM001: 'table_info' method is not implemented.";
+  }
+  
   
 }
