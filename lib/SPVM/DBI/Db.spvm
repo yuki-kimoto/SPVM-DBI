@@ -108,4 +108,24 @@ class DBI::Db {
     return $row;
   }
   
+  # Fetch a single row as a Hash object.
+  # The keys are the column names.
+  method selectrow_hash : Hash ($ctx : Go::Context, $sql : string, $attrs : object[] = undef, $bind_values : object[] = undef) {
+    
+    # 1. Prepare
+    my $sth = $self->prepare($ctx, $sql, $attrs);
+    
+    # 2. Execute
+    $sth->execute($ctx, $bind_values);
+    
+    # 3. Fetch the first row as a Hash
+    # Note: sth->fetch_hash is assumed to be implemented in DBI::St
+    my $row_hash = $sth->fetchrow_hash($ctx);
+    
+    # 4. Finish to release resources
+    $sth->finish;
+    
+    return $row_hash;
+  }
+  
 }
