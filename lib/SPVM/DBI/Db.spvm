@@ -82,4 +82,11 @@ class DBI::Db {
     $self->disconnect;
   }
   
+  # Get the last inserted ID.
+  # This may involve database communication, so it requires a context.
+  method last_insert_id : object ($ctx : Go::Context, $catalog : string = undef, $schema : string = undef, $table : string = undef, $field : string = undef, $attr : Hash = undef) {
+    # SQLSTATE 'IM001' indicates the driver does not support this function.
+    die DBI::Error::SQLState "IM001: 'last_insert_id' method is not implemented.";
+  }
+  
 }
