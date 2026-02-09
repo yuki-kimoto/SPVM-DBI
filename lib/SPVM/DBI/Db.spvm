@@ -186,5 +186,13 @@ class DBI::Db {
     die DBI::Error::SQLState "IM001: 'table_info' method is not implemented.";
   }
   
+  # Get information about columns in a table.
+  # Returns a DBI::St object that can be used to fetch the column metadata.
+  # $ctx: Context for managing timeouts and cancellations.
+  # $catalog, $schema, $table, $column: Search patterns for filtering.
+  method column_info : DBI::St ($ctx : Go::Context, $catalog : string, $schema : string, $table : string, $column : string) {
+    # SQLSTATE 'IM001' indicates the driver does not support this function.
+    die DBI::Error::SQLState "IM001: 'column_info' method is not implemented.";
+  }
   
 }
