@@ -8,49 +8,48 @@ class DBI::St {
   
   # Fields
   has Database : public ro DBI::Db;
-
+  
   has Statement : public ro string;
-
+  
   # Instance Methods
-  method NUM_OF_FIELDS : int () {
+  method NUM_OF_FIELDS : int ($ctx : Go::Context) {
     die DBI::Error::SQLState "IM001: 'NUM_OF_FIELDS' attribute is not implemented.";
   }
-
-  method NAME : string[] () {
+  
+  method NAME : string[] ($ctx : Go::Context) {
     die DBI::Error::SQLState "IM001: 'NAME' attribute is not implemented.";
   }
-
-  method NULLABLE : int[] () {
+  
+  method NULLABLE : int[] ($ctx : Go::Context) {
     die DBI::Error::SQLState "IM001: 'NULLABLE' attribute is not implemented.";
   }
-
-  method TYPE : int[] () {
+  
+  method TYPE : int[] ($ctx : Go::Context) {
     die DBI::Error::SQLState "IM001: 'TYPE' attribute is not implemented.";
   }
   
-  method PRECISION : int[] () {
+  method PRECISION : int[] ($ctx : Go::Context) {
     die DBI::Error::SQLState "IM001: 'PRECISION' attribute is not implemented.";
   }
   
-  method SCALE : int[] () {
+  method SCALE : int[] ($ctx : Go::Context) {
     die DBI::Error::SQLState "IM001: 'SCALE' attribute is not implemented.";
   }
   
-  # Instance Methods
   method execute : int ($ctx : Go::Context, $bind_values : object[] = undef) {
     die DBI::Error::SQLState "IM001: 'execute' method is not implemented.";
-  }
-  
-  method finish : void () {
-    die DBI::Error::SQLState "IM001: 'finish' method is not implemented.";
   }
   
   method fetchrow_array : object[] ($ctx : Go::Context) {
     die DBI::Error::SQLState "IM001: 'fetchrow_array' method is not implemented.";
   }
   
-  method rows : int () {
+  method rows : int ($ctx : Go::Context) {
     die DBI::Error::SQLState "IM001: 'rows' method is not implemented.";
+  }
+  
+  method finish : void () {
+    die DBI::Error::SQLState "IM001: 'finish' method is not implemented.";
   }
   
   method DESTROY : void () {
