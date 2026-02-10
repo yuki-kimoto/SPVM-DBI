@@ -1,0 +1,3 @@
+# how to get SSL_ constants
+
+perl -MDBI::Const::GetInfoReturn -MDBI::Const::GetInfoType -MData::Dumper -e '$Data::Dumper::Sortkeys = 1; print Dumper({ GetInfoType => \%GetInfoType, GetInfoReturnTypes => \%GetInfoReturnTypes, GetInfoReturnValues => \%GetInfoReturnValues })' | grep -v '{' | grep 'SQL_' | perl -p -e "s/\s*'/static method /; s/' =>/ : int () { return /;s/,?$/; }/; s/ +/ /g;" | grep -v "return '" | sort | uniq > .tmp/Constant.spvm
