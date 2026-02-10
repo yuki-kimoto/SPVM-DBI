@@ -8,20 +8,17 @@ class DBI {
   use Go::Context;
   use Native::MethodCall;
   
-  # --- Class Variables ---
+  # Class Variables
   our $DRIVERS_H : cache Hash of DBI::Dr;
   
-  # --- Class Methods ---
-  
-  # The primary gateway to establish a connection.
-  # Corresponds to DBI->connect(...)
+  # Class Methods
   static method connect : DBI::Db ($ctx : Go::Context, $dsn : string, $user : string = undef, $password : string = undef, $attrs : object[] = undef) {
     
     unless ($dsn) {
       die "DSN must be defined.";
     }
     
-    # 1. Parse DSN to find which driver to use
+    # Parse DSN to find which driver to use
     my $driver_name = (string)undef;
     if (my $match = Re->m($dsn, "^dbi:([^:]+):")) {
       $driver_name = $match->cap1;
@@ -30,12 +27,10 @@ class DBI {
       die "Invalid DSN format: '$dsn'. It must follow the 'dbi:DriverName:...' pattern.";
     }
     
-    # 2. Retrieve or load the driver manager (dr)
-    # Initialize the driver cache if it doesn't exist.
+    # Retrieve or load the driver manager. Initialize the driver cache if it doesn't exist.
     unless ($DRIVERS_H) {
       $DRIVERS_H = Hash->new;
     }
-    
     my $driver = $DRIVERS_H->get($driver_name);
     
     # Load the driver class and create an instance if not cached.
@@ -45,7 +40,7 @@ class DBI {
       $DRIVERS_H->set($driver_name, $driver);
     }
       
-    # 3. Request the driver to create a database handle (db)
+    # Request the driver to create a database handle
     my $dbh = $driver->connect($ctx, $dsn, $user, $password, $attrs);
     
     return $dbh;
