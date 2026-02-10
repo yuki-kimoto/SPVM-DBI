@@ -17,7 +17,7 @@ class DBI::Db {
   
   has Username : public ro string;
   
-  has AutoCommit : public rw byte;
+  has AutoCommit : public ro byte;
   
   # Instance Methods
   method prepare : DBI::St ($ctx : Go::Context, $sql : string, $attrs : object[] = undef) {
