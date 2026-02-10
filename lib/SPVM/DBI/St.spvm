@@ -49,19 +49,6 @@ class DBI::St {
     die DBI::Error::SQLState "IM001: 'fetchrow_array' method is not implemented.";
   }
   
-  method fetchrow_hash : Hash ($ctx : Go::Context) {
-    my $names = $self->NAME;
-    my $row = $self->fetchrow_array($ctx);
-    
-    if ($row == undef) { return undef; }
-    
-    my $hash = Hash->new;
-    for (my $i = 0; $i < @$names; $i++) {
-      $hash->{$names->[$i]} = $row->[$i];
-    }
-    return $hash;
-  }
-  
   method rows : int () {
     die DBI::Error::SQLState "IM001: 'rows' method is not implemented.";
   }
