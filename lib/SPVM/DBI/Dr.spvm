@@ -7,7 +7,7 @@ class DBI::Dr {
   use DBI::Db;
   
   method connect : DBI::Db ($ctx : Go::Context, $dsn : string, $user : string = undef, $password : string = undef, $options : object[] = undef) {
-    die DBI::Error::SQLState "IM001: 'connect' method is not implemented.";
+    die DBI::Error::SQLState "IM001: this method is not implemented.";
   }
   
   protected method connect_common : void ($dbh : DBI::Db, $ctx : Go::Context, $dsn : string, $user : string = undef, $password : string = undef, $options : object[] = undef) {
