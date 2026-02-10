@@ -88,7 +88,7 @@ C<has SocketKeepAliveDurationNsec : rw long;>
 
 The duration for TCP keep-alive idle time, in nanoseconds. 
 
-This value is used to set the initial idle period before the socket starts sending keep-alive probes. If this is not explicitly set, a modern default (e.g., 15 seconds) is recommended to be applied via C<apply_modern_tcp_settings> in the underlying socket. Set to 0 to disable keep-alive.
+If this field is not explicitly set, it is recommended that the driver calls L<apply_modern_tcp_settings|SPVM::IO::Socket/"apply_modern_tcp_settings"> (or a similar method) to apply the modern default value. Set to 0 to explicitly disable keep-alive.
 
 =head2 TCPNoDelay
 
@@ -96,7 +96,7 @@ C<has TCPNoDelay : rw byte;>
 
 The TCP_NODELAY status. 
 
-A boolean value (1 or 0). If set to 1 (the modern default), Nagle's algorithm is disabled, which ensures that small database query packets are sent immediately without delay.
+A boolean value (1 or 0). If this field is not explicitly set, it is recommended that the driver calls L<apply_modern_tcp_settings|SPVM::IO::Socket/"apply_modern_tcp_settings"> (or a similar method) to apply the modern default (usually 1). If set to 1, Nagle's algorithm is disabled, which ensures that small database query packets are sent immediately without delay.
 
 =head1 Instance Methods
 
