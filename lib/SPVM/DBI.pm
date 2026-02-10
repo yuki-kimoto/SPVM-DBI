@@ -39,6 +39,20 @@ L<DBI|SPVM::DBI> class in L<SPVM> provides a database-independent interface for 
     # Process the data...
   }
 
+=head1 Modules
+
+=over 2
+
+=item * L<DBI::Dr|SPVM::DBI::Dr> - Driver Handle
+
+=item * L<DBI::Db|SPVM::DBI::Db> - Database Handle
+
+=item * L<DBI::St|SPVM::DBI::St> - Statement Handle
+
+=item * L<DBI::Error::SQLState|SPVM::DBI::Error::SQLState> - SQLSTATE Exceptions
+
+=back
+
 =head1 Class Variables
 
 =head2 $DRIVERS_H
