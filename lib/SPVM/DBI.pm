@@ -1,5 +1,7 @@
 package SPVM::DBI;
 
+our $VERSION = "0.001";
+
 1;
 
 =encoding utf8

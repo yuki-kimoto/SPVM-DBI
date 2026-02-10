@@ -3,6 +3,8 @@
 Changes
 lib/SPVM/DBI.pm
 lib/SPVM/DBI.spvm
+lib/SPVM/DBI/Constant.pm
+lib/SPVM/DBI/Constant.spvm
 lib/SPVM/DBI/Db.pm
 lib/SPVM/DBI/Db.spvm
 lib/SPVM/DBI/Dr.pm
