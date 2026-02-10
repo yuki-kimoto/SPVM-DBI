@@ -12,224 +12,118 @@ class DBI::Db {
   use DBI::St;
   use Re;
 
-  # --- Fields ---
-  
-  # The Name attribute (e.g., the 'dbname' part of the DSN).
-  # Usually read-only after the connection is established.
   has Name : public ro string;
-
-  # The Username used for the connection.
   has Username : public ro string;
-
-  # The AutoCommit attribute. 
-  # If true, database changes are committed immediately.
   has AutoCommit : public rw byte;
   
-  # --- Instance Methods ---
-  
-  # Prepare a statement for execution.
-  # This method must be overridden by the driver.
   method prepare : DBI::St ($ctx : Go::Context, $sql : string, $attrs : object[] = undef) {
     die DBI::Error::SQLState "IM001: 'prepare' method is not implemented.";
   }
 
-  # Initialize common statement handle attributes.
-  # This is intended to be called by driver's prepare method.
   protected method prepare_common : void ($sth : DBI::St, $ctx : Go::Context, $sql : string, $attrs : object[] = undef) {
-    
-    # Set the parent database handle.
     $sth->{Database} = (DBI::Db)$self;
-    
-    # Set the original SQL statement.
     $sth->{Statement} = $sql;
   }
   
-  # Execute a statement immediately.
-  # This can be overridden for optimization, but provides a default via prepare/execute.
   method do : int ($ctx : Go::Context, $sql : string, $attrs : object[] = undef, $bind_values : object[] = undef) {
     my $sth = $self->prepare($ctx, $sql, $attrs);
     my $rows = $sth->execute($ctx, $bind_values);
     return $rows;
   }
   
-  # Start a new transaction.
-  # This method must be overridden by the driver to send a "BEGIN" or "START TRANSACTION" command.
   method begin_work : void ($ctx : Go::Context) {
-    # Throws an exception if the subclass does not implement this method.
-    # SQLSTATE 'IM001' indicates the driver does not support this function.
     die DBI::Error::SQLState "IM001: 'begin_work' method is not implemented.";
   }
   
-  # Commit the current transaction.
-  # This method must be overridden by the driver class.
   method commit : void ($ctx : Go::Context) {
-    # Throws an exception if the subclass does not implement this method.
-    # SQLSTATE 'IM001' indicates the driver does not support this function.
     die DBI::Error::SQLState "IM001: 'commit' method is not implemented.";
   }
 
-  # Roll back the current transaction.
-  # This method must be overridden by the driver class.
   method rollback : void ($ctx : Go::Context) {
-    # Throws an exception if the subclass does not implement this method.
-    # SQLSTATE 'IM001' indicates the driver does not support this function.
     die DBI::Error::SQLState "IM001: 'rollback' method is not implemented.";
   }
   
-  # Disconnect from the database.
-  # This method must be overridden by the driver to release database-level resources.
   method disconnect : void () {
-    # SQLSTATE 'IM001' indicates the driver does not support this function.
     die DBI::Error::SQLState "IM001: 'disconnect' method is not implemented.";
   }
 
-  # Destructor to ensure the connection is closed.
   method DESTROY : void () {
-    # We call disconnect to safely close the connection.
-    # In some drivers, this might involve sending a QUIT packet with a default timeout.
     $self->disconnect;
   }
   
-  # Get the last inserted ID.
-  # This may involve database communication, so it requires a context.
   method last_insert_id : object ($ctx : Go::Context, $catalog : string = undef, $schema : string = undef, $table : string = undef, $field : string = undef, $attr : Hash = undef) {
-    # SQLSTATE 'IM001' indicates the driver does not support this function.
     die DBI::Error::SQLState "IM001: 'last_insert_id' method is not implemented.";
   }
   
-  # Fetch a single row as an array of objects.
-  # This is a convenient wrapper for prepare, execute, and fetch.
   method selectrow_array : object[] ($ctx : Go::Context, $sql : string, $attrs : object[] = undef, $bind_values : object[] = undef) {
-    
-    # 1. Prepare
     my $sth = $self->prepare($ctx, $sql, $attrs);
-    
-    # 2. Execute
     $sth->execute($ctx, $bind_values);
-    
-    # 3. Fetch the first row
     my $row = $sth->fetchrow_array($ctx);
-    
-    # 4. Finish (Ensure resources are released immediately)
     $sth->finish;
-    
     return $row;
   }
   
-  # Fetch a single row as a Hash object.
-  # The keys are the column names.
   method selectrow_hash : Hash ($ctx : Go::Context, $sql : string, $attrs : object[] = undef, $bind_values : object[] = undef) {
-    
-    # 1. Prepare
     my $sth = $self->prepare($ctx, $sql, $attrs);
-    
-    # 2. Execute
     $sth->execute($ctx, $bind_values);
-    
-    # 3. Fetch the first row as a Hash
-    # Note: sth->fetch_hash is assumed to be implemented in DBI::St
     my $row_hash = $sth->fetchrow_hash($ctx);
-    
-    # 4. Finish to release resources
     $sth->finish;
-    
     return $row_hash;
   }
   
-  # Fetch all rows as an array of object arrays.
   method selectall_array : object[] ($ctx : Go::Context, $sql : string, $attrs : object[] = undef, $bind_values : object[] = undef) {
     my $sth = $self->prepare($ctx, $sql, $attrs);
     $sth->execute($ctx, $bind_values);
-    
     my $rows_list = List->new;
     while (my $row = $sth->fetchrow_array($ctx)) {
       $rows_list->push($row);
     }
-    
     $sth->finish;
-    
     return (object[])$rows_list->to_array;
   }
   
-  # Fetch all rows as an array of Hash objects.
   method selectall_hash : Hash[] ($ctx : Go::Context, $sql : string, $attrs : object[] = undef, $bind_values : object[] = undef) {
     my $sth = $self->prepare($ctx, $sql, $attrs);
     $sth->execute($ctx, $bind_values);
-    
     my $rows_list = List->new;
     while (my $row_hash = $sth->fetchrow_hash($ctx)) {
       $rows_list->push($row_hash);
     }
-    
     $sth->finish;
-    
     return (Hash[])$rows_list->to_array;
   }
   
-  # Check if the database connection is still alive.
-  # This usually involves a small round-trip to the server.
   method ping : int ($ctx : Go::Context) {
-    # SQLSTATE 'IM001' indicates the driver does not support this function.
     die DBI::Error::SQLState "IM001: 'ping' method is not implemented.";
   }
   
-  # Get information about the database and driver capabilities.
-  # $ctx: The context for managing timeouts and cancellations.
-  # $info_type: An integer constant representing the type of information.
-  # Returns an object containing the requested information, or undef if unavailable.
   method get_info : object ($ctx : Go::Context, $info_type : int) {
-    # Default implementation returns undef.
-    # Drivers should override this and use $ctx for any potential DB communication.
     return undef;
   }
   
-  # Get a list of table names and metadata.
-  # Returns a DBI::St object that can be used to fetch the table information.
-  # $ctx: Context for timeout and cancellation.
-  # $catalog, $schema, $table: Search patterns for filtering.
-  # $type: Table types (e.g., "TABLE", "VIEW").
-  # $attr: Additional attributes for the query.
   method table_info : DBI::St ($ctx : Go::Context, $catalog : string, $schema : string, $table : string, $type : string, $attr : object[] = undef) {
-    # SQLSTATE 'IM001' indicates the driver does not support this function.
     die DBI::Error::SQLState "IM001: 'table_info' method is not implemented.";
   }
   
-  # Get information about columns in a table.
-  # Returns a DBI::St object that can be used to fetch the column metadata.
-  # $ctx: Context for managing timeouts and cancellations.
-  # $catalog, $schema, $table, $column: Search patterns for filtering.
   method column_info : DBI::St ($ctx : Go::Context, $catalog : string, $schema : string, $table : string, $column : string) {
-    # SQLSTATE 'IM001' indicates the driver does not support this function.
     die DBI::Error::SQLState "IM001: 'column_info' method is not implemented.";
   }
   
-  # Get a list of table names.
-  # Returns an array of formatted table names.
-  # $ctx: Context for timeout and cancellation.
   method tables : string[] ($ctx : Go::Context, $catalog : string, $schema : string, $table : string, $type : string, $attr : object[] = undef) {
     my $sth = $self->table_info($ctx, $catalog, $schema, $table, $type, $attr);
-    
     my $tables_list = StringList->new;
-    
-    # In table_info, the table name is usually in the 3rd column (index 2)
-    # or accessible via the key 'TABLE_NAME'
     while (my $row = $sth->fetchrow_array($ctx)) {
-      # For simplicity, we assume the driver returns the full table name
       my $table_name = (string)$row->[2]; 
       $tables_list->push($table_name);
     }
-    
     $sth->finish;
-    
     return $tables_list->to_array;
   }
   
-  # Version with type hint is not yet supported in this interface.
   method quote : string ($str : string, $type : int) {
     die "quote with a type hint is not yet implemented. Use the single-argument version.";
   }
   
-  # Multi-argument version for schema.table etc.
   method quote_identifier : string ($catalog : string, $schema : string, $table : string, $attr : object[] = undef) {
     die "Multi-argument quote_identifier is not yet implemented.";
   }
