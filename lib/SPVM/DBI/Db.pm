@@ -52,6 +52,8 @@ C<has AutoCommit : ro byte;>
 
 The AutoCommit status.
 
+The default value is set to 1. Driver authors must ensure that the initial database connection state matches this default (i.e., transactions are automatically committed after each statement).
+
 =head2 InactiveDestroy
 
 C<has InactiveDestroy : rw byte;>
