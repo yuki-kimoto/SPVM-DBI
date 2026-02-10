@@ -6,8 +6,9 @@ class DBI::Db {
   
   allow DBI::Dr;
   
-  use Go::Context;
   use DBI::St;
+  use Go::Context;
+  use Go::Time;
   
   # Fields
   has Name : ro string;
@@ -17,6 +18,12 @@ class DBI::Db {
   has AutoCommit : ro byte;
   
   has InactiveDestroy : rw byte;
+  
+  has Timeout : rw Go::Duration;
+  
+  has ReadTimeout : rw Go::Duration;
+  
+  has WriteTimeout : rw Go::Duration;
   
   # Instance Methods
   method prepare : DBI::St ($ctx : Go::Context, $sql : string, $options : object[] = undef) {
