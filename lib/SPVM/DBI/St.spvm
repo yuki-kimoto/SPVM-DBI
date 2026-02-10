@@ -4,12 +4,14 @@
 class DBI::St {
   version_from DBI;
   
+  allow DBI::Db;
+  
   use DBI::Error::SQLState;
   
   # Fields
-  has Database : public ro DBI::Db;
+  has Database : ro DBI::Db;
   
-  has Statement : public ro string;
+  has Statement : ro string;
   
   # Instance Methods
   method NUM_OF_FIELDS : int ($ctx : Go::Context) {
