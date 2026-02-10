@@ -15,9 +15,12 @@ L<DBI::Db|SPVM::DBI::Db> class in L<SPVM> represents a database handle. This cla
 =head1 Usage
 
   use Go::Context;
+  use DBI;
+  use DBD::SQLite;
+  
   my $ctx = Go::Context->background;
   
-  my $dbh = $dr->connect($ctx, "dbi:SQLite:dbname=:memory:");
+  my $dbh = DBI->connect($ctx, "dbi:SQLite:dbname=:memory:");
   
   # Prepare a statement
   my $sth = $dbh->prepare($ctx, "SELECT * FROM users");
@@ -28,13 +31,13 @@ L<DBI::Db|SPVM::DBI::Db> class in L<SPVM> represents a database handle. This cla
 
 C<has Name : ro string;>
 
-The data source name (DSN).
+The data source name (DSN). This field stores the part of the DSN after the second colon (e.g., "dbname=:memory:" if the DSN is "dbi:SQLite:dbname=:memory:").
 
 =head2 Username
 
 C<has Username : ro string;>
 
-The username for the database connection.
+The username for the database connection. This field stores the username extracted from the DSN.
 
 =head2 AutoCommit
 
@@ -52,19 +55,19 @@ The InactiveDestroy status.
 
 C<has Timeout : rw long;>
 
-The timeout value in seconds.
+The timeout value in seconds. This field is used to set a deadline for database operations. If an operation exceeds this duration, the operation is canceled via the context.
 
 =head2 ReadTimeout
 
 C<has ReadTimeout : rw long;>
 
-The read timeout value in seconds.
+The read timeout value in seconds. This field is used to set a deadline for read operations. If a read operation does not complete within this duration, the operation is canceled.
 
 =head2 WriteTimeout
 
 C<has WriteTimeout : rw long;>
 
-The write timeout value in seconds.
+The write timeout value in seconds. This field is used to set a deadline for write operations. If a write operation does not complete within this duration, the operation is canceled.
 
 =head1 Instance Methods
 
