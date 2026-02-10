@@ -24,6 +24,9 @@ class DBI::Db {
   }
   
   protected method prepare_common : void ($sth : DBI::St, $ctx : Go::Context, $sql : string, $options : object[] = undef) {
+    
+    Fn->check_option_names($options, $sth->option_names);
+    
     $sth->{Database} = (DBI::Db)$self;
     $sth->{Statement} = $sql;
   }

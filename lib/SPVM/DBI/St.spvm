@@ -14,6 +14,13 @@ class DBI::St {
   has Statement : ro string;
   
   # Instance Methods
+  protected method option_names : string[] () {
+    
+    my $option_names = new string[0];
+    
+    return $option_names;
+  }
+  
   method NUM_OF_FIELDS : int ($ctx : Go::Context) {
     die DBI::Error::SQLState "IM001: 'NUM_OF_FIELDS' attribute is not implemented.";
   }
