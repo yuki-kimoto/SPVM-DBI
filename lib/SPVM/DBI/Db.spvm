@@ -40,7 +40,7 @@ class DBI::Db {
     die DBI::Error::SQLState "IM001: 'rollback' method is not implemented.";
   }
   
-  method last_insert_id : object ($ctx : Go::Context, $catalog : string = undef, $schema : string = undef, $table : string = undef, $field : string = undef, $attrs : Hash = undef) {
+  method last_insert_id : object ($ctx : Go::Context, $catalog : string = undef, $schema : string = undef, $table : string = undef, $field : string = undef, $attrs : object[] = undef) {
     die DBI::Error::SQLState "IM001: 'last_insert_id' method is not implemented.";
   }
   
@@ -60,7 +60,7 @@ class DBI::Db {
     die DBI::Error::SQLState "IM001: 'column_info' method is not implemented.";
   }
   
-  method quote : string ($ctx : Go::Context, $str : string, $type : int) {
+  method quote : string ($ctx : Go::Context, $str : string, $type : int = -1) {
     die DBI::Error::SQLState "IM001: 'quote' method is not implemented.";
   }
   
