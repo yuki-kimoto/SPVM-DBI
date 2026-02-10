@@ -31,10 +31,15 @@ class DBI::Dr {
       $dbh->{Username} = $m->cap(1);
     }
     
-    # Map AutoCommit attribute from options
+    # Check if AutoCommit is specified
     if ($attrs->exists("AutoCommit")) {
-      $dbh->{AutoCommit} = $attrs->get("AutoCommit")->(byte);
+      die "DBI: The 'AutoCommit' attribute is not allowed in connect attributes. It is always 1 by default.";
     }
+    else {
+      # Always set to 1
+      $dbh->{AutoCommit} = 1;
+    }
+    
   }
 
 }
