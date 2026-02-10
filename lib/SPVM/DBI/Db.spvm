@@ -19,6 +19,8 @@ class DBI::Db {
   
   has AutoCommit : ro byte;
   
+  has InactiveDestroy : rw byte;
+  
   # Instance Methods
   method prepare : DBI::St ($ctx : Go::Context, $sql : string, $attrs : object[] = undef) {
     die DBI::Error::SQLState "IM001: 'prepare' method is not implemented.";
@@ -74,7 +76,9 @@ class DBI::Db {
   }
   
   method DESTROY : void () {
-    $self->disconnect;
+    unless ($self->{InactiveDestroy}) {
+      $self->disconnect;
+    }
   }
   
 }
