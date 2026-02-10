@@ -19,13 +19,20 @@ class DBI::Db {
   has InactiveDestroy : rw byte;
   
   # Instance Methods
-  method prepare : DBI::St ($ctx : Go::Context, $sql : string, $attrs : object[] = undef) {
+  method prepare : DBI::St ($ctx : Go::Context, $sql : string, $options : object[] = undef) {
     die DBI::Error::SQLState "IM001: 'prepare' method is not implemented.";
   }
   
-  protected method prepare_common : void ($sth : DBI::St, $ctx : Go::Context, $sql : string, $attrs : object[] = undef) {
+  protected method prepare_common : void ($sth : DBI::St, $ctx : Go::Context, $sql : string, $options : object[] = undef) {
     $sth->{Database} = (DBI::Db)$self;
     $sth->{Statement} = $sql;
+  }
+  
+  protected method option_names : string[] () {
+    
+    my $option_names = new string[0];
+    
+    return $option_names;
   }
   
   method begin_work : void ($ctx : Go::Context) {
@@ -40,7 +47,7 @@ class DBI::Db {
     die DBI::Error::SQLState "IM001: 'rollback' method is not implemented.";
   }
   
-  method last_insert_id : object ($ctx : Go::Context, $catalog : string = undef, $schema : string = undef, $table : string = undef, $field : string = undef, $attrs : object[] = undef) {
+  method last_insert_id : object ($ctx : Go::Context, $catalog : string = undef, $schema : string = undef, $table : string = undef, $field : string = undef, $options : object[] = undef) {
     die DBI::Error::SQLState "IM001: 'last_insert_id' method is not implemented.";
   }
   
@@ -52,7 +59,7 @@ class DBI::Db {
     die DBI::Error::SQLState "IM001: 'get_info' method is not implemented.";
   }
   
-  method table_info : DBI::St ($ctx : Go::Context, $catalog : string, $schema : string, $table : string, $type : string, $attrs : object[] = undef) {
+  method table_info : DBI::St ($ctx : Go::Context, $catalog : string, $schema : string, $table : string, $type : string, $options : object[] = undef) {
     die DBI::Error::SQLState "IM001: 'table_info' method is not implemented.";
   }
   
@@ -64,7 +71,7 @@ class DBI::Db {
     die DBI::Error::SQLState "IM001: 'quote' method is not implemented.";
   }
   
-  method quote_identifier : string ($ctx : Go::Context, $catalog : string, $schema : string, $table : string, $attrs : object[] = undef) {
+  method quote_identifier : string ($ctx : Go::Context, $catalog : string, $schema : string, $table : string, $options : object[] = undef) {
     die DBI::Error::SQLState "IM001: 'quote_identifier' method is not implemented.";
   }
   

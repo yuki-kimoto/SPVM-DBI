@@ -12,7 +12,7 @@ class DBI {
   our $DRIVERS_H : cache Hash of DBI::Dr;
   
   # Class Methods
-  static method connect : DBI::Db ($ctx : Go::Context, $dsn : string, $user : string = undef, $password : string = undef, $attrs : object[] = undef) {
+  static method connect : DBI::Db ($ctx : Go::Context, $dsn : string, $user : string = undef, $password : string = undef, $options : object[] = undef) {
     
     unless ($dsn) {
       die "DSN must be defined.";
@@ -41,7 +41,7 @@ class DBI {
     }
       
     # Request the driver to create a database handle
-    my $dbh = $driver->connect($ctx, $dsn, $user, $password, $attrs);
+    my $dbh = $driver->connect($ctx, $dsn, $user, $password, $options);
     
     return $dbh;
   }

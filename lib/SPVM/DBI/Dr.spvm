@@ -6,19 +6,21 @@ class DBI::Dr {
   
   use DBI::Db;
   
-  method connect : DBI::Db ($ctx : Go::Context, $dsn : string, $user : string = undef, $password : string = undef, $attrs : object[] = undef) {
+  method connect : DBI::Db ($ctx : Go::Context, $dsn : string, $user : string = undef, $password : string = undef, $options : object[] = undef) {
     die DBI::Error::SQLState "IM001: 'connect' method is not implemented.";
   }
   
-  protected method connect_common : void ($dbh : DBI::Db, $ctx : Go::Context, $dsn : string, $user : string = undef, $password : string = undef, $attrs : object[] = undef) {
+  protected method connect_common : void ($dbh : DBI::Db, $ctx : Go::Context, $dsn : string, $user : string = undef, $password : string = undef, $options : object[] = undef) {
+    
+    Fn->check_option_names($options, $dbh->option_names);
     
     # DSN is mandatory for initialization.
     unless ($dsn) {
       die "The data source name $dsn must be defined.";
     }
 
-    # Redefine $attrs as a Hash.
-    my $attrs = Fn->to_hash($attrs);
+    # Redefine $options as a Hash.
+    my $options = Fn->to_hash($options);
     
     # Parse Name and Username from DSN
     # Extract everything after "dbi:driver:" as Name
@@ -31,15 +33,9 @@ class DBI::Dr {
       $dbh->{Username} = $m->cap(1);
     }
     
-    # Check if AutoCommit is specified
-    if ($attrs->exists("AutoCommit")) {
-      die "DBI: The 'AutoCommit' attribute is not allowed in connect attributes. It is always 1 by default.";
-    }
-    else {
-      # Always set to 1
-      $dbh->{AutoCommit} = 1;
-    }
+    # Always set to 1
+    $dbh->{AutoCommit} = 1;
     
   }
-
+  
 }
