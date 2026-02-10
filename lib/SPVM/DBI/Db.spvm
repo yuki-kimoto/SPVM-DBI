@@ -19,7 +19,9 @@ class DBI::Db {
   
   has InactiveDestroy : rw byte;
   
-  has Timeout : rw long;
+  has IdleTimeout : rw long;
+  
+  has ConnectTimeout : rw long;
   
   has ReadTimeout : rw long;
   

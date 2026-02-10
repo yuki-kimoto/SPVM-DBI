@@ -58,11 +58,17 @@ C<has InactiveDestroy : rw byte;>
 
 The InactiveDestroy status.
 
-=head2 Timeout
+=head2 IdleTimeout
 
-C<has Timeout : rw long;>
+C<has IdleTimeout : rw long;>
 
-The timeout value in seconds. This field is used to set a deadline for database operations. If an operation exceeds this duration, the operation is canceled via the context.
+The idle timeout value in seconds. This field is used to set a maximum duration that a connection can remain idle (no read/write operations). If the idle time exceeds this duration, the connection is expected to be closed, typically by a connection pool.
+
+=head2 ConnectTimeout
+
+C<has ConnectTimeout : rw long;>
+
+The connection timeout value in seconds. This field is used to set a deadline for establishing a new database connection.
 
 =head2 ReadTimeout
 
