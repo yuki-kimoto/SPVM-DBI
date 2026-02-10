@@ -11,15 +11,19 @@ class DBI::Db {
   use Go::Context;
   use DBI::St;
   use Re;
-
+  
+  # Fields
   has Name : public ro string;
+  
   has Username : public ro string;
+  
   has AutoCommit : public rw byte;
   
+  # Instance Methods
   method prepare : DBI::St ($ctx : Go::Context, $sql : string, $attrs : object[] = undef) {
     die DBI::Error::SQLState "IM001: 'prepare' method is not implemented.";
   }
-
+  
   protected method prepare_common : void ($sth : DBI::St, $ctx : Go::Context, $sql : string, $attrs : object[] = undef) {
     $sth->{Database} = (DBI::Db)$self;
     $sth->{Statement} = $sql;
@@ -43,15 +47,7 @@ class DBI::Db {
     die DBI::Error::SQLState "IM001: 'rollback' method is not implemented.";
   }
   
-  method disconnect : void () {
-    die DBI::Error::SQLState "IM001: 'disconnect' method is not implemented.";
-  }
-
-  method DESTROY : void () {
-    $self->disconnect;
-  }
-  
-  method last_insert_id : object ($ctx : Go::Context, $catalog : string = undef, $schema : string = undef, $table : string = undef, $field : string = undef, $attr : Hash = undef) {
+  method last_insert_id : object ($ctx : Go::Context, $catalog : string = undef, $schema : string = undef, $table : string = undef, $field : string = undef, $attrs : Hash = undef) {
     die DBI::Error::SQLState "IM001: 'last_insert_id' method is not implemented.";
   }
   
@@ -98,10 +94,10 @@ class DBI::Db {
   }
   
   method get_info : object ($ctx : Go::Context, $info_type : int) {
-    return undef;
+    die DBI::Error::SQLState "IM001: 'get_info' method is not implemented.";
   }
   
-  method table_info : DBI::St ($ctx : Go::Context, $catalog : string, $schema : string, $table : string, $type : string, $attr : object[] = undef) {
+  method table_info : DBI::St ($ctx : Go::Context, $catalog : string, $schema : string, $table : string, $type : string, $attrs : object[] = undef) {
     die DBI::Error::SQLState "IM001: 'table_info' method is not implemented.";
   }
   
@@ -109,22 +105,20 @@ class DBI::Db {
     die DBI::Error::SQLState "IM001: 'column_info' method is not implemented.";
   }
   
-  method tables : string[] ($ctx : Go::Context, $catalog : string, $schema : string, $table : string, $type : string, $attr : object[] = undef) {
-    my $sth = $self->table_info($ctx, $catalog, $schema, $table, $type, $attr);
-    my $tables_list = StringList->new;
-    while (my $row = $sth->fetchrow_array($ctx)) {
-      my $table_name = (string)$row->[2]; 
-      $tables_list->push($table_name);
-    }
-    $sth->finish;
-    return $tables_list->to_array;
-  }
-  
   method quote : string ($str : string, $type : int) {
     die "quote with a type hint is not yet implemented. Use the single-argument version.";
   }
   
-  method quote_identifier : string ($catalog : string, $schema : string, $table : string, $attr : object[] = undef) {
+  method quote_identifier : string ($catalog : string, $schema : string, $table : string, $attrs : object[] = undef) {
     die "Multi-argument quote_identifier is not yet implemented.";
   }
+  
+  method disconnect : void () {
+    die DBI::Error::SQLState "IM001: 'disconnect' method is not implemented.";
+  }
+  
+  method DESTROY : void () {
+    $self->disconnect;
+  }
+  
 }
