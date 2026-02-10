@@ -29,12 +29,6 @@ class DBI::Db {
     $sth->{Statement} = $sql;
   }
   
-  method do : int ($ctx : Go::Context, $sql : string, $attrs : object[] = undef, $bind_values : object[] = undef) {
-    my $sth = $self->prepare($ctx, $sql, $attrs);
-    my $rows = $sth->execute($ctx, $bind_values);
-    return $rows;
-  }
-  
   method begin_work : void ($ctx : Go::Context) {
     die DBI::Error::SQLState "IM001: 'begin_work' method is not implemented.";
   }
@@ -42,51 +36,13 @@ class DBI::Db {
   method commit : void ($ctx : Go::Context) {
     die DBI::Error::SQLState "IM001: 'commit' method is not implemented.";
   }
-
+  
   method rollback : void ($ctx : Go::Context) {
     die DBI::Error::SQLState "IM001: 'rollback' method is not implemented.";
   }
   
   method last_insert_id : object ($ctx : Go::Context, $catalog : string = undef, $schema : string = undef, $table : string = undef, $field : string = undef, $attrs : Hash = undef) {
     die DBI::Error::SQLState "IM001: 'last_insert_id' method is not implemented.";
-  }
-  
-  method selectrow_array : object[] ($ctx : Go::Context, $sql : string, $attrs : object[] = undef, $bind_values : object[] = undef) {
-    my $sth = $self->prepare($ctx, $sql, $attrs);
-    $sth->execute($ctx, $bind_values);
-    my $row = $sth->fetchrow_array($ctx);
-    $sth->finish;
-    return $row;
-  }
-  
-  method selectrow_hash : Hash ($ctx : Go::Context, $sql : string, $attrs : object[] = undef, $bind_values : object[] = undef) {
-    my $sth = $self->prepare($ctx, $sql, $attrs);
-    $sth->execute($ctx, $bind_values);
-    my $row_hash = $sth->fetchrow_hash($ctx);
-    $sth->finish;
-    return $row_hash;
-  }
-  
-  method selectall_array : object[] ($ctx : Go::Context, $sql : string, $attrs : object[] = undef, $bind_values : object[] = undef) {
-    my $sth = $self->prepare($ctx, $sql, $attrs);
-    $sth->execute($ctx, $bind_values);
-    my $rows_list = List->new;
-    while (my $row = $sth->fetchrow_array($ctx)) {
-      $rows_list->push($row);
-    }
-    $sth->finish;
-    return (object[])$rows_list->to_array;
-  }
-  
-  method selectall_hash : Hash[] ($ctx : Go::Context, $sql : string, $attrs : object[] = undef, $bind_values : object[] = undef) {
-    my $sth = $self->prepare($ctx, $sql, $attrs);
-    $sth->execute($ctx, $bind_values);
-    my $rows_list = List->new;
-    while (my $row_hash = $sth->fetchrow_hash($ctx)) {
-      $rows_list->push($row_hash);
-    }
-    $sth->finish;
-    return (Hash[])$rows_list->to_array;
   }
   
   method ping : int ($ctx : Go::Context) {
@@ -106,11 +62,11 @@ class DBI::Db {
   }
   
   method quote : string ($str : string, $type : int) {
-    die "quote with a type hint is not yet implemented. Use the single-argument version.";
+    die DBI::Error::SQLState "IM001: 'quote' method is not implemented.";
   }
   
   method quote_identifier : string ($catalog : string, $schema : string, $table : string, $attrs : object[] = undef) {
-    die "Multi-argument quote_identifier is not yet implemented.";
+    die DBI::Error::SQLState "IM001: 'quote_identifier' method is not implemented.";
   }
   
   method disconnect : void () {
