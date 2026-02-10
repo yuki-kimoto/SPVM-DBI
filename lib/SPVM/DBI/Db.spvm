@@ -46,47 +46,47 @@ class DBI::Db {
   }
   
   method begin_work : void ($ctx : Go::Context) {
-    die DBI::Error::SQLState "IM001: 'begin_work' method is not implemented.";
+    die DBI::Error::SQLState "IM001: this method is not implemented.";
   }
   
   method commit : void ($ctx : Go::Context) {
-    die DBI::Error::SQLState "IM001: 'commit' method is not implemented.";
+    die DBI::Error::SQLState "IM001: this method is not implemented.";
   }
   
   method rollback : void ($ctx : Go::Context) {
-    die DBI::Error::SQLState "IM001: 'rollback' method is not implemented.";
+    die DBI::Error::SQLState "IM001: this method is not implemented.";
   }
   
   method last_insert_id : object ($ctx : Go::Context, $catalog : string = undef, $schema : string = undef, $table : string = undef, $field : string = undef, $options : object[] = undef) {
-    die DBI::Error::SQLState "IM001: 'last_insert_id' method is not implemented.";
+    die DBI::Error::SQLState "IM001: this method is not implemented.";
   }
   
   method ping : int ($ctx : Go::Context) {
-    die DBI::Error::SQLState "IM001: 'ping' method is not implemented.";
+    die DBI::Error::SQLState "IM001: this method is not implemented.";
   }
   
   method get_info : object ($ctx : Go::Context, $info_type : int) {
-    die DBI::Error::SQLState "IM001: 'get_info' method is not implemented.";
+    die DBI::Error::SQLState "IM001: this method is not implemented.";
   }
   
   method table_info : DBI::St ($ctx : Go::Context, $catalog : string, $schema : string, $table : string, $type : string, $options : object[] = undef) {
-    die DBI::Error::SQLState "IM001: 'table_info' method is not implemented.";
+    die DBI::Error::SQLState "IM001: this method is not implemented.";
   }
   
   method column_info : DBI::St ($ctx : Go::Context, $catalog : string, $schema : string, $table : string, $column : string) {
-    die DBI::Error::SQLState "IM001: 'column_info' method is not implemented.";
+    die DBI::Error::SQLState "IM001: this method is not implemented.";
   }
   
   method quote : string ($ctx : Go::Context, $str : string, $type : int = -1) {
-    die DBI::Error::SQLState "IM001: 'quote' method is not implemented.";
+    die DBI::Error::SQLState "IM001: this method is not implemented.";
   }
   
   method quote_identifier : string ($ctx : Go::Context, $catalog : string, $schema : string, $table : string, $options : object[] = undef) {
-    die DBI::Error::SQLState "IM001: 'quote_identifier' method is not implemented.";
+    die DBI::Error::SQLState "IM001: this method is not implemented.";
   }
   
   method disconnect : void () {
-    die DBI::Error::SQLState "IM001: 'disconnect' method is not implemented.";
+    die DBI::Error::SQLState "IM001: this method is not implemented.";
   }
   
   method DESTROY : void () {
