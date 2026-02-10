@@ -92,6 +92,34 @@ By using C<exists> check internally, this method allows driver authors to distin
 
 =back
 
+=head2 option_names
+
+C<protected method option_names : string[] ()>
+
+Returns an array of supported option names for the database handle.
+
+In the base class L<DBI::Db|SPVM::DBI::Db>, this method returns the following default options:
+
+=over 2
+
+=item * C<InactiveDestroy>
+
+=item * C<IdleTimeoutDurationNsec>
+
+=item * C<ConnectTimeoutDurationNsec>
+
+=item * C<ReadTimeoutDurationNsec>
+
+=item * C<WriteTimeoutDurationNsec>
+
+=item * C<SocketKeepAliveDurationNsec>
+
+=item * C<TCPNoDelay>
+
+=back
+
+Driver authors can override this method to add driver-specific options. These names are used by L<connect_common|SPVM::DBI::Dr/"connect_common"> or L<prepare_common|SPVM::DBI::Db/"prepare_common"> to validate the options provided by the user via L<Fn#check_option_names|SPVM::Fn/"check_option_names">.
+
 =head1 See Also
 
 L<DBI|SPVM::DBI>, L<DBI::Db|SPVM::DBI::Db>, L<Go::Context|SPVM::Go::Context>
