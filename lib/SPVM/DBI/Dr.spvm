@@ -36,6 +36,35 @@ class DBI::Dr {
     # Always set to 1
     $dbh->{AutoCommit} = 1;
     
+    # Set fields from options if they exist
+    if ($options->exists("InactiveDestroy")) {
+      $dbh->{InactiveDestroy} = $options->get("InactiveDestroy")->(byte);
+    }
+    
+    if ($options->exists("IdleTimeoutDurationNsec")) {
+      $dbh->{IdleTimeoutDurationNsec} = $options->get("IdleTimeoutDurationNsec")->(long);
+    }
+    
+    if ($options->exists("ConnectTimeoutDurationNsec")) {
+      $dbh->{ConnectTimeoutDurationNsec} = $options->get("ConnectTimeoutDurationNsec")->(long);
+    }
+    
+    if ($options->exists("ReadTimeoutDurationNsec")) {
+      $dbh->{ReadTimeoutDurationNsec} = $options->get("ReadTimeoutDurationNsec")->(long);
+    }
+    
+    if ($options->exists("WriteTimeoutDurationNsec")) {
+      $dbh->{WriteTimeoutDurationNsec} = $options->get("WriteTimeoutDurationNsec")->(long);
+    }
+    
+    if ($options->exists("SocketKeepAliveDurationNsec")) {
+      $dbh->{SocketKeepAliveDurationNsec} = $options->get("SocketKeepAliveDurationNsec")->(long);
+    }
+    
+    if ($options->exists("TCPNoDelay")) {
+      $dbh->{TCPNoDelay} = $options->get("TCPNoDelay")->(byte);
+    }
+    
   }
   
 }
