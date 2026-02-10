@@ -58,29 +58,45 @@ C<has InactiveDestroy : rw byte;>
 
 The InactiveDestroy status.
 
-=head2 IdleTimeout
+=head2 IdleTimeoutDurationNsec
 
-C<has IdleTimeout : rw long;>
+C<has IdleTimeoutDurationNsec : rw long;>
 
-The idle timeout value in seconds. This field is used to set a maximum duration that a connection can remain idle (no read/write operations). If the idle time exceeds this duration, the connection is expected to be closed, typically by a connection pool.
+The maximum duration that a connection can remain idle, in nanoseconds. If the idle time exceeds this duration, the connection is expected to be closed, typically by a connection pool.
 
-=head2 ConnectTimeout
+=head2 ConnectTimeoutDurationNsec
 
-C<has ConnectTimeout : rw long;>
+C<has ConnectTimeoutDurationNsec : rw long;>
 
-The connection timeout value in seconds. This field is used to set a deadline for establishing a new database connection.
+The timeout value for establishing a new database connection, in nanoseconds.
 
-=head2 ReadTimeout
+=head2 ReadTimeoutDurationNsec
 
-C<has ReadTimeout : rw long;>
+C<has ReadTimeoutDurationNsec : rw long;>
 
-The read timeout value in seconds. This field is used to set a deadline for read operations. If a read operation does not complete within this duration, the operation is canceled.
+The timeout value for read operations, in nanoseconds. If a read operation does not complete within this duration, the operation is canceled.
 
-=head2 WriteTimeout
+=head2 WriteTimeoutDurationNsec
 
-C<has WriteTimeout : rw long;>
+C<has WriteTimeoutDurationNsec : rw long;>
 
-The write timeout value in seconds. This field is used to set a deadline for write operations. If a write operation does not complete within this duration, the operation is canceled.
+The timeout value for write operations, in nanoseconds. If a write operation does not complete within this duration, the operation is canceled.
+
+=head2 SocketKeepAliveDurationNsec
+
+C<has SocketKeepAliveDurationNsec : rw long;>
+
+The duration for TCP keep-alive idle time, in nanoseconds. 
+
+This value is used to set the initial idle period before the socket starts sending keep-alive probes. If this is not explicitly set, a modern default (e.g., 15 seconds) is recommended to be applied via C<apply_modern_tcp_settings> in the underlying socket. Set to 0 to disable keep-alive.
+
+=head2 TCPNoDelay
+
+C<has TCPNoDelay : rw byte;>
+
+The TCP_NODELAY status. 
+
+A boolean value (1 or 0). If set to 1 (the modern default), Nagle's algorithm is disabled, which ensures that small database query packets are sent immediately without delay.
 
 =head1 Instance Methods
 

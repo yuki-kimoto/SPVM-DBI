@@ -19,13 +19,17 @@ class DBI::Db {
   
   has InactiveDestroy : rw byte;
   
-  has IdleTimeout : rw long;
+  has IdleTimeoutDurationNsec : rw long; 
   
-  has ConnectTimeout : rw long;
+  has ConnectTimeoutDurationNsec : rw long; 
   
-  has ReadTimeout : rw long;
+  has ReadTimeoutDurationNsec : rw long; 
   
-  has WriteTimeout : rw long;
+  has WriteTimeoutDurationNsec : rw long; 
+  
+  has SocketKeepAliveDurationNsec : rw long;
+  
+  has TCPNoDelay : rw byte;
   
   # Instance Methods
   method prepare : DBI::St ($ctx : Go::Context, $sql : string, $options : object[] = undef) {
