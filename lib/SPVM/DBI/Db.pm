@@ -1,63 +1,206 @@
 package SPVM::DBI::Db;
 
-
-
 1;
 
 =encoding utf8
 
 =head1 Name
 
-SPVM::DBI::Db - Short Description
+SPVM::DBI::Db - Database Handle
 
 =head1 Description
 
-DBI::Db class in L<SPVM> has methods to do someting.
+L<DBI::Db|SPVM::DBI::Db> class in L<SPVM> represents a database handle. This class is a base class for database handles, and each method is expected to be overridden in child classes like L<DBI::Db::SQLite|SPVM::DBI::Db::SQLite>.
 
 =head1 Usage
 
-  use DBI::Db;
-
-=head1 Details
-
-
-
-=head1 Super Class
-
-
-
-=head1 Interfaces
-
-
-
-=head1 Enumerations
-
-
+  use Go::Context;
+  my $ctx = Go::Context->background;
+  
+  my $dbh = $dr->connect($ctx, "dbi:SQLite:dbname=:memory:");
+  
+  # Prepare a statement
+  my $sth = $dbh->prepare($ctx, "SELECT * FROM users");
 
 =head1 Fields
 
+=head2 Name
 
+C<has Name : ro string;>
 
-=head1 Class Methods
+The data source name (DSN).
 
+=head2 Username
 
+C<has Username : ro string;>
+
+The username for the database connection.
+
+=head2 AutoCommit
+
+C<has AutoCommit : ro byte;>
+
+The AutoCommit status.
+
+=head2 InactiveDestroy
+
+C<has InactiveDestroy : rw byte;>
+
+The InactiveDestroy status.
+
+=head2 Timeout
+
+C<has Timeout : rw long;>
+
+The timeout value in seconds.
+
+=head2 ReadTimeout
+
+C<has ReadTimeout : rw long;>
+
+The read timeout value in seconds.
+
+=head2 WriteTimeout
+
+C<has WriteTimeout : rw long;>
+
+The write timeout value in seconds.
 
 =head1 Instance Methods
 
+=head2 prepare
 
+C<method prepare : L<DBI::St|SPVM::DBI::St> ($ctx : L<Go::Context|SPVM::Go::Context>, $sql : string, $options : object[] = undef)>
 
-=head1 Well Known Child Classes
+In a child class, this method must prepare the SQL statement and return a statement handle (L<DBI::St|SPVM::DBI::St>).
 
+Exceptions:
 
+Always throws a L<DBI::Error::SQLState|SPVM::DBI::Error::SQLState> exception whose message begins with a 5-character SQLSTATE "IM001" because this method is not implemented.
+
+=head2 begin_work
+
+C<method begin_work : void ($ctx : L<Go::Context|SPVM::Go::Context>)>
+
+In a child class, this method must start a new transaction.
+
+Exceptions:
+
+Always throws a L<DBI::Error::SQLState|SPVM::DBI::Error::SQLState> exception whose message begins with a 5-character SQLSTATE "IM001" because this method is not implemented.
+
+=head2 commit
+
+C<method commit : void ($ctx : L<Go::Context|SPVM::Go::Context>)>
+
+In a child class, this method must commit the current transaction.
+
+Exceptions:
+
+Always throws a L<DBI::Error::SQLState|SPVM::DBI::Error::SQLState> exception whose message begins with a 5-character SQLSTATE "IM001" because this method is not implemented.
+
+=head2 rollback
+
+C<method rollback : void ($ctx : L<Go::Context|SPVM::Go::Context>)>
+
+In a child class, this method must roll back the current transaction.
+
+Exceptions:
+
+Always throws a L<DBI::Error::SQLState|SPVM::DBI::Error::SQLState> exception whose message begins with a 5-character SQLSTATE "IM001" because this method is not implemented.
+
+=head2 last_insert_id
+
+C<method last_insert_id : object ($ctx : L<Go::Context|SPVM::Go::Context>, $catalog : string = undef, $schema : string = undef, $table : string = undef, $field : string = undef, $options : object[] = undef)>
+
+In a child class, this method must return the ID of the last inserted row.
+
+Exceptions:
+
+Always throws a L<DBI::Error::SQLState|SPVM::DBI::Error::SQLState> exception whose message begins with a 5-character SQLSTATE "IM001" because this method is not implemented.
+
+=head2 ping
+
+C<method ping : int ($ctx : L<Go::Context|SPVM::Go::Context>)>
+
+In a child class, this method must check if the database connection is still alive.
+
+Exceptions:
+
+Always throws a L<DBI::Error::SQLState|SPVM::DBI::Error::SQLState> exception whose message begins with a 5-character SQLSTATE "IM001" because this method is not implemented.
+
+=head2 get_info
+
+C<method get_info : object ($ctx : L<Go::Context|SPVM::Go::Context>, $info_type : int)>
+
+In a child class, this method must return information about the database.
+
+Exceptions:
+
+Always throws a L<DBI::Error::SQLState|SPVM::DBI::Error::SQLState> exception whose message begins with a 5-character SQLSTATE "IM001" because this method is not implemented.
+
+=head2 table_info
+
+C<method table_info : L<DBI::St|SPVM::DBI::St> ($ctx : L<Go::Context|SPVM::Go::Context>, $catalog : string, $schema : string, $table : string, $type : string, $options : object[] = undef)>
+
+In a child class, this method must return a statement handle containing information about tables.
+
+Exceptions:
+
+Always throws a L<DBI::Error::SQLState|SPVM::DBI::Error::SQLState> exception whose message begins with a 5-character SQLSTATE "IM001" because this method is not implemented.
+
+=head2 column_info
+
+C<method column_info : L<DBI::St|SPVM::DBI::St> ($ctx : L<Go::Context|SPVM::Go::Context>, $catalog : string, $schema : string, $table : string, $column : string)>
+
+In a child class, this method must return a statement handle containing information about columns.
+
+Exceptions:
+
+Always throws a L<DBI::Error::SQLState|SPVM::DBI::Error::SQLState> exception whose message begins with a 5-character SQLSTATE "IM001" because this method is not implemented.
+
+=head2 quote
+
+C<method quote : string ($ctx : L<Go::Context|SPVM::Go::Context>, $str : string, $type : int = -1)>
+
+In a child class, this method must quote a string for use in a SQL statement.
+
+Exceptions:
+
+Always throws a L<DBI::Error::SQLState|SPVM::DBI::Error::SQLState> exception whose message begins with a 5-character SQLSTATE "IM001" because this method is not implemented.
+
+=head2 quote_identifier
+
+C<method quote_identifier : string ($ctx : L<Go::Context|SPVM::Go::Context>, $catalog : string, $schema : string, $table : string, $options : object[] = undef)>
+
+In a child class, this method must quote an identifier for use in a SQL statement.
+
+Exceptions:
+
+Always throws a L<DBI::Error::SQLState|SPVM::DBI::Error::SQLState> exception whose message begins with a 5-character SQLSTATE "IM001" because this method is not implemented.
+
+=head2 disconnect
+
+C<method disconnect : void ()>
+
+In a child class, this method is expected to disconnect from the database.
+
+Exceptions:
+
+Always throws a L<DBI::Error::SQLState|SPVM::DBI::Error::SQLState> exception whose message begins with a 5-character SQLSTATE "IM001" because this method is not implemented.
+
+=head2 DESTROY
+
+C<method DESTROY : void ()>
+
+The destructor. Unless L</"InactiveDestroy"> is true, it calls L</"disconnect">.
 
 =head1 See Also
 
-
-
+L<DBI|SPVM::DBI>, L<DBI::St|SPVM::DBI::St>, L<Go::Context|SPVM::Go::Context>
 
 =head1 Repository
 
-
+L<https://github.com/yuki-kimoto/SPVM-DBI>
 
 =head1 Author
 
@@ -68,4 +211,3 @@ Yuki Kimoto C<kimoto.yuki@gmail.com>
 Copyright (c) 2026 Yuki Kimoto
 
 MIT License
-
