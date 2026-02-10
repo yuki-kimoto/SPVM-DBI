@@ -60,11 +60,11 @@ class DBI::Db {
     die DBI::Error::SQLState "IM001: 'column_info' method is not implemented.";
   }
   
-  method quote : string ($str : string, $type : int) {
+  method quote : string ($ctx : Go::Context, $str : string, $type : int) {
     die DBI::Error::SQLState "IM001: 'quote' method is not implemented.";
   }
   
-  method quote_identifier : string ($catalog : string, $schema : string, $table : string, $attrs : object[] = undef) {
+  method quote_identifier : string ($ctx : Go::Context, $catalog : string, $schema : string, $table : string, $attrs : object[] = undef) {
     die DBI::Error::SQLState "IM001: 'quote_identifier' method is not implemented.";
   }
   
