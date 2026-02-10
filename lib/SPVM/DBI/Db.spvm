@@ -6,11 +6,8 @@ class DBI::Db {
   
   allow DBI::Dr;
   
-  use DBI::Db;
-  use Hash;
   use Go::Context;
   use DBI::St;
-  use Re;
   
   # Fields
   has Name : ro string;
