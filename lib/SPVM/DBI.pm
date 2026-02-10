@@ -57,6 +57,8 @@ This module is not yet tested and is in a highly experimental stage. The interfa
 
 =item * L<DBI::St|SPVM::DBI::St> - Statement Handle
 
+=item * L<DBI::Constant|SPVM::DBI::Constant> - Information and Capability Constants
+
 =item * L<DBI::Error::SQLState|SPVM::DBI::Error::SQLState> - SQLSTATE Exceptions
 
 =back
