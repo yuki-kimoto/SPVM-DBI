@@ -14,17 +14,14 @@ L<DBI::St|SPVM::DBI::St> class in L<SPVM> represents a statement handle. This cl
 
 =head1 Usage
 
-  use Go::Context;
-  my $ctx = Go::Context->background;
-  
-  # Prepare and execute
-  my $sth = $dbh->prepare($ctx, "SELECT id, name FROM users WHERE id = ?");
-  $sth->execute($ctx, [(object)1]);
-  
-  # Fetch data
-  while (my $row = $sth->fetchrow_array($ctx)) {
-    my $id = $row->[0]->(int);
-    my $name = $row->[1]->(string);
+  class DBD::MyDiriver::St extends DBI::St {
+    
+    # Overriding a method
+    method execute : long ($ctx : Go::Context, $bind_values : object[] = undef) {
+      
+      # Implement a logic
+    }
+    
   }
 
 =head1 Fields

@@ -14,16 +14,23 @@ L<DBI::Db|SPVM::DBI::Db> class in L<SPVM> represents a database handle. This cla
 
 =head1 Usage
 
-  use Go::Context;
-  use DBI;
-  use DBD::SQLite;
-  
-  my $ctx = Go::Context->background;
-  
-  my $dbh = DBI->connect($ctx, "dbi:SQLite:dbname=:memory:");
-  
-  # Prepare a statement
-  my $sth = $dbh->prepare($ctx, "SELECT * FROM users");
+  class DBD::MyDriver::Db extends DBI::Db {
+    
+    # Overriding the prepare method
+    method prepare : DBI::St ($ctx : Go::Context, $sql : string, $options : object[] = undef) {
+      
+      my $sth = DBD::MyDriver::St->new;
+      
+      # Call the common preparation logic provided by the base class
+      $self->prepare_common($sth, $ctx, $sql, $options);
+      
+      # Implement the driver-specific logic to prepare a statement
+      # ...
+      
+      return $sth;
+    }
+    
+  }
 
 =head1 Fields
 
