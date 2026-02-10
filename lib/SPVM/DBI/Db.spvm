@@ -13,11 +13,11 @@ class DBI::Db {
   use Re;
   
   # Fields
-  has Name : public ro string;
+  has Name : ro string;
   
-  has Username : public ro string;
+  has Username : ro string;
   
-  has AutoCommit : public ro byte;
+  has AutoCommit : ro byte;
   
   # Instance Methods
   method prepare : DBI::St ($ctx : Go::Context, $sql : string, $attrs : object[] = undef) {
