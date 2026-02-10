@@ -14,6 +14,12 @@ SPVM::DBI - Database Independent Interface
 
 L<DBI|SPVM::DBI> class in L<SPVM> provides a database-independent interface for database connections. It acts as a factory to create a database handle (L<DBI::Db|SPVM::DBI::Db>) by loading the appropriate driver (L<DBI::Dr|SPVM::DBI::Dr>).
 
+=head1 Caution
+
+B<SPVM::DBI is under early development. This is an alpha release.>
+
+This module is not yet tested and is in a highly experimental stage. The interface and implementation are subject to change without notice. Use this module at your own risk. It is not recommended for production use.
+
 =head1 Usage
 
   use DBI;
