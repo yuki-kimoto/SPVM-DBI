@@ -46,7 +46,15 @@ class DBI::Db {
   
   protected method option_names : string[] () {
     
-    my $option_names = new string[0];
+    my $option_names = [
+      "InactiveDestroy",
+      "IdleTimeoutDurationNsec",
+      "ConnectTimeoutDurationNsec",
+      "ReadTimeoutDurationNsec",
+      "WriteTimeoutDurationNsec",
+      "SocketKeepAliveDurationNsec",
+      "TCPNoDelay"
+    ];
     
     return $option_names;
   }
