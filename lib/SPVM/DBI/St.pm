@@ -10,7 +10,7 @@ SPVM::DBI::St - Statement Handle
 
 =head1 Description
 
-L<DBI::St|SPVM::DBI::St> class in L<SPVM> represents a statement handle. It is used to execute SQL statements and fetch result sets.
+L<DBI::St|SPVM::DBI::St> class in L<SPVM> represents a statement handle. This class is a base class for statement handles, and each method is expected to be overridden in child classes like L<DBI::St::SQLite|SPVM::DBI::St::SQLite>.
 
 =head1 Usage
 
@@ -47,107 +47,107 @@ The SQL statement string.
 
 C<protected method option_names : string[] ()>
 
-Returns the valid option names for this statement handle.
+Returns the valid option names for this statement handle. This method is intended to be overridden in child classes.
 
 =head2 NUM_OF_FIELDS
 
 C<method NUM_OF_FIELDS : int ($ctx : L<Go::Context|SPVM::Go::Context>)>
 
-Returns the number of fields (columns) in the result set.
+In a child class, this method must return the number of fields (columns) in the result set.
 
 Exceptions:
 
-Throws a L<DBI::Error::SQLState|SPVM::DBI::Error::SQLState> exception whose message begins with a 5-character SQLSTATE "IM001" because this method is not implemented.
+Always throws a L<DBI::Error::SQLState|SPVM::DBI::Error::SQLState> exception whose message begins with a 5-character SQLSTATE "IM001" because this method is not implemented.
 
 =head2 NAME
 
 C<method NAME : string[] ($ctx : L<Go::Context|SPVM::Go::Context>)>
 
-Returns an array of column names.
+In a child class, this method must return an array of column names.
 
 Exceptions:
 
-Throws a L<DBI::Error::SQLState|SPVM::DBI::Error::SQLState> exception whose message begins with a 5-character SQLSTATE "IM001" because this method is not implemented.
+Always throws a L<DBI::Error::SQLState|SPVM::DBI::Error::SQLState> exception whose message begins with a 5-character SQLSTATE "IM001" because this method is not implemented.
 
 =head2 NULLABLE
 
 C<method NULLABLE : int[] ($ctx : L<Go::Context|SPVM::Go::Context>)>
 
-Returns an array indicating if each column is nullable.
+In a child class, this method must return an array indicating if each column is nullable.
 
 Exceptions:
 
-Throws a L<DBI::Error::SQLState|SPVM::DBI::Error::SQLState> exception whose message begins with a 5-character SQLSTATE "IM001" because this method is not implemented.
+Always throws a L<DBI::Error::SQLState|SPVM::DBI::Error::SQLState> exception whose message begins with a 5-character SQLSTATE "IM001" because this method is not implemented.
 
 =head2 TYPE
 
 C<method TYPE : int[] ($ctx : L<Go::Context|SPVM::Go::Context>)>
 
-Returns an array of column types.
+In a child class, this method must return an array of column types.
 
 Exceptions:
 
-Throws a L<DBI::Error::SQLState|SPVM::DBI::Error::SQLState> exception whose message begins with a 5-character SQLSTATE "IM001" because this method is not implemented.
+Always throws a L<DBI::Error::SQLState|SPVM::DBI::Error::SQLState> exception whose message begins with a 5-character SQLSTATE "IM001" because this method is not implemented.
 
 =head2 PRECISION
 
 C<method PRECISION : int[] ($ctx : L<Go::Context|SPVM::Go::Context>)>
 
-Returns an array of column precision values.
+In a child class, this method must return an array of column precision values.
 
 Exceptions:
 
-Throws a L<DBI::Error::SQLState|SPVM::DBI::Error::SQLState> exception whose message begins with a 5-character SQLSTATE "IM001" because this method is not implemented.
+Always throws a L<DBI::Error::SQLState|SPVM::DBI::Error::SQLState> exception whose message begins with a 5-character SQLSTATE "IM001" because this method is not implemented.
 
 =head2 SCALE
 
 C<method SCALE : int[] ($ctx : L<Go::Context|SPVM::Go::Context>)>
 
-Returns an array of column scale values.
+In a child class, this method must return an array of column scale values.
 
 Exceptions:
 
-Throws a L<DBI::Error::SQLState|SPVM::DBI::Error::SQLState> exception whose message begins with a 5-character SQLSTATE "IM001" because this method is not implemented.
+Always throws a L<DBI::Error::SQLState|SPVM::DBI::Error::SQLState> exception whose message begins with a 5-character SQLSTATE "IM001" because this method is not implemented.
 
 =head2 execute
 
 C<method execute : long ($ctx : L<Go::Context|SPVM::Go::Context>, $bind_values : object[] = undef)>
 
-Executes the prepared statement. Returns the number of affected rows, or -1 if unknown.
+In a child class, this method must execute the prepared statement and return the number of affected rows, or -1 if unknown.
 
 Exceptions:
 
-Throws a L<DBI::Error::SQLState|SPVM::DBI::Error::SQLState> exception whose message begins with a 5-character SQLSTATE "IM001" because this method is not implemented.
+Always throws a L<DBI::Error::SQLState|SPVM::DBI::Error::SQLState> exception whose message begins with a 5-character SQLSTATE "IM001" because this method is not implemented.
 
 =head2 fetchrow_array
 
 C<method fetchrow_array : object[] ($ctx : L<Go::Context|SPVM::Go::Context>)>
 
-Fetches the next row of data. Returns an array of objects or C<undef> if there are no more rows.
+In a child class, this method must fetch the next row of data and return an array of objects or C<undef> if there are no more rows.
 
 Exceptions:
 
-Throws a L<DBI::Error::SQLState|SPVM::DBI::Error::SQLState> exception whose message begins with a 5-character SQLSTATE "IM001" because this method is not implemented.
+Always throws a L<DBI::Error::SQLState|SPVM::DBI::Error::SQLState> exception whose message begins with a 5-character SQLSTATE "IM001" because this method is not implemented.
 
 =head2 rows
 
 C<method rows : long ($ctx : L<Go::Context|SPVM::Go::Context>)>
 
-Returns the number of rows affected by the last execute.
+In a child class, this method must return the number of rows affected by the last execute.
 
 Exceptions:
 
-Throws a L<DBI::Error::SQLState|SPVM::DBI::Error::SQLState> exception whose message begins with a 5-character SQLSTATE "IM001" because this method is not implemented.
+Always throws a L<DBI::Error::SQLState|SPVM::DBI::Error::SQLState> exception whose message begins with a 5-character SQLSTATE "IM001" because this method is not implemented.
 
 =head2 finish
 
 C<method finish : void ()>
 
-Indicates that no more data will be fetched from this statement handle.
+In a child class, this method is expected to indicate that no more data will be fetched from this statement handle.
 
 Exceptions:
 
-Throws a L<DBI::Error::SQLState|SPVM::DBI::Error::SQLState> exception whose message begins with a 5-character SQLSTATE "IM001" because this method is not implemented.
+Always throws a L<DBI::Error::SQLState|SPVM::DBI::Error::SQLState> exception whose message begins with a 5-character SQLSTATE "IM001" because this method is not implemented.
 
 =head2 DESTROY
 
