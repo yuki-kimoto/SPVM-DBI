@@ -87,7 +87,7 @@ Returns an array of column scale values.
 
 =head2 execute
 
-C<method execute : int ($ctx : L<Go::Context|SPVM::Go::Context>, $bind_values : object[] = undef)>
+C<method execute : long ($ctx : L<Go::Context|SPVM::Go::Context>, $bind_values : object[] = undef)>
 
 Executes the prepared statement. Returns the number of affected rows, or -1 if unknown.
 
@@ -99,7 +99,7 @@ Fetches the next row of data. Returns an array of objects or C<undef> if there a
 
 =head2 rows
 
-C<method rows : int ($ctx : L<Go::Context|SPVM::Go::Context>)>
+C<method rows : long ($ctx : L<Go::Context|SPVM::Go::Context>)>
 
 Returns the number of rows affected by the last execute.
 
