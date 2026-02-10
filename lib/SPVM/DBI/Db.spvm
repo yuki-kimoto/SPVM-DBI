@@ -19,11 +19,11 @@ class DBI::Db {
   
   has InactiveDestroy : rw byte;
   
-  has Timeout : rw Go::Duration;
+  has Timeout : rw long;
   
-  has ReadTimeout : rw Go::Duration;
+  has ReadTimeout : rw long;
   
-  has WriteTimeout : rw Go::Duration;
+  has WriteTimeout : rw long;
   
   # Instance Methods
   method prepare : DBI::St ($ctx : Go::Context, $sql : string, $options : object[] = undef) {
