@@ -52,6 +52,14 @@ class DBI::Db {
     return $rows;
   }
   
+  # Start a new transaction.
+  # This method must be overridden by the driver to send a "BEGIN" or "START TRANSACTION" command.
+  method begin_work : void ($ctx : Go::Context) {
+    # Throws an exception if the subclass does not implement this method.
+    # SQLSTATE 'IM001' indicates the driver does not support this function.
+    die DBI::Error::SQLState "IM001: 'begin_work' method is not implemented.";
+  }
+  
   # Commit the current transaction.
   # This method must be overridden by the driver class.
   method commit : void ($ctx : Go::Context) {
