@@ -48,4 +48,25 @@ class DBI {
     return $dbh;
   }
   
+  static method blob : DBI::Data ($value : string) {
+    my $data = DBI::Data->new;
+    $data->set_type_id(DBI::Data->TYPE_ID_BLOB);
+    $data->set_value($value);
+    return $data;
+  }
+
+  static method big_int : DBI::Data ($value : string) {
+    my $data = DBI::Data->new;
+    $data->set_type_id(DBI::Data->TYPE_ID_BIG_INT);
+    $data->set_value($value);
+    return $data;
+  }
+
+  static method big_float : DBI::Data ($value : string) {
+    my $data = DBI::Data->new;
+    $data->set_type_id(DBI::Data->TYPE_ID_BIG_FLOAT);
+    $data->set_value($value);
+    return $data;
+  }
+  
 }
