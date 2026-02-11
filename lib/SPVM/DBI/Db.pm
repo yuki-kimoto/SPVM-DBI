@@ -14,6 +14,10 @@ L<DBI::Db|SPVM::DBI::Db> class in L<SPVM> represents a database handle. This cla
 
 =head1 Usage
 
+For Driver Authors:
+
+The following example shows how to implement a specific database handle (DBD) by extending the L<DBI::Db|SPVM::DBI::Db> class.
+
   class DBD::MyDriver::Db extends DBI::Db {
     
     # Overriding the prepare method
@@ -21,10 +25,11 @@ L<DBI::Db|SPVM::DBI::Db> class in L<SPVM> represents a database handle. This cla
       
       my $sth = DBD::MyDriver::St->new;
       
-      # Call the common preparation logic provided by the base class
+      # Call the common preparation logic provided by the base class.
+      # This validates options and performs common initialization.
       $self->prepare_common($sth, $ctx, $sql, $options);
       
-      # Implement the driver-specific logic to prepare a statement
+      # Implement the driver-specific logic to prepare a statement.
       # ...
       
       return $sth;
@@ -106,121 +111,121 @@ A boolean value (1 or 0). If this field is not explicitly set, it is recommended
 
 C<method prepare : L<DBI::St|SPVM::DBI::St> ($ctx : L<Go::Context|SPVM::Go::Context>, $sql : string, $options : object[] = undef)>
 
-In a child class, this method must prepare the SQL statement and return a statement handle (L<DBI::St|SPVM::DBI::St>).
+Prepares the SQL statement and returns a statement handle (L<DBI::St|SPVM::DBI::St>).
 
-Exceptions:
+For Driver Authors:
 
-Always throws a L<DBI::Error::SQLState|SPVM::DBI::Error::SQLState> exception whose message begins with a 5-character SQLSTATE "IM001" because this method is not implemented.
+If this method is not overridden in a child class (a specific DBD), it throws a L<DBI::Error::SQLState|SPVM::DBI::Error::SQLState> exception with SQLSTATE "IM001" (Driver does not support this function) to indicate that the driver implementation is missing.
 
 =head2 begin_work
 
 C<method begin_work : void ($ctx : L<Go::Context|SPVM::Go::Context>)>
 
-In a child class, this method must start a new transaction.
+Starts a new transaction.
 
-Exceptions:
+For Driver Authors:
 
-Always throws a L<DBI::Error::SQLState|SPVM::DBI::Error::SQLState> exception whose message begins with a 5-character SQLSTATE "IM001" because this method is not implemented.
+If this method is not overridden in a child class (a specific DBD), it throws a L<DBI::Error::SQLState|SPVM::DBI::Error::SQLState> exception with SQLSTATE "IM001" (Driver does not support this function) to indicate that the driver implementation is missing.
 
 =head2 commit
 
 C<method commit : void ($ctx : L<Go::Context|SPVM::Go::Context>)>
 
-In a child class, this method must commit the current transaction.
+Commits the current transaction.
 
-Exceptions:
+For Driver Authors:
 
-Always throws a L<DBI::Error::SQLState|SPVM::DBI::Error::SQLState> exception whose message begins with a 5-character SQLSTATE "IM001" because this method is not implemented.
+If this method is not overridden in a child class (a specific DBD), it throws a L<DBI::Error::SQLState|SPVM::DBI::Error::SQLState> exception with SQLSTATE "IM001" (Driver does not support this function) to indicate that the driver implementation is missing.
 
 =head2 rollback
 
 C<method rollback : void ($ctx : L<Go::Context|SPVM::Go::Context>)>
 
-In a child class, this method must roll back the current transaction.
+Rolls back the current transaction.
 
-Exceptions:
+For Driver Authors:
 
-Always throws a L<DBI::Error::SQLState|SPVM::DBI::Error::SQLState> exception whose message begins with a 5-character SQLSTATE "IM001" because this method is not implemented.
+If this method is not overridden in a child class (a specific DBD), it throws a L<DBI::Error::SQLState|SPVM::DBI::Error::SQLState> exception with SQLSTATE "IM001" (Driver does not support this function) to indicate that the driver implementation is missing.
 
 =head2 last_insert_id
 
 C<method last_insert_id : object ($ctx : L<Go::Context|SPVM::Go::Context>, $catalog : string = undef, $schema : string = undef, $table : string = undef, $field : string = undef, $options : object[] = undef)>
 
-In a child class, this method must return the ID of the last inserted row.
+Returns the ID of the last inserted row.
 
-Exceptions:
+For Driver Authors:
 
-Always throws a L<DBI::Error::SQLState|SPVM::DBI::Error::SQLState> exception whose message begins with a 5-character SQLSTATE "IM001" because this method is not implemented.
+If this method is not overridden in a child class (a specific DBD), it throws a L<DBI::Error::SQLState|SPVM::DBI::Error::SQLState> exception with SQLSTATE "IM001" (Driver does not support this function) to indicate that the driver implementation is missing.
 
 =head2 ping
 
 C<method ping : int ($ctx : L<Go::Context|SPVM::Go::Context>)>
 
-In a child class, this method must check if the database connection is still alive.
+Checks if the database connection is still alive.
 
-Exceptions:
+For Driver Authors:
 
-Always throws a L<DBI::Error::SQLState|SPVM::DBI::Error::SQLState> exception whose message begins with a 5-character SQLSTATE "IM001" because this method is not implemented.
+If this method is not overridden in a child class (a specific DBD), it throws a L<DBI::Error::SQLState|SPVM::DBI::Error::SQLState> exception with SQLSTATE "IM001" (Driver does not support this function) to indicate that the driver implementation is missing.
 
 =head2 get_info
 
 C<method get_info : object ($ctx : L<Go::Context|SPVM::Go::Context>, $info_type : int)>
 
-In a child class, this method must return information about the database.
+Returns information about the database.
 
-Exceptions:
+For Driver Authors:
 
-Always throws a L<DBI::Error::SQLState|SPVM::DBI::Error::SQLState> exception whose message begins with a 5-character SQLSTATE "IM001" because this method is not implemented.
+If this method is not overridden in a child class (a specific DBD), it throws a L<DBI::Error::SQLState|SPVM::DBI::Error::SQLState> exception with SQLSTATE "IM001" (Driver does not support this function) to indicate that the driver implementation is missing.
 
 =head2 table_info
 
 C<method table_info : L<DBI::St|SPVM::DBI::St> ($ctx : L<Go::Context|SPVM::Go::Context>, $catalog : string, $schema : string, $table : string, $type : string, $options : object[] = undef)>
 
-In a child class, this method must return a statement handle containing information about tables.
+Returns a statement handle containing information about tables.
 
-Exceptions:
+For Driver Authors:
 
-Always throws a L<DBI::Error::SQLState|SPVM::DBI::Error::SQLState> exception whose message begins with a 5-character SQLSTATE "IM001" because this method is not implemented.
+If this method is not overridden in a child class (a specific DBD), it throws a L<DBI::Error::SQLState|SPVM::DBI::Error::SQLState> exception with SQLSTATE "IM001" (Driver does not support this function) to indicate that the driver implementation is missing.
 
 =head2 column_info
 
 C<method column_info : L<DBI::St|SPVM::DBI::St> ($ctx : L<Go::Context|SPVM::Go::Context>, $catalog : string, $schema : string, $table : string, $column : string)>
 
-In a child class, this method must return a statement handle containing information about columns.
+Returns a statement handle containing information about columns.
 
-Exceptions:
+For Driver Authors:
 
-Always throws a L<DBI::Error::SQLState|SPVM::DBI::Error::SQLState> exception whose message begins with a 5-character SQLSTATE "IM001" because this method is not implemented.
+If this method is not overridden in a child class (a specific DBD), it throws a L<DBI::Error::SQLState|SPVM::DBI::Error::SQLState> exception with SQLSTATE "IM001" (Driver does not support this function) to indicate that the driver implementation is missing.
 
 =head2 quote
 
 C<method quote : string ($ctx : L<Go::Context|SPVM::Go::Context>, $str : string, $type : int = -1)>
 
-In a child class, this method must quote a string for use in a SQL statement.
+Quotes a string for use in a SQL statement.
 
-Exceptions:
+For Driver Authors:
 
-Always throws a L<DBI::Error::SQLState|SPVM::DBI::Error::SQLState> exception whose message begins with a 5-character SQLSTATE "IM001" because this method is not implemented.
+If this method is not overridden in a child class (a specific DBD), it throws a L<DBI::Error::SQLState|SPVM::DBI::Error::SQLState> exception with SQLSTATE "IM001" (Driver does not support this function) to indicate that the driver implementation is missing.
 
 =head2 quote_identifier
 
 C<method quote_identifier : string ($ctx : L<Go::Context|SPVM::Go::Context>, $catalog : string, $schema : string, $table : string, $options : object[] = undef)>
 
-In a child class, this method must quote an identifier for use in a SQL statement.
+Quotes an identifier for use in a SQL statement.
 
-Exceptions:
+For Driver Authors:
 
-Always throws a L<DBI::Error::SQLState|SPVM::DBI::Error::SQLState> exception whose message begins with a 5-character SQLSTATE "IM001" because this method is not implemented.
+If this method is not overridden in a child class (a specific DBD), it throws a L<DBI::Error::SQLState|SPVM::DBI::Error::SQLState> exception with SQLSTATE "IM001" (Driver does not support this function) to indicate that the driver implementation is missing.
 
 =head2 disconnect
 
 C<method disconnect : void ()>
 
-In a child class, this method is expected to disconnect from the database.
+Disconnects from the database.
 
-Exceptions:
+For Driver Authors:
 
-Always throws a L<DBI::Error::SQLState|SPVM::DBI::Error::SQLState> exception whose message begins with a 5-character SQLSTATE "IM001" because this method is not implemented.
+If this method is not overridden in a child class (a specific DBD), it throws a L<DBI::Error::SQLState|SPVM::DBI::Error::SQLState> exception with SQLSTATE "IM001" (Driver does not support this function) to indicate that the driver implementation is missing.
 
 =head2 DESTROY
 
