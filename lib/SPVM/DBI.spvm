@@ -8,6 +8,7 @@ class DBI {
   use Go::Context;
   use Native::MethodCall;
   use DBI::Constant;
+  use DBI::Data;
   
   # Class Variables
   our $DRIVERS_H : cache Hash of DBI::Dr;
