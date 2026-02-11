@@ -57,9 +57,9 @@ The SQL statement string.
 
 C<protected method option_names : string[] ()>
 
-Returns the valid option names for this statement handle.
-
 For Driver Authors:
+
+Returns the valid option names for this statement handle.
 
 Override this method if your statement handle supports specific options. These names are used to validate the options passed to C<prepare_common>.
 
@@ -67,7 +67,7 @@ Override this method if your statement handle supports specific options. These n
 
 C<method NUM_OF_FIELDS : int ($ctx : L<Go::Context|SPVM::Go::Context>)>
 
-In a child class, this method must return the number of fields (columns) in the result set.
+Returns the number of fields (columns) in the result set.
 
 For Driver Authors:
 
@@ -77,7 +77,7 @@ If this method is not overridden in a child class (a specific DBD), it throws a 
 
 C<method NAME : string[] ($ctx : L<Go::Context|SPVM::Go::Context>)>
 
-In a child class, this method must return an array of column names.
+Returns an array of column names.
 
 For Driver Authors:
 
@@ -87,7 +87,7 @@ If this method is not overridden in a child class (a specific DBD), it throws a 
 
 C<method NULLABLE : int[] ($ctx : L<Go::Context|SPVM::Go::Context>)>
 
-In a child class, this method must return an array indicating if each column is nullable.
+Returns an array indicating if each column is nullable.
 
 For Driver Authors:
 
@@ -97,7 +97,7 @@ If this method is not overridden in a child class (a specific DBD), it throws a 
 
 C<method TYPE : int[] ($ctx : L<Go::Context|SPVM::Go::Context>)>
 
-In a child class, this method must return an array of column types.
+Returns an array of column types.
 
 For Driver Authors:
 
@@ -107,7 +107,7 @@ If this method is not overridden in a child class (a specific DBD), it throws a 
 
 C<method PRECISION : int[] ($ctx : L<Go::Context|SPVM::Go::Context>)>
 
-In a child class, this method must return an array of column precision values.
+Returns an array of column precision values.
 
 For Driver Authors:
 
@@ -117,7 +117,7 @@ If this method is not overridden in a child class (a specific DBD), it throws a 
 
 C<method SCALE : int[] ($ctx : L<Go::Context|SPVM::Go::Context>)>
 
-In a child class, this method must return an array of column scale values.
+Returns an array of column scale values.
 
 For Driver Authors:
 
@@ -127,7 +127,7 @@ If this method is not overridden in a child class (a specific DBD), it throws a 
 
 C<method execute : long ($ctx : L<Go::Context|SPVM::Go::Context>, $bind_values : object[] = undef)>
 
-In a child class, this method must execute the prepared statement and return the number of affected rows, or -1 if unknown.
+Executes the prepared statement and return the number of affected rows, or -1 if unknown.
 
 For Driver Authors:
 
@@ -173,7 +173,7 @@ An array to store the result of the current row (the pointers to objects in C<$b
 
 =back
 
-Returns:
+Return Value:
 
 Returns the fetched row as an array of objects.
 
@@ -195,7 +195,7 @@ If this method is not overridden in a child class (a specific DBD), it throws a 
 
 C<method rows : long ($ctx : L<Go::Context|SPVM::Go::Context>)>
 
-In a child class, this method must return the number of rows affected by the last execute.
+Returns the number of rows affected by the last execute.
 
 For Driver Authors:
 
@@ -215,7 +215,7 @@ If this method is not overridden in a child class (a specific DBD), it throws a 
 
 C<method DESTROY : void ()>
 
-The destructor. Calls L</"finish">.
+The destructor. Calls L</"finish"> method.
 
 =head1 See Also
 
