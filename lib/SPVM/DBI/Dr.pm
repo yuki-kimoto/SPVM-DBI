@@ -54,9 +54,13 @@ A boolean value. If set to 1, the C<disconnect> method will not be called automa
 
 C<protected method connect_common : void ($dbh : L<DBI::Db|SPVM::DBI::Db>, $ctx : L<Go::Context|SPVM::Go::Context>, $dsn : string, $user : string = undef, $password : string = undef, $options : object[] = undef)>
 
+Provides common initialization logic for a database handle, such as parsing the DSN and mapping options to fields.
+
 =head2 option_names
 
 C<protected method option_names : string[] ()>
+
+Returns an array of supported option names for the database handle.
 
 =head1 For Driver Authors
 
