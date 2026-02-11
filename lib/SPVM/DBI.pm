@@ -93,6 +93,8 @@ C<static method connect : L<DBI::Db|SPVM::DBI::Db> ($ctx : L<Go::Context|SPVM::G
 
 Establishes a connection to the database specified by the C<$dsn>.
 
+For more information about the available options that can be passed in C<$options> (such as timeouts and TCP settings), please see the L<DBI::Dr#connect|SPVM::DBI::Dr/"connect"> method.
+
 This method performs the following steps:
 
 =over 2
