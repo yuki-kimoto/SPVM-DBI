@@ -104,8 +104,6 @@ When implementing L</"connect">, driver authors are responsible for the followin
 
 =item * B<Network Settings>: Apply C<TCPNoDelay> (TCP_NODELAY), C<ConnectTimeoutDurationNsec> (dialer deadline), and C<SocketKeepAliveDurationNsec> (TCP keep-alive) to the actual socket.
 
-=item * B<Modern Defaults>: If network options are not provided in C<$options>, call C<apply_modern_tcp_settings> from L<IO::Socket|SPVM::IO::Socket> to ensure optimized default behavior.
-
 =item * B<Idle Management>: Use C<IdleTimeoutDurationNsec> to set the timeout of the L<IO::Socket|SPVM::IO::Socket> to prevent resource leaks.
 
 =item * B<Handle Cleanup>: Ensure the C<InactiveDestroy> value is correctly set in the database handle so that C<DESTROY> behaves as expected.
