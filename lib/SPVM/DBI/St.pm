@@ -14,27 +14,18 @@ L<DBI::St|SPVM::DBI::St> class in L<SPVM> represents a statement handle. This cl
 
 =head1 Usage
 
-For Driver Authors:
+A statement handle is typically created by calling the L<prepare|SPVM::DBI::Db/"prepare"> method of a database handle (L<DBI::Db|SPVM::DBI::Db>).
 
-The following example shows how to implement a specific database statement handle (DBD) by extending the L<DBI::St|SPVM::DBI::St> class.
-
-  class DBD::MyDriver::St extends DBI::St {
-    
-    # Overriding the execute method
-    method execute : long ($ctx : Go::Context, $bind_values : object[] = undef) {
-      
-      # Implement the logic to execute the prepared statement.
-      # Return the number of affected rows, or -1 if unknown.
-      # ...
-    }
-    
-    # Overriding the fetch method
-    method fetch : object[] ($ctx : Go::Context, $bind_columns : object[] = undef, $ret_row : object[] = undef) {
-      
-      # Implement the logic to fetch one row.
-      # Use $bind_columns and $ret_row to minimize memory allocations.
-      # ...
-    }
+  # Create a statement handle
+  my $sth = $dbh->prepare($ctx, "SELECT id, name FROM users WHERE id = ?");
+  
+  # Execute with bind values
+  $sth->execute($ctx, [(object)1]);
+  
+  # Fetch rows
+  while (my $row = $sth->fetch($ctx)) {
+    my $id = $row->[0]->(int);
+    my $name = $row->[1]->(string);
   }
 
 =head1 Fields
@@ -57,9 +48,7 @@ The SQL statement string.
 
 C<protected method option_names : string[] ()>
 
-For Driver Authors:
-
-Returns the valid option names for this statement handle. Override this method if your statement handle supports specific options. These names are used to validate the options passed to C<prepare_common>.
+Returns the valid option names for this statement handle.
 
 =head2 NUM_OF_FIELDS
 
@@ -176,6 +165,33 @@ C<method DESTROY : void ()>
 The destructor. Calls L</"finish"> method.
 
 =head1 For Driver Authors
+
+=head2 Implementation Examples
+
+The following example shows how to implement a specific database statement handle (DBD) by extending the L<DBI::St|SPVM::DBI::St> class.
+
+  class DBD::MyDriver::St extends DBI::St {
+    
+    # Overriding the execute method
+    method execute : long ($ctx : Go::Context, $bind_values : object[] = undef) {
+      
+      # Implement the logic to execute the prepared statement.
+      # Return the number of affected rows, or -1 if unknown.
+      # ...
+    }
+    
+    # Overriding the fetch method
+    method fetch : object[] ($ctx : Go::Context, $bind_columns : object[] = undef, $ret_row : object[] = undef) {
+      
+      # Implement the logic to fetch one row.
+      # Use $bind_columns and $ret_row to minimize memory allocations.
+      # ...
+    }
+  }
+
+=head2 Overriding option_names
+
+Returns the valid option names for this statement handle. Override this method if your statement handle supports specific options. These names are used to validate the options passed to L<DBI::Db#prepare_common|SPVM::DBI::Db/"prepare_common"> method.
 
 =head2 Abstract Methods
 
