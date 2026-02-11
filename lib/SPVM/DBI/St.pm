@@ -59,9 +59,7 @@ C<protected method option_names : string[] ()>
 
 For Driver Authors:
 
-Returns the valid option names for this statement handle.
-
-Override this method if your statement handle supports specific options. These names are used to validate the options passed to C<prepare_common>.
+Returns the valid option names for this statement handle. Override this method if your statement handle supports specific options. These names are used to validate the options passed to C<prepare_common>.
 
 =head2 NUM_OF_FIELDS
 
@@ -69,19 +67,11 @@ C<method NUM_OF_FIELDS : int ($ctx : L<Go::Context|SPVM::Go::Context>)>
 
 Returns the number of fields (columns) in the result set.
 
-For Driver Authors:
-
-If this method is not overridden in a child class (a specific DBD), it throws a L<DBI::Error::SQLState|SPVM::DBI::Error::SQLState> exception with SQLSTATE "IM001" (Driver does not support this function) to indicate that the driver implementation is missing.
-
 =head2 NAME
 
 C<method NAME : string[] ($ctx : L<Go::Context|SPVM::Go::Context>)>
 
 Returns an array of column names.
-
-For Driver Authors:
-
-If this method is not overridden in a child class (a specific DBD), it throws a L<DBI::Error::SQLState|SPVM::DBI::Error::SQLState> exception with SQLSTATE "IM001" (Driver does not support this function) to indicate that the driver implementation is missing.
 
 =head2 NULLABLE
 
@@ -89,19 +79,11 @@ C<method NULLABLE : int[] ($ctx : L<Go::Context|SPVM::Go::Context>)>
 
 Returns an array indicating if each column is nullable.
 
-For Driver Authors:
-
-If this method is not overridden in a child class (a specific DBD), it throws a L<DBI::Error::SQLState|SPVM::DBI::Error::SQLState> exception with SQLSTATE "IM001" (Driver does not support this function) to indicate that the driver implementation is missing.
-
 =head2 TYPE
 
 C<method TYPE : int[] ($ctx : L<Go::Context|SPVM::Go::Context>)>
 
 Returns an array of column types.
-
-For Driver Authors:
-
-If this method is not overridden in a child class (a specific DBD), it throws a L<DBI::Error::SQLState|SPVM::DBI::Error::SQLState> exception with SQLSTATE "IM001" (Driver does not support this function) to indicate that the driver implementation is missing.
 
 =head2 PRECISION
 
@@ -109,29 +91,17 @@ C<method PRECISION : int[] ($ctx : L<Go::Context|SPVM::Go::Context>)>
 
 Returns an array of column precision values.
 
-For Driver Authors:
-
-If this method is not overridden in a child class (a specific DBD), it throws a L<DBI::Error::SQLState|SPVM::DBI::Error::SQLState> exception with SQLSTATE "IM001" (Driver does not support this function) to indicate that the driver implementation is missing.
-
 =head2 SCALE
 
 C<method SCALE : int[] ($ctx : L<Go::Context|SPVM::Go::Context>)>
 
 Returns an array of column scale values.
 
-For Driver Authors:
-
-If this method is not overridden in a child class (a specific DBD), it throws a L<DBI::Error::SQLState|SPVM::DBI::Error::SQLState> exception with SQLSTATE "IM001" (Driver does not support this function) to indicate that the driver implementation is missing.
-
 =head2 execute
 
 C<method execute : long ($ctx : L<Go::Context|SPVM::Go::Context>, $bind_values : object[] = undef)>
 
 Executes the prepared statement and return the number of affected rows, or -1 if unknown.
-
-For Driver Authors:
-
-If this method is not overridden in a child class (a specific DBD), it throws a L<DBI::Error::SQLState|SPVM::DBI::Error::SQLState> exception with SQLSTATE "IM001" (Driver does not support this function) to indicate that the driver implementation is missing.
 
 =head2 fetch
 
@@ -187,35 +157,31 @@ Returns the fetched row as an array of objects.
 
 =back
 
-For Driver Authors:
-
-If this method is not overridden in a child class (a specific DBD), it throws a L<DBI::Error::SQLState|SPVM::DBI::Error::SQLState> exception with SQLSTATE "IM001" (Driver does not support this function) to indicate that the driver implementation is missing.
-
 =head2 rows
 
 C<method rows : long ($ctx : L<Go::Context|SPVM::Go::Context>)>
 
 Returns the number of rows affected by the last execute.
 
-For Driver Authors:
-
-If this method is not overridden in a child class (a specific DBD), it throws a L<DBI::Error::SQLState|SPVM::DBI::Error::SQLState> exception with SQLSTATE "IM001" (Driver does not support this function) to indicate that the driver implementation is missing.
-
 =head2 finish
 
 C<method finish : void ()>
 
-In a child class, this method is expected to indicate that no more data will be fetched from this statement handle.
-
-For Driver Authors:
-
-If this method is not overridden in a child class (a specific DBD), it throws a L<DBI::Error::SQLState|SPVM::DBI::Error::SQLState> exception with SQLSTATE "IM001" (Driver does not support this function) to indicate that the driver implementation is missing.
+Indicates that no more data will be fetched from this statement handle before it is prepared again or destroyed. 
 
 =head2 DESTROY
 
 C<method DESTROY : void ()>
 
 The destructor. Calls L</"finish"> method.
+
+=head1 For Driver Authors
+
+=head2 Abstract Methods
+
+The following methods are intended to be overridden in child classes. If a method is not overridden, it throws a L<DBI::Error::SQLState|SPVM::DBI::Error::SQLState> exception with SQLSTATE "IM001" (Driver does not support this function) to indicate that the driver implementation is missing:
+
+L</"NUM_OF_FIELDS">, L</"NAME">, L</"NULLABLE">, L</"TYPE">, L</"PRECISION">, L</"SCALE">, L</"execute">, L</"fetch">, L</"rows">, L</"finish">.
 
 =head1 See Also
 
