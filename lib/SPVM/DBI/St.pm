@@ -116,15 +116,63 @@ Exceptions:
 
 Always throws a L<DBI::Error::SQLState|SPVM::DBI::Error::SQLState> exception whose message begins with a 5-character SQLSTATE "IM001" because this method is not implemented.
 
-=head2 fetchrow_array
+=head2 fetch
 
-C<method fetchrow_array : object[] ($ctx : L<Go::Context|SPVM::Go::Context>)>
+C<method fetch : object[] ($ctx : L<Go::Context|SPVM::Go::Context>, $bind_columns : object[] = undef, $ret_row : object[] = undef)>
 
-In a child class, this method must fetch the next row of data and return an array of objects or C<undef> if there are no more rows.
+Fetches the next row of data from the result set.
 
-Exceptions:
+Arguments:
 
-Always throws a L<DBI::Error::SQLState|SPVM::DBI::Error::SQLState> exception whose message begins with a 5-character SQLSTATE "IM001" because this method is not implemented.
+=over 4
+
+=item * C<$ctx> : L<Go::Context|SPVM::Go::Context>
+
+The context for goroutine-like execution and cancellation.
+
+=item * C<$bind_columns> : object[] (Optional)
+
+An array of objects used as persistent buffers for column values.
+
+=over 8
+
+=item * If a slot is C<undef>, the driver creates a new object (e.g., C<Int>, C<String>) and stores it in this array.
+
+=item * If a slot already contains an object, the driver reuses it by updating its value (mutable update), which avoids new memory allocations.
+
+=back
+
+=item * C<$ret_row> : object[] (Optional)
+
+An array to store the result of the current row (the pointers to objects in C<$bind_columns> or C<undef> for C<NULL>).
+
+=over 8
+
+=item * If this argument is C<undef>, the driver creates a new array for the row.
+
+=item * If an array is provided, the driver fills it and returns it.
+
+=back
+
+=back
+
+Returns:
+
+Returns the fetched row as an array of objects.
+
+=over 8
+
+=item * If C<$ret_row> was provided, that same array is returned (with updated values).
+
+=item * If C<$ret_row> was C<undef>, a newly allocated array is returned.
+
+=item * Returns C<undef> when there are no more rows.
+
+=back
+
+Implementation Note for Driver Authors:
+
+In a child class (DBD), this method must be implemented. The default implementation in the base C<DBI> class always throws a L<DBI::Error::SQLState|SPVM::DBI::Error::SQLState> exception with SQLSTATE "IM001".
 
 =head2 rows
 
