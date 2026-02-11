@@ -27,6 +27,9 @@ A statement handle is typically created by calling the L<prepare|SPVM::DBI::Db/"
     my $id = $row->[0]->(int);
     my $name = $row->[1]->(string);
   }
+  
+  # Finish explicitly
+  $sth->finish;
 
 =head1 Fields
 
@@ -166,7 +169,7 @@ The destructor. Calls L</"finish"> method.
 
 =head1 For Driver Authors
 
-=head2 Implementation Examples
+=head2 Extending DBI::St
 
 The following example shows how to implement a specific database statement handle (DBD) by extending the L<DBI::St|SPVM::DBI::St> class.
 

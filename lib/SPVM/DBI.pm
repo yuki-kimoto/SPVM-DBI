@@ -1,6 +1,6 @@
 package SPVM::DBI;
 
-our $VERSION = "0.003";
+our $VERSION = "0.002";
 
 1;
 

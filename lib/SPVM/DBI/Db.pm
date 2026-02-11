@@ -10,32 +10,41 @@ SPVM::DBI::Db - Database Handle
 
 =head1 Description
 
-L<DBI::Db|SPVM::DBI::Db> class in L<SPVM> represents a database handle. This class is a base class for database handles, and each method is expected to be overridden in child classes like L<DBI::Db::SQLite|SPVM::DBI::Db::SQLite>.
+L<DBI::Db|SPVM::DBI::Db> class in L<SPVM> represents a database handle. 
+
+This class is a base class for database handles, and each method is expected to be overridden in child classes like L<DBI::Db::SQLite|SPVM::DBI::Db::SQLite>.
+
+Note that this class is intended for driver authors. General users should not use this class directly; instead, use the L<DBI|SPVM::DBI> class to establish a connection.
 
 =head1 Usage
 
-For Driver Authors:
+The following example shows how to prepare a statement and manage transactions using a database handle (L<DBI::Db|SPVM::DBI::Db>).
 
-The following example shows how to implement a specific database handle (DBD) by extending the L<DBI::Db|SPVM::DBI::Db> class.
-
-  class DBD::MyDriver::Db extends DBI::Db {
+  use DBI::Db;
+  use DBI::St;
+  use Go::Context;
+  
+  my $ctx = Go::Context->new;
+  
+  # Assuming $dbh is already obtained via DBI->connect
+  
+  # 1. Prepare a statement
+  my $sth = $dbh->prepare($ctx, "SELECT * FROM users WHERE id = ?");
+  
+  # 2. Transaction management
+  eval {
+    $dbh->begin_work($ctx);
     
-    # Overriding the prepare method
-    method prepare : DBI::St ($ctx : Go::Context, $sql : string, $options : object[] = undef) {
-      
-      my $sth = DBD::MyDriver::St->new;
-      
-      # Call the common preparation logic provided by the base class.
-      # This validates options and performs common initialization.
-      $self->prepare_common($sth, $ctx, $sql, $options);
-      
-      # Implement the driver-specific logic to prepare a statement.
-      # ...
-      
-      return $sth;
-    }
+    # ... execute statements ...
     
+    $dbh->commit($ctx);
+  };
+  if ($@) {
+    $dbh->rollback($ctx);
   }
+  
+  # 3. Disconnect explicitly
+  $dbh->disconnect;
 
 =head1 Fields
 
@@ -57,8 +66,6 @@ C<has AutoCommit : ro byte;>
 
 The AutoCommit status.
 
-The default value is set to 1. Driver authors must ensure that the initial database connection state matches this default (i.e., transactions are automatically committed after each statement).
-
 =head2 InactiveDestroy
 
 C<has InactiveDestroy : rw byte;>
@@ -69,7 +76,7 @@ The InactiveDestroy status.
 
 C<has IdleTimeoutDurationNsec : rw long;>
 
-The maximum duration that a connection can remain idle, in nanoseconds. If the idle time exceeds this duration, the connection is expected to be closed, typically by a connection pool.
+The maximum duration that a connection can remain idle, in nanoseconds.
 
 =head2 ConnectTimeoutDurationNsec
 
@@ -81,29 +88,25 @@ The timeout value for establishing a new database connection, in nanoseconds.
 
 C<has ReadTimeoutDurationNsec : rw long;>
 
-The timeout value for read operations, in nanoseconds. If a read operation does not complete within this duration, the operation is canceled.
+The timeout value for read operations, in nanoseconds.
 
 =head2 WriteTimeoutDurationNsec
 
 C<has WriteTimeoutDurationNsec : rw long;>
 
-The timeout value for write operations, in nanoseconds. If a write operation does not complete within this duration, the operation is canceled.
+The timeout value for write operations, in nanoseconds.
 
 =head2 SocketKeepAliveDurationNsec
 
 C<has SocketKeepAliveDurationNsec : rw long;>
 
-The duration for TCP keep-alive idle time, in nanoseconds. 
-
-If this field is not explicitly set, it is recommended that the driver calls L<apply_modern_tcp_settings|SPVM::IO::Socket/"apply_modern_tcp_settings"> (or a similar method) to apply the modern default value. Set to 0 to explicitly disable keep-alive.
+The duration for TCP keep-alive idle time, in nanoseconds.
 
 =head2 TCPNoDelay
 
 C<has TCPNoDelay : rw byte;>
 
-The TCP_NODELAY status. 
-
-A boolean value (1 or 0). If this field is not explicitly set, it is recommended that the driver calls L<apply_modern_tcp_settings|SPVM::IO::Socket/"apply_modern_tcp_settings"> (or a similar method) to apply the modern default (usually 1). If set to 1, Nagle's algorithm is disabled, which ensures that small database query packets are sent immediately without delay.
+The TCP_NODELAY status (boolean 1 or 0).
 
 =head1 Instance Methods
 
@@ -113,19 +116,11 @@ C<method prepare : L<DBI::St|SPVM::DBI::St> ($ctx : L<Go::Context|SPVM::Go::Cont
 
 Prepares the SQL statement and returns a statement handle (L<DBI::St|SPVM::DBI::St>).
 
-For Driver Authors:
-
-If this method is not overridden in a child class (a specific DBD), it throws a L<DBI::Error::SQLState|SPVM::DBI::Error::SQLState> exception with SQLSTATE "IM001" (Driver does not support this function) to indicate that the driver implementation is missing.
-
 =head2 begin_work
 
 C<method begin_work : void ($ctx : L<Go::Context|SPVM::Go::Context>)>
 
 Starts a new transaction.
-
-For Driver Authors:
-
-If this method is not overridden in a child class (a specific DBD), it throws a L<DBI::Error::SQLState|SPVM::DBI::Error::SQLState> exception with SQLSTATE "IM001" (Driver does not support this function) to indicate that the driver implementation is missing.
 
 =head2 commit
 
@@ -133,19 +128,11 @@ C<method commit : void ($ctx : L<Go::Context|SPVM::Go::Context>)>
 
 Commits the current transaction.
 
-For Driver Authors:
-
-If this method is not overridden in a child class (a specific DBD), it throws a L<DBI::Error::SQLState|SPVM::DBI::Error::SQLState> exception with SQLSTATE "IM001" (Driver does not support this function) to indicate that the driver implementation is missing.
-
 =head2 rollback
 
 C<method rollback : void ($ctx : L<Go::Context|SPVM::Go::Context>)>
 
 Rolls back the current transaction.
-
-For Driver Authors:
-
-If this method is not overridden in a child class (a specific DBD), it throws a L<DBI::Error::SQLState|SPVM::DBI::Error::SQLState> exception with SQLSTATE "IM001" (Driver does not support this function) to indicate that the driver implementation is missing.
 
 =head2 last_insert_id
 
@@ -153,19 +140,11 @@ C<method last_insert_id : object ($ctx : L<Go::Context|SPVM::Go::Context>, $cata
 
 Returns the ID of the last inserted row.
 
-For Driver Authors:
-
-If this method is not overridden in a child class (a specific DBD), it throws a L<DBI::Error::SQLState|SPVM::DBI::Error::SQLState> exception with SQLSTATE "IM001" (Driver does not support this function) to indicate that the driver implementation is missing.
-
 =head2 ping
 
 C<method ping : int ($ctx : L<Go::Context|SPVM::Go::Context>)>
 
 Checks if the database connection is still alive.
-
-For Driver Authors:
-
-If this method is not overridden in a child class (a specific DBD), it throws a L<DBI::Error::SQLState|SPVM::DBI::Error::SQLState> exception with SQLSTATE "IM001" (Driver does not support this function) to indicate that the driver implementation is missing.
 
 =head2 get_info
 
@@ -173,19 +152,11 @@ C<method get_info : object ($ctx : L<Go::Context|SPVM::Go::Context>, $info_type 
 
 Returns information about the database.
 
-For Driver Authors:
-
-If this method is not overridden in a child class (a specific DBD), it throws a L<DBI::Error::SQLState|SPVM::DBI::Error::SQLState> exception with SQLSTATE "IM001" (Driver does not support this function) to indicate that the driver implementation is missing.
-
 =head2 table_info
 
 C<method table_info : L<DBI::St|SPVM::DBI::St> ($ctx : L<Go::Context|SPVM::Go::Context>, $catalog : string, $schema : string, $table : string, $type : string, $options : object[] = undef)>
 
 Returns a statement handle containing information about tables.
-
-For Driver Authors:
-
-If this method is not overridden in a child class (a specific DBD), it throws a L<DBI::Error::SQLState|SPVM::DBI::Error::SQLState> exception with SQLSTATE "IM001" (Driver does not support this function) to indicate that the driver implementation is missing.
 
 =head2 column_info
 
@@ -193,19 +164,11 @@ C<method column_info : L<DBI::St|SPVM::DBI::St> ($ctx : L<Go::Context|SPVM::Go::
 
 Returns a statement handle containing information about columns.
 
-For Driver Authors:
-
-If this method is not overridden in a child class (a specific DBD), it throws a L<DBI::Error::SQLState|SPVM::DBI::Error::SQLState> exception with SQLSTATE "IM001" (Driver does not support this function) to indicate that the driver implementation is missing.
-
 =head2 quote
 
 C<method quote : string ($ctx : L<Go::Context|SPVM::Go::Context>, $str : string, $type : int = -1)>
 
 Quotes a string for use in a SQL statement.
-
-For Driver Authors:
-
-If this method is not overridden in a child class (a specific DBD), it throws a L<DBI::Error::SQLState|SPVM::DBI::Error::SQLState> exception with SQLSTATE "IM001" (Driver does not support this function) to indicate that the driver implementation is missing.
 
 =head2 quote_identifier
 
@@ -213,25 +176,78 @@ C<method quote_identifier : string ($ctx : L<Go::Context|SPVM::Go::Context>, $ca
 
 Quotes an identifier for use in a SQL statement.
 
-For Driver Authors:
-
-If this method is not overridden in a child class (a specific DBD), it throws a L<DBI::Error::SQLState|SPVM::DBI::Error::SQLState> exception with SQLSTATE "IM001" (Driver does not support this function) to indicate that the driver implementation is missing.
-
 =head2 disconnect
 
 C<method disconnect : void ()>
 
 Disconnects from the database.
 
-For Driver Authors:
+=head2 prepare_common
 
-If this method is not overridden in a child class (a specific DBD), it throws a L<DBI::Error::SQLState|SPVM::DBI::Error::SQLState> exception with SQLSTATE "IM001" (Driver does not support this function) to indicate that the driver implementation is missing.
+C<protected method prepare_common : void ($sth : L<DBI::St|SPVM::DBI::St>, $ctx : L<Go::Context|SPVM::Go::Context>, $sql : string, $options : object[] = undef)>
+
+Provides common initialization logic for a statement handle.
+
+=head2 option_names
+
+C<protected method option_names : string[] ()>
+
+Returns the valid option names for this database handle.
 
 =head2 DESTROY
 
 C<method DESTROY : void ()>
 
 The destructor. Unless L</"InactiveDestroy"> is true, it calls L</"disconnect">.
+
+=head1 For Driver Authors
+
+=head2 Extending DBI::Db
+
+The following example shows how to implement a specific database handle (DBD) by extending the L<DBI::Db|SPVM::DBI::Db> class.
+
+  class DBD::MyDriver::Db extends DBI::Db {
+    
+    # Overriding the prepare method
+    method prepare : DBI::St ($ctx : Go::Context, $sql : string, $options : object[] = undef) {
+      
+      my $sth = DBD::MyDriver::St->new;
+      
+      # Call the common preparation logic provided by the base class.
+      $self->prepare_common($sth, $ctx, $sql, $options);
+      
+      # Implement the driver-specific logic to prepare a statement.
+      # ...
+      
+      return $sth;
+    }
+  }
+
+=head2 Abstract Methods
+
+The following methods are intended to be overridden in child classes. If a method is not overridden, it throws a L<DBI::Error::SQLState|SPVM::DBI::Error::SQLState> exception with SQLSTATE "IM001" (Driver does not support this function):
+
+L</"prepare">, L</"begin_work">, L</"commit">, L</"rollback">, L</"last_insert_id">, L</"ping">, L</"get_info">, L</"table_info">, L</"column_info">, L</"quote">, L</"quote_identifier">, L</"disconnect">.
+
+=head2 Implementing prepare
+
+When implementing L</"prepare">, driver authors should:
+
+=over 2
+
+=item * B<Call prepare_common>: Use L</"prepare_common"> to validate options and perform common initialization tasks.
+
+=item * B<Handle Driver Defaults>: Ensure that initial states (like C<AutoCommit> defaulting to 1) are respected in the underlying database connection.
+
+=back
+
+=head2 How to use prepare_common
+
+This method provides common initialization logic for a statement handle. It validates the option names in C<$options> using L</"option_names"> and performs other shared setup tasks. Driver authors are expected to call this method within their C<prepare> implementation.
+
+=head2 Overriding option_names
+
+Override this method if your database handle supports specific options. These names are used by L</"prepare_common"> to validate the options passed by the user.
 
 =head1 See Also
 
