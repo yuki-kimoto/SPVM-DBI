@@ -48,12 +48,6 @@ The following example shows how to prepare a statement and manage transactions u
 
 =head1 Fields
 
-=head2 Name
-
-C<has Name : ro string;>
-
-The data source name (DSN). This field stores the part of the DSN after the second colon (e.g., "dbname=:memory:" if the DSN is "dbi:SQLite:dbname=:memory:").
-
 =head2 Username
 
 C<has Username : ro string;>
