@@ -14,7 +14,7 @@ L<DBI::St|SPVM::DBI::St> class in L<SPVM> represents a statement handle. This cl
 
 =head1 Usage
 
-A statement handle is typically created by calling the L<prepare|SPVM::DBI::Db/"prepare"> method of a database handle (L<DBI::Db|SPVM::DBI::Db>).
+A statement handle is typically created by calling the L<prepare|SPVM::DBI/"prepare"> method of a database handle (L<DBI|SPVM::DBI>).
 
   # Create a statement handle
   my $sth = $dbh->prepare($ctx, "SELECT id, name FROM users WHERE id = ?");
@@ -35,7 +35,7 @@ A statement handle is typically created by calling the L<prepare|SPVM::DBI::Db/"
 
 =head2 Database
 
-C<has Database : ro L<DBI::Db|SPVM::DBI::Db>;>
+C<has Database : ro L<DBI|SPVM::DBI>;>
 
 The database handle that created this statement handle.
 
@@ -194,7 +194,7 @@ The following example shows how to implement a specific database statement handl
 
 =head2 Overriding option_names
 
-Returns the valid option names for this statement handle. Override this method if your statement handle supports specific options. These names are used to validate the options passed to L<DBI::Db#prepare_common|SPVM::DBI::Db/"prepare_common"> method.
+Returns the valid option names for this statement handle. Override this method if your statement handle supports specific options. These names are used to validate the options passed to L<DBI#prepare_common|SPVM::DBI/"prepare_common"> method.
 
 =head2 Abstract Methods
 
@@ -204,7 +204,7 @@ L</"NUM_OF_FIELDS">, L</"NAME">, L</"NULLABLE">, L</"TYPE">, L</"PRECISION">, L<
 
 =head1 See Also
 
-L<DBI|SPVM::DBI>, L<DBI::Db|SPVM::DBI::Db>, L<Go::Context|SPVM::Go::Context>
+L<DBI|SPVM::DBI>, L<DBI|SPVM::DBI>, L<Go::Context|SPVM::Go::Context>
 
 =head1 Repository
 

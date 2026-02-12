@@ -12,7 +12,7 @@ SPVM::DBI - Database Independent Interface
 
 =head1 Description
 
-L<DBI|SPVM::DBI> class in L<SPVM> provides a database-independent interface for database connections. It acts as a factory to create a database handle (L<DBI::Db|SPVM::DBI::Db>) by loading the appropriate driver (L<DBI::Dr|SPVM::DBI::Dr>).
+L<DBI|SPVM::DBI> class in L<SPVM> provides a database-independent interface for database connections. It acts as a factory to create a database handle (L<DBI|SPVM::DBI>) by loading the appropriate driver (L<DBI|SPVM::DBI>).
 
 =head1 Caution
 
@@ -27,10 +27,9 @@ This module is not yet tested and is in a highly experimental stage. The interfa
   use Go::Context;
   
   my $ctx = Go::Context->new;
-  my $dsn = "dbi:SQLite:dbname=:memory:";
   
   # 1. Connect to a database
-  my $dbh = DBI->connect($ctx, $dsn, "user", "password");
+  my $dbh = DBD::SQLite->connect($ctx, "user", "password", {Database => ":memory:"});
   
   # 2. Prepare a statement
   my $sql = "SELECT id, name FROM users WHERE id > ?";
@@ -65,10 +64,6 @@ This module is not yet tested and is in a highly experimental stage. The interfa
 
 =over 2
 
-=item * L<DBI::Dr|SPVM::DBI::Dr> - Driver Handle
-
-=item * L<DBI::Db|SPVM::DBI::Db> - Database Handle
-
 =item * L<DBI::St|SPVM::DBI::St> - Statement Handle
 
 =item * L<DBI::Constant|SPVM::DBI::Constant> - Information and Capability Constants
@@ -77,45 +72,7 @@ This module is not yet tested and is in a highly experimental stage. The interfa
 
 =back
 
-=head1 Class Variables
-
-=head2 $DRIVERS_H
-
-C<our $DRIVERS_H : cache L<Hash|SPVM::Hash> of L<DBI::Dr|SPVM::DBI::Dr>;>
-
-A cache for driver handles.
-
 =head1 Class Methods
-
-=head2 connect
-
-C<static method connect : L<DBI::Db|SPVM::DBI::Db> ($ctx : L<Go::Context|SPVM::Go::Context>, $dsn : string, $user : string = undef, $password : string = undef, $options : object[] = undef)>
-
-Establishes a connection to the database specified by the C<$dsn>.
-
-For more information about the available options that can be passed in C<$options> (such as timeouts and TCP settings), please see the L<DBI::Dr#connect|SPVM::DBI::Dr/"connect"> method.
-
-This method performs the following steps:
-
-=over 2
-
-=item 1. DSN Parsing
-
-Validates the C<$dsn> and parses it to extract the driver name (e.g., extracting "SQLite" from "dbi:SQLite:dbname=:memory:").
-
-=item 2. Driver Resolution
-
-Checks the internal cache L</"$DRIVERS_H">. If the driver (e.g., C<DBD::SQLite>) is already loaded, it reuses the existing driver instance.
-
-=item 3. Dynamic Driver Creation
-
-If the driver is not in the cache, creates a new instance of the driver class calling C<new> method. The new instance is then stored in the cache.
-
-=item 4. Handover to Driver
-
-Calls the L<connect|SPVM::DBI::Dr/"connect"> method of the resolved driver handle (L<DBI::Dr|SPVM::DBI::Dr>) to obtain a database handle (L<DBI::Db|SPVM::DBI::Db>).
-
-=back
 
 =head2 blob
 
@@ -143,7 +100,454 @@ This is a helper method to wrap a high-precision floating-point number represent
 
 =head1 See Also
 
-L<DBI::Db|SPVM::DBI::Db>, L<DBI::Dr|SPVM::DBI::Dr>, L<Go::Context|SPVM::Go::Context>
+L<Go::Context|SPVM::Go::Context>
+
+=head1 Repository
+
+L<https://github.com/yuki-kimoto/SPVM-DBI>
+
+=head1 Author
+
+Yuki Kimoto C<kimoto.yuki@gmail.com>
+
+=head1 Copyright & License
+
+Copyright (c) 2026 Yuki Kimoto
+
+MIT License
+
+__END__
+
+package SPVM::DBI;
+
+1;
+
+=encoding utf8
+
+=head1 Name
+
+SPVM::DBI - Driver Handle
+
+=head1 Description
+
+L<DBI|SPVM::DBI> class in L<SPVM> represents a driver handle. 
+
+This class is a base class for database driver handles, and each method is expected to be overridden in child classes like L<DBD::SQLite|SPVM::DBD::SQLite>.
+
+Note that this class is intended for driver authors. General users should not use this class directly; instead, use the L<DBI|SPVM::DBI> class to establish a connection.
+
+=head1 Instance Methods
+
+=head2 connect
+
+C<method connect : L<DBI|SPVM::DBI> ($ctx : L<Go::Context|SPVM::Go::Context>, $user : string = undef, $password : string = undef, $options : object[] = undef)>
+
+Establishes a connection to the database and returns a database handle (L<DBI|SPVM::DBI>).
+
+The following options can be specified in C<$options>.
+
+=over 4
+
+=item * C<ConnectTimeoutDurationNsec>
+
+The maximum time to wait for the database connection to be established, specified in nanoseconds.
+
+=item * C<TCPNoDelay>
+
+A boolean value (0 or 1) to disable Nagle's algorithm. Set to 1 to reduce latency for small packets by sending them immediately.
+
+=item * C<SocketKeepAliveDurationNsec>
+
+The interval for TCP keep-alive probes, specified in nanoseconds. This is useful for maintaining long-lived connections through firewalls or load balancers.
+
+=item * C<IdleTimeoutDurationNsec>
+
+The duration a connection can remain idle before it is considered expired and closed by the driver, specified in nanoseconds.
+
+=item * C<InactiveDestroy>
+
+A boolean value. If set to 1, the C<disconnect> method will not be called automatically when the database handle object is destroyed.
+
+=back
+
+=head2 connect_common
+
+C<protected method connect_common : void ($dbh : L<DBI|SPVM::DBI>, $ctx : L<Go::Context|SPVM::Go::Context>, $user : string = undef, $password : string = undef, $options : object[] = undef)>
+
+Provides common initialization logic for a database handle, such as parsing the DSN and mapping options to fields.
+
+=head2 option_names
+
+C<protected method option_names : string[] ()>
+
+Returns an array of supported option names for the database handle.
+
+=head1 For Driver Authors
+
+=head2 Extending DBI
+
+The following example shows how to implement a specific database driver (DBD) by extending the L<DBI|SPVM::DBI> class.
+
+  class DBD::MyDriver extends DBI {
+    
+    # Overriding the connect method
+    static method connect : DBD::MyDriver ($ctx : Go::Context, $user : string = undef, $password : string = undef, $options : object[] = undef) {
+      
+      my $self = DBD::MyDriver->new;
+      
+      # Call the common connection logic provided by the base class.
+      # This validates options and stores them into the database handle ($dbh).
+      $self->connect_common($dbh, $ctx, $user, $password, $options);
+      
+      # Implement the driver-specific logic to connect to a database.
+      # Apply network-related settings using the values stored in $dbh.
+      # ...
+      
+      return $self;
+    }
+    
+  }
+
+=head2 Abstract Methods
+
+The following method is intended to be overridden in child classes. If it is not overridden, it throws a L<DBI::Error::SQLState|SPVM::DBI::Error::SQLState> exception with SQLSTATE "IM001" (Driver does not support this function):
+
+L</"connect">.
+
+=head2 Implementing connect
+
+When implementing L</"connect">, driver authors are responsible for the following:
+
+=over 2
+
+=item * B<Option Validation>: Call L</"connect_common"> to validate and store options in the L<DBI|SPVM::DBI> instance.
+
+=item * B<Network Settings>: Apply C<TCPNoDelay> (TCP_NODELAY), C<ConnectTimeoutDurationNsec> (dialer deadline), and C<SocketKeepAliveDurationNsec> (TCP keep-alive) to the actual socket.
+
+=item * B<Idle Management>: Use C<IdleTimeoutDurationNsec> to set the timeout of the L<IO::Socket|SPVM::IO::Socket> to prevent resource leaks.
+
+=item * B<Handle Cleanup>: Ensure the C<InactiveDestroy> value is correctly set in the database handle so that C<DESTROY> behaves as expected.
+
+=back
+
+=head2 How to use connect_common
+
+This method provides common initialization logic for a database handle. It is intended to be called by driver authors within their C<connect> implementation.
+
+It performs the following tasks:
+
+=over 2
+
+=item 1.
+
+Validates the option names in C<$options> using L<option_names|SPVM::DBI/"option_names">.
+
+=item 2.
+
+Parses the DSN to extract the database name and username.
+
+=item 3.
+
+Sets the L<AutoCommit|SPVM::DBI/"AutoCommit"> field of C<$dbh> to 1.
+
+=item 4.
+
+Maps values from C<$options> to the corresponding fields in C<$dbh> (e.g., C<InactiveDestroy>, C<TCPNoDelay>, and various timeout durations).
+
+=back
+
+=head2 Overriding option_names
+
+Returns an array of supported option names for the database handle. In the base class, this returns default options like C<InactiveDestroy>, C<TCPNoDelay>, and several C<*DurationNsec> options.
+
+Driver authors can override this method to add driver-specific options. These names are used by L</"connect_common"> or L<prepare_common|SPVM::DBI/"prepare_common"> via L<Fn#check_option_names|SPVM::Fn/"check_option_names">.
+
+=head1 See Also
+
+L<DBI|SPVM::DBI>, L<DBI::St|SPVM::DBI::St>, L<Go::Context|SPVM::Go::Context>
+
+=head1 Repository
+
+L<https://github.com/yuki-kimoto/SPVM-DBI>
+
+=head1 Author
+
+Yuki Kimoto C<kimoto.yuki@gmail.com>
+
+=head1 Copyright & License
+
+Copyright (c) 2026 Yuki Kimoto
+
+MIT License
+
+__END__
+
+package SPVM::DBI;
+
+1;
+
+=encoding utf8
+
+=head1 Name
+
+SPVM::DBI - Database Handle
+
+=head1 Description
+
+L<DBI|SPVM::DBI> class in L<SPVM> represents a database handle. 
+
+This class is a base class for database handles, and each method is expected to be overridden in child classes like L<DBD::SQLite|SPVM::DBD::SQLite>.
+
+Note that this class is intended for driver authors. General users should not use this class directly; instead, use the L<DBI|SPVM::DBI> class to establish a connection.
+
+=head1 Usage
+
+The following example shows how to prepare a statement and manage transactions using a database handle (L<DBI|SPVM::DBI>).
+
+  use DBI;
+  use DBI::St;
+  use Go::Context;
+  
+  my $ctx = Go::Context->new;
+  
+  # Assuming $dbh is already obtained via DBI->connect
+  
+  # 1. Prepare a statement
+  my $sth = $dbh->prepare($ctx, "SELECT * FROM users WHERE id = ?");
+  
+  # 2. Transaction management
+  eval {
+    $dbh->begin_work($ctx);
+    
+    # ... execute statements ...
+    
+    $dbh->commit($ctx);
+  };
+  if ($@) {
+    $dbh->rollback($ctx);
+  }
+  
+  # 3. Disconnect explicitly
+  $dbh->disconnect;
+
+=head1 Fields
+
+=head2 Username
+
+The username for the database connection. This field stores the username extracted from the DSN.
+
+=head2 Database
+
+C<has Database : ro string;>
+
+The database name.
+
+=head2 Host
+
+C<has Host : ro string;>
+
+The host name of the database server.
+
+=head2 Port
+
+C<has Port : ro int;>
+
+The port number of the database server.
+
+C<has Username : ro string;>
+
+=head2 AutoCommit
+
+C<has AutoCommit : ro byte;>
+
+The AutoCommit status.
+
+=head2 InactiveDestroy
+
+C<has InactiveDestroy : rw byte;>
+
+The InactiveDestroy status.
+
+=head2 IdleTimeoutDurationNsec
+
+C<has IdleTimeoutDurationNsec : rw long;>
+
+The maximum duration that a connection can remain idle, in nanoseconds.
+
+=head2 ConnectTimeoutDurationNsec
+
+C<has ConnectTimeoutDurationNsec : rw long;>
+
+The timeout value for establishing a new database connection, in nanoseconds.
+
+=head2 ReadTimeoutDurationNsec
+
+C<has ReadTimeoutDurationNsec : rw long;>
+
+The timeout value for read operations, in nanoseconds.
+
+=head2 WriteTimeoutDurationNsec
+
+C<has WriteTimeoutDurationNsec : rw long;>
+
+The timeout value for write operations, in nanoseconds.
+
+=head2 SocketKeepAliveDurationNsec
+
+C<has SocketKeepAliveDurationNsec : rw long;>
+
+The duration for TCP keep-alive idle time, in nanoseconds.
+
+=head2 TCPNoDelay
+
+C<has TCPNoDelay : rw byte;>
+
+The TCP_NODELAY status (boolean 1 or 0).
+
+=head1 Instance Methods
+
+=head2 prepare
+
+C<method prepare : L<DBI::St|SPVM::DBI::St> ($ctx : L<Go::Context|SPVM::Go::Context>, $sql : string, $options : object[] = undef)>
+
+Prepares the SQL statement and returns a statement handle (L<DBI::St|SPVM::DBI::St>).
+
+=head2 begin_work
+
+C<method begin_work : void ($ctx : L<Go::Context|SPVM::Go::Context>)>
+
+Starts a new transaction.
+
+=head2 commit
+
+C<method commit : void ($ctx : L<Go::Context|SPVM::Go::Context>)>
+
+Commits the current transaction.
+
+=head2 rollback
+
+C<method rollback : void ($ctx : L<Go::Context|SPVM::Go::Context>)>
+
+Rolls back the current transaction.
+
+=head2 last_insert_id
+
+C<method last_insert_id : object ($ctx : L<Go::Context|SPVM::Go::Context>, $catalog : string = undef, $schema : string = undef, $table : string = undef, $field : string = undef, $options : object[] = undef)>
+
+Returns the ID of the last inserted row.
+
+=head2 ping
+
+C<method ping : int ($ctx : L<Go::Context|SPVM::Go::Context>)>
+
+Checks if the database connection is still alive.
+
+=head2 get_info
+
+C<method get_info : object ($ctx : L<Go::Context|SPVM::Go::Context>, $info_type : int)>
+
+Returns information about the database.
+
+=head2 table_info
+
+C<method table_info : L<DBI::St|SPVM::DBI::St> ($ctx : L<Go::Context|SPVM::Go::Context>, $catalog : string, $schema : string, $table : string, $type : string, $options : object[] = undef)>
+
+Returns a statement handle containing information about tables.
+
+=head2 column_info
+
+C<method column_info : L<DBI::St|SPVM::DBI::St> ($ctx : L<Go::Context|SPVM::Go::Context>, $catalog : string, $schema : string, $table : string, $column : string)>
+
+Returns a statement handle containing information about columns.
+
+=head2 quote
+
+C<method quote : string ($ctx : L<Go::Context|SPVM::Go::Context>, $str : string, $type : int = -1)>
+
+Quotes a string for use in a SQL statement.
+
+=head2 quote_identifier
+
+C<method quote_identifier : string ($ctx : L<Go::Context|SPVM::Go::Context>, $catalog : string, $schema : string, $table : string, $options : object[] = undef)>
+
+Quotes an identifier for use in a SQL statement.
+
+=head2 disconnect
+
+C<method disconnect : void ()>
+
+Disconnects from the database.
+
+=head2 prepare_common
+
+C<protected method prepare_common : void ($sth : L<DBI::St|SPVM::DBI::St>, $ctx : L<Go::Context|SPVM::Go::Context>, $sql : string, $options : object[] = undef)>
+
+Provides common initialization logic for a statement handle.
+
+=head2 option_names
+
+C<protected method option_names : string[] ()>
+
+Returns the valid option names for this database handle.
+
+=head2 DESTROY
+
+C<method DESTROY : void ()>
+
+The destructor. Unless L</"InactiveDestroy"> is true, it calls L</"disconnect">.
+
+=head1 For Driver Authors
+
+=head2 Extending DBI
+
+The following example shows how to implement a specific database handle (DBD) by extending the L<DBI|SPVM::DBI> class.
+
+  class DBD::MyDriver extends DBI {
+    
+    # Overriding the prepare method
+    method prepare : DBI::St ($ctx : Go::Context, $sql : string, $options : object[] = undef) {
+      
+      my $sth = DBD::MyDriver::St->new;
+      
+      # Call the common preparation logic provided by the base class.
+      $self->prepare_common($sth, $ctx, $sql, $options);
+      
+      # Implement the driver-specific logic to prepare a statement.
+      # ...
+      
+      return $sth;
+    }
+  }
+
+=head2 Abstract Methods
+
+The following methods are intended to be overridden in child classes. If a method is not overridden, it throws a L<DBI::Error::SQLState|SPVM::DBI::Error::SQLState> exception with SQLSTATE "IM001" (Driver does not support this function):
+
+L</"prepare">, L</"begin_work">, L</"commit">, L</"rollback">, L</"last_insert_id">, L</"ping">, L</"get_info">, L</"table_info">, L</"column_info">, L</"quote">, L</"quote_identifier">, L</"disconnect">.
+
+=head2 Implementing prepare
+
+When implementing L</"prepare">, driver authors should:
+
+=over 2
+
+=item * B<Call prepare_common>: Use L</"prepare_common"> to validate options and perform common initialization tasks.
+
+=item * B<Handle Driver Defaults>: Ensure that initial states (like C<AutoCommit> defaulting to 1) are respected in the underlying database connection.
+
+=back
+
+=head2 How to use prepare_common
+
+This method provides common initialization logic for a statement handle. It validates the option names in C<$options> using L</"option_names"> and performs other shared setup tasks. Driver authors are expected to call this method within their C<prepare> implementation.
+
+=head2 Overriding option_names
+
+Override this method if your database handle supports specific options. These names are used by L</"prepare_common"> to validate the options passed by the user.
+
+=head1 See Also
+
+L<DBI|SPVM::DBI>, L<DBI::St|SPVM::DBI::St>, L<Go::Context|SPVM::Go::Context>
 
 =head1 Repository
 

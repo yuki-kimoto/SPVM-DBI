@@ -5,10 +5,10 @@ class TestCase::DBI {
   use Go::Context;
 
   static method driver : int () {
+    
     my $ctx = Go::Context->background;
     
     # Connect via DBI using DSN with username/password and options
-    my $dsn = "dbi:TestCaseMinimal:test_db";
     my $user = "kimocchan";
     my $pass = "password";
     my $options = {
@@ -17,7 +17,7 @@ class TestCase::DBI {
       Database => "test_db"
     };
     
-    my $dbh = DBI->connect($ctx, $dsn, $user, $pass, $options);
+    my $dbh = DBD::TestCaseMinimal->connect($ctx, $user, $pass, $options);
     
     # Test Db fields (Host, Port, Database, and Username)
     {
