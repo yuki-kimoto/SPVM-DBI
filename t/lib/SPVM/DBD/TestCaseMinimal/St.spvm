@@ -1,0 +1,14 @@
+# Copyright (c) 2026 Yuki Kimoto
+# MIT License
+
+class DBD::TestCaseMinimal::St extends DBI::St {
+
+  method execute : long ($ctx : Go::Context, $params : object[] = undef) {
+    # TODO: Implement query logic against the memory storage
+  }
+
+  method fetch : DBI::Data[] ($ctx : Go::Context) {
+    # TODO: Return a row from the memory storage
+    return (DBI::Data[])undef;
+  }
+}

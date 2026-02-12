@@ -1,0 +1,16 @@
+# Copyright (c) 2026 Yuki Kimoto
+# MIT License
+
+class DBD::TestCaseMinimal::Db extends DBI::Db {
+  use DBD::TestCaseMinimal::St;
+
+  # TODO: has storage : List of object[]; # Example: rows of columns
+
+  method prepare : DBI::St ($ctx : Go::Context, $sql : string, $options : object[] = undef) {
+    # my $sth = DBD::TestCaseMinimal::St->new;
+    
+    # $self->prepare_common($sth, $ctx, $sql, $options);
+    
+    # return $sth;
+  }
+}

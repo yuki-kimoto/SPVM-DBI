@@ -1,0 +1,16 @@
+# Copyright (c) 2026 Yuki Kimoto
+# MIT License
+
+class DBD::TestCaseMinimal::Dr extends DBI::Dr {
+  use DBD::TestCaseMinimal::Db;
+
+  method connect : DBI::Db ($ctx : Go::Context, $dsn : string, $user : string = undef, $password : string = undef, $options : object[] = undef) {
+    # my $dbh = DBD::TestCaseMinimal::Db->new;
+    
+    # $self->connect_common($dbh, $ctx, $dsn, $user, $password, $options);
+    
+    # TODO: Initialize memory storage if needed
+    
+    # return $dbh;
+  }
+}
