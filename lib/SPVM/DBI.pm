@@ -117,6 +117,30 @@ Calls the L<connect|SPVM::DBI::Dr/"connect"> method of the resolved driver handl
 
 =back
 
+=head2 blob
+
+C<static method blob : L<DBI::Data|SPVM::DBI::Data> ($value : string)>
+
+Creates a new L<DBI::Data|SPVM::DBI::Data> object with C<TYPE_ID_BLOB>.
+
+This is a helper method to wrap binary data.
+
+=head2 big_int
+
+C<static method big_int : L<DBI::Data|SPVM::DBI::Data> ($value : string)>
+
+Creates a new L<DBI::Data|SPVM::DBI::Data> object with C<TYPE_ID_BIG_INT>.
+
+This is a helper method to wrap a large integer represented as a string (e.g., "170141183460469231731687303715884105727").
+
+=head2 big_float
+
+C<static method big_float : L<DBI::Data|SPVM::DBI::Data> ($value : string)>
+
+Creates a new L<DBI::Data|SPVM::DBI::Data> object with C<TYPE_ID_BIG_FLOAT>.
+
+This is a helper method to wrap a high-precision floating-point number represented as a string.
+
 =head1 See Also
 
 L<DBI::Db|SPVM::DBI::Db>, L<DBI::Dr|SPVM::DBI::Dr>, L<Go::Context|SPVM::Go::Context>
