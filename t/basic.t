@@ -17,6 +17,8 @@ my $start_memory_blocks_count = $api->get_memory_blocks_count;
 
 ok(SPVM::TestCase::DBI->test);
 
+ok(SPVM::TestCase::DBI->data);
+
 # Version check
 is($SPVM::DBI::VERSION, $api->get_version_string("DBI"));
 
