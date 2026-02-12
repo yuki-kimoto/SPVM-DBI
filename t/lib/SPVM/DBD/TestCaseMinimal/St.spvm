@@ -61,6 +61,6 @@ class DBD::TestCaseMinimal::St extends DBI::St {
 
   method finish : void () {
     # Use diag for debugging output
-    diag "DBD::TestCaseMinimal::St#finish";
+    diag "[Test Output]DBD::TestCaseMinimal::St#finish";
   }
 }

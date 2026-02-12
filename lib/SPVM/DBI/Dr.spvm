@@ -18,20 +18,12 @@ class DBI::Dr {
     unless ($dsn) {
       die "The data source name $dsn must be defined.";
     }
-
+    
     # Redefine $options as a Hash.
     my $options = Fn->to_hash($options);
     
-    # Parse Name and Username from DSN
-    # Extract everything after "dbi:driver:" as Name
-    if (my $m = Re->m($dsn, "^dbi:[^:]+:(.+)")) {
-      $dbh->{Name} = $m->cap(1);
-    }
-    
     # Extract user from "dbi:driver:db;user=xxx" or similar patterns
-    if (my $m = Re->m($dsn, ["[;:]user=([^;:]+)", "i"])) {
-      $dbh->{Username} = $m->cap(1);
-    }
+    $dbh->{Username} = $user;
     
     # Always set to 1
     $dbh->{AutoCommit} = 1;

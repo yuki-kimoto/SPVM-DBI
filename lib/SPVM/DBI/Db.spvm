@@ -11,8 +11,6 @@ class DBI::Db {
   use Go::Time;
   
   # Fields
-  has Name : ro string;
-  
   has Username : ro string;
   
   has AutoCommit : ro byte;

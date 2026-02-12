@@ -54,6 +54,6 @@ class DBD::TestCaseMinimal::Db extends DBI::Db {
   }
 
   method disconnect : void () {
-    diag "DBD::TestCaseMinimal::Db#disconnect";
+    diag "[Test Output]DBD::TestCaseMinimal::Db#disconnect";
   }
 }

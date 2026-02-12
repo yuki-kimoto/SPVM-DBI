@@ -3,8 +3,4 @@
 
 class DBD::TestCaseMinimal {
   use DBD::TestCaseMinimal::Dr;
-
-  static method new : DBD::TestCaseMinimal::Dr () {
-    # return DBD::TestCaseMinimal::Dr->new;
-  }
 }

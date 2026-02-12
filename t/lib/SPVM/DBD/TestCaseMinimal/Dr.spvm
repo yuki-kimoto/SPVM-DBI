@@ -3,7 +3,11 @@
 
 class DBD::TestCaseMinimal::Dr extends DBI::Dr {
   use DBD::TestCaseMinimal::Db;
-
+  
+  static method new : DBD::TestCaseMinimal::Dr () {
+    return new DBD::TestCaseMinimal::Dr;
+  }
+  
   method connect : DBI::Db ($ctx : Go::Context, $dsn : string, $user : string = undef, $password : string = undef, $options : object[] = undef) {
     my $dbh = DBD::TestCaseMinimal::Db->new;
     
