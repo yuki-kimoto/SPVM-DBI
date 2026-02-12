@@ -14,6 +14,8 @@ L<DBI::Data|SPVM::DBI::Data> class in L<SPVM> represents a data container for sp
 
 This class holds a value as a C<string> and a C<type_id> to indicate how the value should be interpreted (e.g., as a large integer or a high-precision decimal).
 
+This class implements L<Stringable|SPVM::Stringable> interface.
+
 =head1 Usage
 
   use DBI::Data;
@@ -22,6 +24,13 @@ This class holds a value as a C<string> and a C<type_id> to indicate how the val
   my $data = DBI::Data->new;
   $data->set_type_id(DBI::Data->TYPE_ID_BIG_INT);
   $data->set_value("123456789012345678901234567890");
+  
+  # Stringification
+  my $string_value = $data->to_string;
+
+=head1 Interfaces
+
+L<Stringable|SPVM::Stringable>
 
 =head1 Enumerations
 
@@ -69,9 +78,17 @@ C<static method new : L<DBI::Data|SPVM::DBI::Data> ()>
 
 Creates a new L<DBI::Data|SPVM::DBI::Data> object.
 
+=head1 Instance Methods
+
+=head2 to_string
+
+C<method to_string : string ()>
+
+Returns the L</"value"> field. This method is intended to be used for stringification.
+
 =head1 See Also
 
-L<DBI|SPVM::DBI>, L<DBI::St|SPVM::DBI::St>
+L<DBI|SPVM::DBI>, L<DBI::St|SPVM::DBI::St>, L<Stringable|SPVM::Stringable>
 
 =head1 Repository
 
