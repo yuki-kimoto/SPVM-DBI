@@ -50,9 +50,27 @@ The following example shows how to prepare a statement and manage transactions u
 
 =head2 Username
 
-C<has Username : ro string;>
-
 The username for the database connection. This field stores the username extracted from the DSN.
+
+=head2 Database
+
+C<has Database : ro string;>
+
+The database name.
+
+=head2 Host
+
+C<has Host : ro string;>
+
+The host name of the database server.
+
+=head2 Port
+
+C<has Port : ro int;>
+
+The port number of the database server.
+
+C<has Username : ro string;>
 
 =head2 AutoCommit
 

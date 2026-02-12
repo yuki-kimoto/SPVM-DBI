@@ -25,6 +25,18 @@ class DBI::Dr {
     # Extract user from "dbi:driver:db;user=xxx" or similar patterns
     $dbh->{Username} = $user;
     
+    if ($options->exists("Host")) {
+      $dbh->{Host} = $options->get("Host")->(string);
+    }
+    
+    if ($options->exists("Port")) {
+      $dbh->{Port} = $options->get("Port")->(int);
+    }
+    
+    if ($options->exists("Database")) {
+      $dbh->{Database} = $options->get("Database")->(string);
+    }
+    
     # Always set to 1
     $dbh->{AutoCommit} = 1;
     

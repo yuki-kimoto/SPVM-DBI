@@ -13,6 +13,12 @@ class DBI::Db {
   # Fields
   has Username : ro string;
   
+  has Database : ro string;
+  
+  has Host : ro string;
+  
+  has Port : ro int;
+  
   has AutoCommit : ro byte;
   
   has InactiveDestroy : rw byte;
@@ -45,6 +51,9 @@ class DBI::Db {
   protected method option_names : string[] () {
     
     my $option_names = [
+      "Host",
+      "Port",
+      "Database",
       "InactiveDestroy",
       "IdleTimeoutDurationNsec",
       "ConnectTimeoutDurationNsec",

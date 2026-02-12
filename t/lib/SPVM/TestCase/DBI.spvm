@@ -7,15 +7,35 @@ class TestCase::DBI {
   static method driver : int () {
     my $ctx = Go::Context->background;
     
-    # Connect via DBI using DSN with username/password
+    # Connect via DBI using DSN with username/password and options
     my $dsn = "dbi:TestCaseMinimal:test_db";
     my $user = "kimocchan";
     my $pass = "password";
+    my $options = {
+      Host => "localhost",
+      Port => 3306,
+      Database => "test_db"
+    };
     
-    my $dbh = DBI->connect($ctx, $dsn, $user, $pass);
+    my $dbh = DBI->connect($ctx, $dsn, $user, $pass, $options);
     
-    # Test Db fields (Name and Username)
+    # Test Db fields (Host, Port, Database, and Username)
     {
+      unless ($dbh->Host eq "localhost") {
+        diag $dbh->Host;
+        return 0;
+      }
+      
+      unless ($dbh->Port == 3306) {
+        diag (string)$dbh->Port;
+        return 0;
+      }
+      
+      unless ($dbh->Database eq "test_db") {
+        diag $dbh->Database;
+        return 0;
+      }
+      
       unless ($dbh->Username eq $user) {
         diag $dbh->Username;
         return 0;
