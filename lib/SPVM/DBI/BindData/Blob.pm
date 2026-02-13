@@ -42,7 +42,7 @@ The binary data value represented as a string.
 
 =head2 new
 
-C<static method new : L<DBI::BindData::Blob|SPVM::DBI::BindData::Blob> ($binary: string = undef)>
+C<static method new : L<DBI::BindData::Blob|SPVM::DBI::BindData::Blob> ($binary: string = undef);>
 
 Creates a new L<DBI::BindData::Blob|SPVM::DBI::BindData::Blob> object with the given binary $binary.
 
@@ -50,7 +50,7 @@ Creates a new L<DBI::BindData::Blob|SPVM::DBI::BindData::Blob> object with the g
 
 =head2 to_string
 
-C<method to_string : string ()>
+C<method to_string : string ();>
 
 Returns the L</"value"> field. This method is used for stringification and fulfills the L<Stringable|SPVM::Stringable> interface.
 

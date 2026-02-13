@@ -57,49 +57,49 @@ The SQL statement string.
 
 =head2 NUM_OF_FIELDS
 
-C<method NUM_OF_FIELDS : int ($ctx : L<Go::Context|SPVM::Go::Context>)>
+C<method NUM_OF_FIELDS : int ($ctx : L<Go::Context|SPVM::Go::Context>);>
 
 Returns the number of fields (columns) in the result set.
 
 =head2 NAME
 
-C<method NAME : string[] ($ctx : L<Go::Context|SPVM::Go::Context>)>
+C<method NAME : string[] ($ctx : L<Go::Context|SPVM::Go::Context>);>
 
 Returns an array of column names.
 
 =head2 NULLABLE
 
-C<method NULLABLE : int[] ($ctx : L<Go::Context|SPVM::Go::Context>)>
+C<method NULLABLE : int[] ($ctx : L<Go::Context|SPVM::Go::Context>);>
 
 Returns an array indicating if each column is nullable.
 
 =head2 TYPE
 
-C<method TYPE : int[] ($ctx : L<Go::Context|SPVM::Go::Context>)>
+C<method TYPE : int[] ($ctx : L<Go::Context|SPVM::Go::Context>);>
 
 Returns an array of column types.
 
 =head2 PRECISION
 
-C<method PRECISION : int[] ($ctx : L<Go::Context|SPVM::Go::Context>)>
+C<method PRECISION : int[] ($ctx : L<Go::Context|SPVM::Go::Context>);>
 
 Returns an array of column precision values.
 
 =head2 SCALE
 
-C<method SCALE : int[] ($ctx : L<Go::Context|SPVM::Go::Context>)>
+C<method SCALE : int[] ($ctx : L<Go::Context|SPVM::Go::Context>);>
 
 Returns an array of column scale values.
 
 =head2 execute
 
-C<method execute : long ($ctx : L<Go::Context|SPVM::Go::Context>, $bind_values : object[] = undef)>
+C<method execute : long ($ctx : L<Go::Context|SPVM::Go::Context>, $bind_values : object[] = undef);>
 
 Executes the prepared statement and return the number of affected rows, or -1 if unknown.
 
 =head2 fetch
 
-C<method fetch : object[] ($ctx : L<Go::Context|SPVM::Go::Context>)>
+C<method fetch : object[] ($ctx : L<Go::Context|SPVM::Go::Context>);>
 
 Fetches the next row of data from the result set as an array of objects.
 
@@ -187,19 +187,19 @@ Returns the fetched row as an array of objects.
 
 =head2 rows
 
-C<method rows : long ($ctx : L<Go::Context|SPVM::Go::Context>)>
+C<method rows : long ($ctx : L<Go::Context|SPVM::Go::Context>);>
 
 Returns the number of rows affected by the last execute.
 
 =head2 finish
 
-C<method finish : void ()>
+C<method finish : void ();>
 
 Indicates that no more data will be fetched from this statement handle before it is prepared again or destroyed. 
 
 =head2 DESTROY
 
-C<method DESTROY : void ()>
+C<method DESTROY : void ();>
 
 The destructor. Calls L</"finish"> method.
 
@@ -238,7 +238,7 @@ L</"NUM_OF_FIELDS">, L</"NAME">, L</"NULLABLE">, L</"TYPE">, L</"PRECISION">, L<
 
 =head3 option_names
 
-C<protected method option_names : string[] ()>
+C<protected method option_names : string[] ();>
 
 Returns the valid option names for this statement handle. Override this method if your statement handle supports specific options. These names are used to validate the options passed to L<DBI#prepare_common|SPVM::DBI/"prepare_common"> method.
 

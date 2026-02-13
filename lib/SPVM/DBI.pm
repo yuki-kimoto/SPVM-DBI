@@ -186,7 +186,7 @@ The TCP_NODELAY status (boolean 1 or 0).
 
 =head2 blob
 
-C<static method blob : L<DBI::BindData::Blob|SPVM::DBI::BindData::Blob> ($value : string)>
+C<static method blob : L<DBI::BindData::Blob|SPVM::DBI::BindData::Blob> ($value : string);>
 
 Creates a new L<DBI::BindData::Blob|SPVM::DBI::BindData::Blob> object>.
 
@@ -196,79 +196,79 @@ This is a helper method to wrap binary data.
 
 =head2 prepare
 
-C<method prepare : L<DBI::St|SPVM::DBI::St> ($ctx : L<Go::Context|SPVM::Go::Context>, $sql : string, $options : object[] = undef)>
+C<method prepare : L<DBI::St|SPVM::DBI::St> ($ctx : L<Go::Context|SPVM::Go::Context>, $sql : string, $options : object[] = undef);>
 
 Prepares the SQL statement and returns a statement handle (L<DBI::St|SPVM::DBI::St>).
 
 =head2 begin_work
 
-C<method begin_work : void ($ctx : L<Go::Context|SPVM::Go::Context>)>
+C<method begin_work : void ($ctx : L<Go::Context|SPVM::Go::Context>);>
 
 Starts a new transaction.
 
 =head2 commit
 
-C<method commit : void ($ctx : L<Go::Context|SPVM::Go::Context>)>
+C<method commit : void ($ctx : L<Go::Context|SPVM::Go::Context>);>
 
 Commits the current transaction.
 
 =head2 rollback
 
-C<method rollback : void ($ctx : L<Go::Context|SPVM::Go::Context>)>
+C<method rollback : void ($ctx : L<Go::Context|SPVM::Go::Context>);>
 
 Rolls back the current transaction.
 
 =head2 last_insert_id
 
-C<method last_insert_id : object ($ctx : L<Go::Context|SPVM::Go::Context>, $catalog : string = undef, $schema : string = undef, $table : string = undef, $field : string = undef, $options : object[] = undef)>
+C<method last_insert_id : object ($ctx : L<Go::Context|SPVM::Go::Context>, $catalog : string = undef, $schema : string = undef, $table : string = undef, $field : string = undef, $options : object[] = undef);>
 
 Returns the ID of the last inserted row.
 
 =head2 ping
 
-C<method ping : int ($ctx : L<Go::Context|SPVM::Go::Context>)>
+C<method ping : int ($ctx : L<Go::Context|SPVM::Go::Context>);>
 
 Checks if the database connection is still alive.
 
 =head2 get_info
 
-C<method get_info : object ($ctx : L<Go::Context|SPVM::Go::Context>, $info_type : int)>
+C<method get_info : object ($ctx : L<Go::Context|SPVM::Go::Context>, $info_type : int);>
 
 Returns information about the database.
 
 =head2 table_info
 
-C<method table_info : L<DBI::St|SPVM::DBI::St> ($ctx : L<Go::Context|SPVM::Go::Context>, $catalog : string, $schema : string, $table : string, $type : string, $options : object[] = undef)>
+C<method table_info : L<DBI::St|SPVM::DBI::St> ($ctx : L<Go::Context|SPVM::Go::Context>, $catalog : string, $schema : string, $table : string, $type : string, $options : object[] = undef);>
 
 Returns a statement handle containing information about tables.
 
 =head2 column_info
 
-C<method column_info : L<DBI::St|SPVM::DBI::St> ($ctx : L<Go::Context|SPVM::Go::Context>, $catalog : string, $schema : string, $table : string, $column : string)>
+C<method column_info : L<DBI::St|SPVM::DBI::St> ($ctx : L<Go::Context|SPVM::Go::Context>, $catalog : string, $schema : string, $table : string, $column : string);>
 
 Returns a statement handle containing information about columns.
 
 =head2 quote
 
-C<method quote : string ($ctx : L<Go::Context|SPVM::Go::Context>, $str : string, $type : int = -1)>
+C<method quote : string ($ctx : L<Go::Context|SPVM::Go::Context>, $str : string, $type : int = -1);>
 
 Quotes a string for use in a SQL statement.
 
 =head2 quote_identifier
 
-C<method quote_identifier : string ($ctx : L<Go::Context|SPVM::Go::Context>, $catalog : string, $schema : string, $table : string, $options : object[] = undef)>
+C<method quote_identifier : string ($ctx : L<Go::Context|SPVM::Go::Context>, $catalog : string, $schema : string, $table : string, $options : object[] = undef);>
 
 Quotes an identifier for use in a SQL statement.
 
 =head2 disconnect
 
-C<method disconnect : void ()>
+C<method disconnect : void ();>
 
 Disconnects from the database.
 
 =head2 DESTROY
 
-C<method DESTROY : void ()>
+C<method DESTROY : void ();>
 
 The destructor. Unless L</"InactiveDestroy"> is true, it calls L</"disconnect">.
 
@@ -316,7 +316,7 @@ The following example shows how to implement a specific database driver (DBD) by
 
 When implementing C<connect> method, driver authors are responsible for the following:
 
-C<static method connect : L<DBI|SPVM::DBI> ($ctx : L<Go::Context|SPVM::Go::Context>, $user : string = undef, $password : string = undef, $options : object[] = undef)>
+C<static method connect : L<DBI|SPVM::DBI> ($ctx : L<Go::Context|SPVM::Go::Context>, $user : string = undef, $password : string = undef, $options : object[] = undef);>
 
 Establishes a connection to the database and returns a database handle (L<DBI|SPVM::DBI>).
 
@@ -356,7 +356,7 @@ L</"prepare">, L</"begin_work">, L</"commit">, L</"rollback">, L</"last_insert_i
 
 =head3 connect_common
 
-C<protected method connect_common : void ($ctx : L<Go::Context|SPVM::Go::Context>, $user : string = undef, $password : string = undef, $options : object[] = undef)>
+C<protected method connect_common : void ($ctx : L<Go::Context|SPVM::Go::Context>, $user : string = undef, $password : string = undef, $options : object[] = undef);>
 
 Provides common initialization logic for a database handle. This method is intended to be called by driver authors within their own C<connect> implementation.
 
@@ -400,7 +400,7 @@ Set to the respective duration values (as C<long>) from C<$options> if they exis
 
 =head3 prepare_common
 
-C<protected method prepare_common : void ($sth : L<DBI::St|SPVM::DBI::St>, $ctx : L<Go::Context|SPVM::Go::Context>, $sql : string, $options : object[] = undef)>
+C<protected method prepare_common : void ($sth : L<DBI::St|SPVM::DBI::St>, $ctx : L<Go::Context|SPVM::Go::Context>, $sql : string, $options : object[] = undef);>
 
 Provides common initialization logic for a statement handle. This method is intended to be called by driver authors within their own C<prepare> implementation.
 
@@ -434,7 +434,7 @@ Set the L<DBI::St#Statement|SPVM::DBI::St/"Statement"> field to the SQL string p
 
 =head3 option_names
 
-C<protected method option_names : string[] ()>
+C<protected method option_names : string[] ();>
 
 Returns an array of supported option names for the database handle. In the base class, this returns default options like C<InactiveDestroy>, C<TCPNoDelay>, and several C<*DurationNsec> options.
 
