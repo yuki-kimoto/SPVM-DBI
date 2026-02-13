@@ -2,7 +2,7 @@
 # MIT License
 
 class DBI {
-  version "0.004";
+  version "0.005";
   
   use DBI::St;
   use Go::Context;
