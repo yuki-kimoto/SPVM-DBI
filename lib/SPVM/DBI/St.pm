@@ -99,9 +99,11 @@ Executes the prepared statement and return the number of affected rows, or -1 if
 
 =head2 fetch
 
-C<method fetch : object[] ($ctx : L<Go::Context|SPVM::Go::Context>, $bind_columns : object[] = undef, $ret_row : object[] = undef)>
+C<method fetch : object[] ($ctx : L<Go::Context|SPVM::Go::Context>)>
 
-Fetches the next row of data from the result set.
+Fetches the next row of data from the result set as an array of objects.
+
+This is the simplest way to fetch data. It always allocates a new array and new column objects (e.g., C<Int>, C<string>) for each row.
 
 Arguments:
 
@@ -109,31 +111,61 @@ Arguments:
 
 =item * C<$ctx> : L<Go::Context|SPVM::Go::Context>
 
-The context for goroutine-like execution and cancellation.
+The context for execution control and cancellation.
+
+=back
+
+Return Value:
+
+Returns the fetched row as an array of objects (C<object[]>). Returns C<undef> if there are no more rows.
+
+=head2 fetch_with_bind_columns
+
+C<method fetch_with_bind_columns : object[] ($ctx : Go::Context, $bind_columns : object[] = undef, $ret_row : object[] = undef, $create_count_ref : int* = undef, $extended_count_ref : int* = undef);>
+
+Fetches the next row efficiently by using bound columns as reusable buffers.
+
+Arguments:
+
+=over 4
+
+=item * C<$ctx> : L<Go::Context|SPVM::Go::Context>
+
+The context for execution control and cancellation.
 
 =item * C<$bind_columns> : object[] (Optional)
 
-An array of objects used as persistent buffers for column values.
+An array of objects provided as reusable containers for column values. This array is read-only; the driver does not modify its elements.
 
 =over 8
 
-=item * If a slot is C<undef>, the driver creates a new object (e.g., C<Int>, C<String>) and stores it in this array.
+=item * If a slot contains an object of the matching type, the driver reuses that container by updating its value, avoiding new memory allocations.
 
-=item * If a slot already contains an object, the driver reuses it by updating its value (mutable update), which avoids new memory allocations.
+=item * If a slot is C<undef>, or if the existing object's type does not match the type fetched from the database, the driver creates a new column object.
 
 =back
 
 =item * C<$ret_row> : object[] (Optional)
 
-An array to store the result of the current row (the pointers to objects in C<$bind_columns> or C<undef> for C<NULL>).
+An array to store the result of the current row.
 
 =over 8
 
-=item * If this argument is C<undef>, the driver creates a new array for the row.
+=item * The driver fills this array with the objects: either the reused ones from C<$bind_columns> or the newly created ones.
 
-=item * If an array is provided, the driver fills it and returns it.
+=item * If C<undef>, the driver creates and returns a new array for the row result.
+
+=item * If an array is provided, the driver fills and returns it. If the provided array does not have enough capacity to store all columns, it is automatically extended.
 
 =back
+
+=item * C<$create_count_ref> : int* (Optional)
+
+A reference to an integer that is incremented whenever a new column object is created. This can be used to detect unintended object creations caused by type mismatches between C<$bind_columns> and the actual database columns.
+
+=item * C<$extended_count_ref> : int* (Optional)
+
+A reference to an integer that is incremented whenever the C<$ret_row> array is extended. This is useful for detecting unintended memory allocations caused by the insufficient size of the provided C<$ret_row> array.
 
 =back
 
@@ -143,9 +175,11 @@ Returns the fetched row as an array of objects.
 
 =over 8
 
-=item * If C<$ret_row> was provided, that same array is returned (with updated values).
+=item * If C<$ret_row> was provided, that same array is returned (potentially extended).
 
 =item * If C<$ret_row> was C<undef>, a newly allocated array is returned.
+
+=item * The returned array contains objects from C<$bind_columns> where the types matched; otherwise, it contains newly created objects.
 
 =item * Returns C<undef> when there are no more rows.
 

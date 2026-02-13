@@ -133,14 +133,16 @@ class TestCase::DBI {
         }
 
         my $bind_cols = [(object)99, (object)"input"];
-        my $row2 = $sth->fetch($ctx, $bind_cols);
+        my $row2 = $sth->fetch_with_bind_columns($ctx, $bind_cols);
         unless ((int)$row2->[0] == 99 && (string)$row2->[1] eq "input") {
           diag;
           return 0;
         }
 
         my $ret_row = new object[2];
-        my $row3 = $sth->fetch($ctx, $bind_cols, $ret_row);
+        my $created_count = 0;
+        my $extended_count = 0;
+        my $row3 = $sth->fetch_with_bind_columns($ctx, $bind_cols, $ret_row, \$created_count, \$extended_count);
         unless ($row3 == $ret_row && (int)$row3->[0] == 99) {
           diag;
           return 0;
