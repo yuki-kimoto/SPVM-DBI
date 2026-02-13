@@ -1,5 +1,10 @@
 Revision history for SPVM::DBI
 
+0.005 2026-02-13
+  [Incompatible Changes]
+    * Rewirte Type Mapping Rules.
+    * Remove DBI::Data and add DBI::BindData::Blob.
+    
 0.004 2026-02-12
   [Incompatible Changes]
     * To finalize the specification, many incompatible changes have been made to DBI classes.
