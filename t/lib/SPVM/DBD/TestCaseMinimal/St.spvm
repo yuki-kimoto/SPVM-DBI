@@ -2,7 +2,6 @@
 # MIT License
 
 class DBD::TestCaseMinimal::St extends DBI::St {
-  use DBI::Data;
 
   # Class Methods
   static method new : DBD::TestCaseMinimal::St () {
