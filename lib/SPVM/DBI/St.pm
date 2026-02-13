@@ -366,22 +366,6 @@ Converts to C<undef>
 
 =back
 
-=head3 Technical Note on 64-bit Casts
-
-When casting between C<uint64_t> (database) and C<int64_t> (SPVM C<long>):
-
-=over 2
-
-=item * B<Range <= 2^63 - 1>: 
-
-The value is preserved perfectly during casting. This covers the vast majority of use cases, such as auto-increment IDs that haven't reached the halfway point of the 64-bit range.
-
-=item * B<Range > 2^63 - 1>: 
-
-The bit pattern is preserved, but the value will be interpreted as a negative number in SPVM. Since no bits are lost, the original unsigned value can be recovered or compared using bitwise operations if necessary.
-
-=back
-
 =head1 See Also
 
 L<DBI|SPVM::DBI>, L<Go::Context|SPVM::Go::Context>
