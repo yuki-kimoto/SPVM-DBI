@@ -4,10 +4,10 @@ Changes
 DEVELOPMENT.txt
 lib/SPVM/DBI.pm
 lib/SPVM/DBI.spvm
+lib/SPVM/DBI/BindData/Blob.pm
+lib/SPVM/DBI/BindData/Blob.spvm
 lib/SPVM/DBI/Constant.pm
 lib/SPVM/DBI/Constant.spvm
-lib/SPVM/DBI/Data.pm
-lib/SPVM/DBI/Data.spvm
 lib/SPVM/DBI/Error/SQLState.pm
 lib/SPVM/DBI/Error/SQLState.spvm
 lib/SPVM/DBI/St.pm

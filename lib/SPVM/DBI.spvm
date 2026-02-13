@@ -7,7 +7,7 @@ class DBI {
   use DBI::St;
   use Go::Context;
   use Go::Time;
-  use DBI::Data;
+  use DBI::BindData::Blob;
   
   # Fields
   has Username : ro string;
@@ -35,30 +35,8 @@ class DBI {
   has TCPNoDelay : rw byte;
   
   # Class Methods
-  static method blob : DBI::Data ($value : string) {
-    my $data = DBI::Data->new;
-    $data->set_type_id(DBI::Data->TYPE_ID_BLOB);
-    $data->set_value($value);
-    return $data;
-  }
-  
-  static method big_int : DBI::Data ($value : string) {
-    my $data = DBI::Data->new;
-    $data->set_type_id(DBI::Data->TYPE_ID_BIG_INT);
-    $data->set_value($value);
-    return $data;
-  }
-  
-  static method big_float : DBI::Data ($value : string) {
-    my $data = DBI::Data->new;
-    $data->set_type_id(DBI::Data->TYPE_ID_BIG_FLOAT);
-    $data->set_value($value);
-    return $data;
-  }
-  
-  static method big_decimal : DBI::Data ($value : string) {
-    my $data = DBI::Data->new;
-    $data->set_type_id(DBI::Data->TYPE_ID_BIG_DECIMAL);
+  static method blob : DBI::BindData::Blob ($value : string) {
+    my $data = DBI::BindData::Blob->new;
     $data->set_value($value);
     return $data;
   }

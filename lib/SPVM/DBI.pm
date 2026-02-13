@@ -100,7 +100,7 @@ Transaction:
 
 =item * L<DBI::St|SPVM::DBI::St> - Statement Handle
 
-=item * L<DBI::Data|SPVM::DBI::Data> - Statement Handle
+=item * L<DBI::BindData::Blob|SPVM::DBI::BindData::Blob> - Statement Handle
 
 =item * L<DBI::Constant|SPVM::DBI::Constant> - Information and Capability Constants
 
@@ -186,27 +186,11 @@ The TCP_NODELAY status (boolean 1 or 0).
 
 =head2 blob
 
-C<static method blob : L<DBI::Data|SPVM::DBI::Data> ($value : string)>
+C<static method blob : L<DBI::BindData::Blob|SPVM::DBI::BindData::Blob> ($value : string)>
 
-Creates a new L<DBI::Data|SPVM::DBI::Data> object with C<TYPE_ID_BLOB>.
+Creates a new L<DBI::BindData::Blob|SPVM::DBI::BindData::Blob> object>.
 
 This is a helper method to wrap binary data.
-
-=head2 big_int
-
-C<static method big_int : L<DBI::Data|SPVM::DBI::Data> ($value : string)>
-
-Creates a new L<DBI::Data|SPVM::DBI::Data> object with C<TYPE_ID_BIG_INT>.
-
-This is a helper method to wrap a large integer represented as a string (e.g., "170141183460469231731687303715884105727").
-
-=head2 big_float
-
-C<static method big_float : L<DBI::Data|SPVM::DBI::Data> ($value : string)>
-
-Creates a new L<DBI::Data|SPVM::DBI::Data> object with C<TYPE_ID_BIG_FLOAT>.
-
-This is a helper method to wrap a high-precision floating-point number represented as a string.
 
 =head1 Instance Methods
 

@@ -204,13 +204,11 @@ L</"NUM_OF_FIELDS">, L</"NAME">, L</"NULLABLE">, L</"TYPE">, L</"PRECISION">, L<
 
 =head3 option_names
 
-=head2 option_names
-
 C<protected method option_names : string[] ()>
 
 Returns the valid option names for this statement handle. Override this method if your statement handle supports specific options. These names are used to validate the options passed to L<DBI#prepare_common|SPVM::DBI/"prepare_common"> method.
 
-=head2 Type Mapping Matrix
+=head2 Type Mapping Rules
 
 The mapping depends on the SPVM type and the target database column type. Driver authors must follow these rules to ensure data integrity and consistent behavior.
 
@@ -262,23 +260,13 @@ The value is treated as a double-precision floating-point (C<double>).
 
 =item * C<string>
 
-The value is treated as a UTF-8 character string or a byte sequence.
+The value is treated as a string.
 
-=item * L<DBI::Data|SPVM::DBI::Data> (C<TYPE_ID_BLOB>)
+Conventionally, strings are expected to be UTF-8 encoded. However, since the C<string> type represents a raw sequence of bytes, it can also hold strings in any other character encoding (e.g., EUC-JP, Shift_JIS) or any arbitrary byte data.
+
+=item * L<DBI::BindData::Blob|SPVM::DBI::BindData::Blob>
 
 The value is treated as binary data (BLOB).
-
-=item * L<DBI::Data|SPVM::DBI::Data> (C<TYPE_ID_BIG_INT>)
-
-The value is treated as an arbitrary precision integer represented as a string.
-
-=item * L<DBI::Data|SPVM::DBI::Data> (C<TYPE_ID_BIG_FLOAT>)
-
-The value is treated as an arbitrary precision floating-point represented as a string.
-
-=item * L<DBI::Data|SPVM::DBI::Data> (C<TYPE_ID_BIG_DECIMAL>)
-
-The value is treated as an exact fixed-point decimal represented as a string.
 
 =item * C<undef>
 
@@ -294,63 +282,55 @@ The driver must convert database values into the following SPVM objects.
 
 =item * Database 8-bit Signed Integer
 
-Converts to L<Byte|SPVM::Byte> (C<unsigned> field is a false value)
+Converts to a L<Byte|SPVM::Byte> object (C<unsigned> field is a false value).
 
 =item * Database 8-bit Unsigned Integer
 
-Converts to L<Byte|SPVM::Byte> (C<unsigned> field is a true value)
+Converts to a L<Byte|SPVM::Byte> object (C<unsigned> field is a true value).
 
 =item * Database 16-bit Signed Integer
 
-Converts to L<Short|SPVM::Short> (C<unsigned> field is a false value)
+Converts to a L<Short|SPVM::Short> object (C<unsigned> field is a false value).
 
 =item * Database 16-bit Unsigned Integer
 
-Converts to L<Short|SPVM::Short> (C<unsigned> field is a true value)
+Converts to a L<Short|SPVM::Short> object (C<unsigned> field is a true value).
 
 =item * Database 32-bit Signed Integer
 
-Converts to L<Int|SPVM::Int> (C<unsigned> field is a false value)
+Converts to an L<Int|SPVM::Int> object (C<unsigned> field is a false value).
 
 =item * Database 32-bit Unsigned Integer
 
-Converts to L<Int|SPVM::Int> (C<unsigned> field is a true value)
+Converts to an L<Int|SPVM::Int> object (C<unsigned> field is a true value).
 
 =item * Database 64-bit Signed Integer (e.g., C<BIGINT>)
 
-Converts to L<Long|SPVM::Long> (C<unsigned> field is a false value)
+Converts to a L<Long|SPVM::Long> object (C<unsigned> field is a false value).
 
 =item * Database 64-bit Unsigned Integer (e.g., C<BIGINT UNSIGNED>)
 
-Converts to L<Long|SPVM::Long> (C<unsigned> field is a true value)
+Converts to a L<Long|SPVM::Long> object (C<unsigned> field is a true value).
 
 =item * Database Single-precision Floating Point
 
-Converts to L<Float|SPVM::Float>
+Converts to a L<Float|SPVM::Float> object.
 
 =item * Database Double-precision Floating Point
 
-Converts to L<Double|SPVM::Double>
-
-=item * Database Arbitrary Precision Integers (Exceeding 64-bit)
-
-Converts to L<DBI::Data|SPVM::DBI::Data> (C<TYPE_ID_BIG_INT>) as string
-
-=item * Database Arbitrary Precision Floating Point (Inexact)
-
-Converts to L<DBI::Data|SPVM::DBI::Data> (C<TYPE_ID_BIG_FLOAT>) as string
-
-=item * Database Exact Fixed-Point Decimals (e.g., C<DECIMAL>, C<NUMERIC>)
-
-Converts to L<DBI::Data|SPVM::DBI::Data> (C<TYPE_ID_BIG_DECIMAL>) as string
+Converts to a L<Double|SPVM::Double> object.
 
 =item * Database Character String (e.g., C<CHAR>, C<VARCHAR>)
 
-Converts to C<string> object
+Converts to a C<string> object.
+
+=item * Database Binary Data (BLOB)
+
+Converts to a C<string> object.
 
 =item * Date and Time Types (e.g., C<DATE>, C<TIME>, C<DATETIME>, C<TIMESTAMP>)
 
-Converts to C<string> object in RFC 3339 format. The specific format depends on the database type:
+Converts to a C<string> object in RFC 3339 format. The specific format depends on the database type:
 
 =over 2
 
@@ -361,8 +341,6 @@ Converts to C<string> object in RFC 3339 format. The specific format depends on 
 =item * C<Date and Time>: C<YYYY-MM-DD HH:MM:SS.fffffffff[Z|[+|-]HH:MM]>
 
 =back
-
-
 
 The following rules apply to these formats:
 
@@ -382,17 +360,17 @@ If the database provides time zone information, it must be included as C<Z> (for
 
 =back
 
+=item * Database Decimals (e.g., C<DECIMAL>, C<NUMERIC>, and integers exceeding 64-bit)
+
+Converts to a C<string> object. These values are converted into their exact textual representation (e.g., C<"12345678901234567890.12345">) to preserve full precision that exceeds the capacity of 64-bit integers or floating-point numbers.
+
 =item * Database Character Large Object (C<CLOB>)
 
-Converts to C<string> object
-
-=item * Database Binary Data (BLOB)
-
-Converts to L<DBI::Data|SPVM::DBI::Data> (C<TYPE_ID_BLOB>)
+Converts to a C<string> object.
 
 =item * Database C<NULL>
 
-Converts to C<undef>
+Converts to C<undef>.
 
 =back
 
