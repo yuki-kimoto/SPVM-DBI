@@ -1,4 +1,8 @@
 Revision history for SPVM::DBI
+  
+0.006 2026-02-14
+  [Incompatible Changes]
+    * Separate fetch_with_bind_columns from fetch for performance optimization and add create_count_ref/extended_count_ref to detect unintended allocations.
 
 0.005 2026-02-13
   [Incompatible Changes]
