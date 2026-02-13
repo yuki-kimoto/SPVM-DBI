@@ -216,129 +216,75 @@ The mapping depends on the SPVM type and the target database column type. Driver
 
 =head3 Bind Values (SPVM to SQL)
 
-The driver must cast the SPVM value to the appropriate C type according to the target database column.
+The driver must interpret the SPVM objects and convert them to the appropriate C type for the target database column.
 
 =over 2
 
-=item * B<SPVM C<byte> (signed 8-bit)>
+=item * L<Byte|SPVM::Byte> (C<unsigned> field is a false value)
 
-=over 4
+The value is treated as a signed 8-bit integer (C<int8_t>).
 
-=item * To 8-bit Signed Column --E<gt> Cast to C<int8_t>
+=item * L<Byte|SPVM::Byte> (C<unsigned> field is a true value)
 
-=item * To 8-bit Unsigned Column --E<gt> Cast to C<uint8_t>
+The value is treated as an unsigned 8-bit integer (C<uint8_t>).
 
-=item * To 16-bit Signed Column --E<gt> Cast to C<int16_t>
+=item * L<Short|SPVM::Short> (C<unsigned> field is a false value)
 
-=item * To 16-bit Unsigned Column --E<gt> Cast to C<uint16_t>
+The value is treated as a signed 16-bit integer (C<int16_t>).
 
-=item * To 32-bit Signed Column --E<gt> Cast to C<int32_t>
+=item * L<Short|SPVM::Short> (C<unsigned> field is a true value)
 
-=item * To 32-bit Unsigned Column --E<gt> Cast to C<uint32_t>
+The value is treated as an unsigned 16-bit integer (C<uint16_t>).
 
-=item * To 64-bit Signed Column --E<gt> Cast to C<int64_t>
+=item * L<Int|SPVM::Int> (C<unsigned> field is a false value)
 
-=item * To 64-bit Unsigned Column --E<gt> Cast to C<uint64_t>
+The value is treated as a signed 32-bit integer (C<int32_t>).
 
-=back
+=item * L<Int|SPVM::Int> (C<unsigned> field is a true value)
 
-=item * B<SPVM C<short> (signed 16-bit)>
+The value is treated as an unsigned 32-bit integer (C<uint32_t>).
 
-=over 4
+=item * L<Long|SPVM::Long> (C<unsigned> field is a false value)
 
-=item * To 8-bit Signed Column --E<gt> Cast to C<int8_t>
+The value is treated as a signed 64-bit integer (C<int64_t>).
 
-=item * To 8-bit Unsigned Column --E<gt> Cast to C<uint8_t>
+=item * L<Long|SPVM::Long> (C<unsigned> field is a true value)
 
-=item * To 16-bit Signed Column --E<gt> Cast to C<int16_t>
+The value is treated as an unsigned 64-bit integer (C<uint64_t>).
 
-=item * To 16-bit Unsigned Column --E<gt> Cast to C<uint16_t>
+=item * L<Float|SPVM::Float>
 
-=item * To 32-bit Signed Column --E<gt> Cast to C<int32_t>
+The value is treated as a single-precision floating-point (C<float>).
 
-=item * To 32-bit Unsigned Column --E<gt> Cast to C<uint32_t>
+=item * L<Double|SPVM::Double>
 
-=item * To 64-bit Signed Column --E<gt> Cast to C<int64_t>
+The value is treated as a double-precision floating-point (C<double>).
 
-=item * To 64-bit Unsigned Column --E<gt> Cast to C<uint64_t>
+=item * C<string>
 
-=back
+The value is treated as a UTF-8 character string or a byte sequence.
 
-=item * B<SPVM C<int> (signed 32-bit)>
+=item * L<DBI::Data|SPVM::DBI::Data> (C<TYPE_ID_BLOB>)
 
-=over 4
+The value is treated as binary data (BLOB).
 
-=item * To 8-bit Signed Column --E<gt> Cast to C<int8_t>
+=item * L<DBI::Data|SPVM::DBI::Data> (C<TYPE_ID_BIG_INT>)
 
-=item * To 8-bit Unsigned Column --E<gt> Cast to C<uint8_t>
+The value is treated as an arbitrary precision integer represented as a string.
 
-=item * To 16-bit Signed Column --E<gt> Cast to C<int16_t>
+=item * L<DBI::Data|SPVM::DBI::Data> (C<TYPE_ID_BIG_FLOAT>)
 
-=item * To 16-bit Unsigned Column --E<gt> Cast to C<uint16_t>
+The value is treated as an arbitrary precision floating-point represented as a string.
 
-=item * To 32-bit Signed Column --E<gt> Cast to C<int32_t>
+=item * L<DBI::Data|SPVM::DBI::Data> (C<TYPE_ID_BIG_DECIMAL>)
 
-=item * To 32-bit Unsigned Column --E<gt> Cast to C<uint32_t>
+The value is treated as an exact fixed-point decimal represented as a string.
 
-=item * To 64-bit Signed Column --E<gt> Cast to C<int64_t>
+=item * C<undef>
 
-=item * To 64-bit Unsigned Column --E<gt> Cast to C<uint64_t>
-
-=back
-
-=item * B<SPVM C<long> (signed 64-bit)>
-
-=over 4
-
-=item * To 8-bit Signed Column --E<gt> Cast to C<int8_t>
-
-=item * To 8-bit Unsigned Column --E<gt> Cast to C<uint8_t>
-
-=item * To 16-bit Signed Column --E<gt> Cast to C<int16_t>
-
-=item * To 16-bit Unsigned Column --E<gt> Cast to C<uint16_t>
-
-=item * To 32-bit Signed Column --E<gt> Cast to C<int32_t>
-
-=item * To 32-bit Unsigned Column --E<gt> Cast to C<uint32_t>
-
-=item * To 64-bit Signed Column --E<gt> Cast to C<int64_t>
-
-=item * To 64-bit Unsigned Column --E<gt> Cast to C<uint64_t>
+The value is treated as a database C<NULL>.
 
 =back
-
-=item * B<SPVM C<float> / C<double>>
-
-=over 4
-
-=item * To Floating Point Column --E<gt> Cast to C<float> or C<double>
-
-=item * To Integer Column --E<gt> Standard C casting to the target integer type
-
-=back
-
-=item * B<Other SPVM Types>
-
-For these types, if the target database column type is different from the expected type, the conversion behavior (automatic casting or raising an error) depends on the database implementation.
-
-=over 4
-
-=item * C<string> --E<gt> UTF-8 Character string
-
-=item * L<DBI::Data|SPVM::DBI::Data> (C<TYPE_ID_BLOB>) --E<gt> Binary data
-
-=item * L<DBI::Data|SPVM::DBI::Data> (C<TYPE_ID_BIG_INT>) --E<gt> Arbitrary precision integer string
-
-=item * L<DBI::Data|SPVM::DBI::Data> (C<TYPE_ID_BIG_FLOAT>) --E<gt> Arbitrary precision decimal string
-
-=item * C<undef> --E<gt> Database C<NULL>
-
-=back
-
-=back
-
----
 
 =head3 Fetching Rows (SQL to SPVM)
 
