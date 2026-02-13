@@ -348,9 +348,39 @@ Converts to L<DBI::Data|SPVM::DBI::Data> (C<TYPE_ID_BIG_DECIMAL>) as string
 
 Converts to C<string> object
 
-=item * Database Date and Time (e.g., C<DATE>, C<DATETIME>, C<TIMESTAMP>)
+=item * Date and Time Types (e.g., C<DATE>, C<TIME>, C<DATETIME>, C<TIMESTAMP>)
 
-Converts to C<string> object
+Converts to C<string> object in RFC 3339 format. The specific format depends on the database type:
+
+=over 2
+
+=item * C<Date>: C<YYYY-MM-DD>
+
+=item * C<Time>: C<HH:MM:SS.fffffffff>
+
+=item * C<Date and Time>: C<YYYY-MM-DD HH:MM:SS.fffffffff[Z|[+|-]HH:MM]>
+
+=back
+
+
+
+The following rules apply to these formats:
+
+=over 2
+
+=item * Separator
+
+A space is used between the date and time instead of "T" for better readability and compatibility with standard SQL output.
+
+=item * Fractional Seconds
+
+The fractional seconds part (C<fffffffff>) can have up to 9 digits (nanosecond precision). The number of digits depends on the database precision (e.g., 6 digits for microseconds).
+
+=item * Time Zone
+
+If the database provides time zone information, it must be included as C<Z> (for UTC) or a numerical offset (e.g., C<+09:00>). If the database does not provide time zone information, the offset part is omitted to indicate a local or unknown time zone.
+
+=back
 
 =item * Database Character Large Object (C<CLOB>)
 
