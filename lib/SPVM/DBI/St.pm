@@ -292,53 +292,77 @@ The driver must convert database values into the following SPVM objects.
 
 =over 2
 
-=item * B<Database 8/16/32-bit Integer (Signed/Unsigned)>
+=item * Database 8-bit Signed Integer
 
-=over 4
+Converts to L<Byte|SPVM::Byte> (C<unsigned> field is a false value)
 
-=item * --E<gt> L<Int|SPVM::Int> object (via C<int32_t> cast)
+=item * Database 8-bit Unsigned Integer
 
-=back
+Converts to L<Byte|SPVM::Byte> (C<unsigned> field is a true value)
 
-=item * B<Database 64-bit Integer (Signed/Unsigned)>
+=item * Database 16-bit Signed Integer
 
-=over 4
+Converts to L<Short|SPVM::Short> (C<unsigned> field is a false value)
 
-=item * --E<gt> L<Long|SPVM::Long> object (via C<int64_t> cast)
+=item * Database 16-bit Unsigned Integer
 
-=back
+Converts to L<Short|SPVM::Short> (C<unsigned> field is a true value)
 
-=item * B<Database Floating Point>
+=item * Database 32-bit Signed Integer
 
-=over 4
+Converts to L<Int|SPVM::Int> (C<unsigned> field is a false value)
 
-=item * Single-precision --E<gt> L<Float|SPVM::Float> object
+=item * Database 32-bit Unsigned Integer
 
-=item * Double-precision --E<gt> L<Double|SPVM::Double> object
+Converts to L<Int|SPVM::Int> (C<unsigned> field is a true value)
 
-=back
+=item * Database 64-bit Signed Integer (e.g., C<BIGINT>)
 
-=item * B<Database High-Precision Numbers (NUMERIC, DECIMAL, etc.)>
+Converts to L<Long|SPVM::Long> (C<unsigned> field is a false value)
 
-=over 4
+=item * Database 64-bit Unsigned Integer (e.g., C<BIGINT UNSIGNED>)
 
-=item * Exact Integers --E<gt> L<DBI::Data|SPVM::DBI::Data> (C<TYPE_ID_BIG_INT>) as string
+Converts to L<Long|SPVM::Long> (C<unsigned> field is a true value)
 
-=item * Exact Decimals --E<gt> L<DBI::Data|SPVM::DBI::Data> (C<TYPE_ID_BIG_FLOAT>) as string
+=item * Database Single-precision Floating Point
 
-=back
+Converts to L<Float|SPVM::Float>
 
-=item * B<Database String / Binary / NULL>
+=item * Database Double-precision Floating Point
 
-=over 4
+Converts to L<Double|SPVM::Double>
 
-=item * Character string --E<gt> C<string> object
+=item * Database Arbitrary Precision Integers (Exceeding 64-bit)
 
-=item * Binary data --E<gt> L<DBI::Data|SPVM::DBI::Data> (C<TYPE_ID_BLOB>)
+Converts to L<DBI::Data|SPVM::DBI::Data> (C<TYPE_ID_BIG_INT>) as string
 
-=item * C<NULL> --E<gt> C<undef>
+=item * Database Arbitrary Precision Floating Point (Inexact)
 
-=back
+Converts to L<DBI::Data|SPVM::DBI::Data> (C<TYPE_ID_BIG_FLOAT>) as string
+
+=item * Database Exact Fixed-Point Decimals (e.g., C<DECIMAL>, C<NUMERIC>)
+
+Converts to L<DBI::Data|SPVM::DBI::Data> (C<TYPE_ID_BIG_DECIMAL>) as string
+
+=item * Database Character String (e.g., C<CHAR>, C<VARCHAR>)
+
+Converts to C<string> object
+
+=item * Database Date and Time (e.g., C<DATE>, C<DATETIME>, C<TIMESTAMP>)
+
+Converts to C<string> object
+
+=item * Database Character Large Object (C<CLOB>)
+
+Converts to C<string> object
+
+=item * Database Binary Data (BLOB)
+
+Converts to L<DBI::Data|SPVM::DBI::Data> (C<TYPE_ID_BLOB>)
+
+=item * Database C<NULL>
+
+Converts to C<undef>
 
 =back
 
