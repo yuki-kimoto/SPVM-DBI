@@ -56,6 +56,13 @@ class DBI {
     return $data;
   }
   
+  static method big_decimal : DBI::Data ($value : string) {
+    my $data = DBI::Data->new;
+    $data->set_type_id(DBI::Data->TYPE_ID_BIG_DECIMAL);
+    $data->set_value($value);
+    return $data;
+  }
+  
   # Instance Methods
   protected method connect_common : void ($ctx : Go::Context, $user : string = undef, $password : string = undef, $options : object[] = undef) {
     

@@ -13,6 +13,7 @@ class DBI::Data {
     TYPE_ID_BLOB    = 1,
     TYPE_ID_BIG_INT  = 2,
     TYPE_ID_BIG_FLOAT = 3,
+    TYPE_ID_BIG_DECIMAL = 4,
   }
 
   # Fields

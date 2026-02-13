@@ -20,10 +20,11 @@ This class implements L<Stringable|SPVM::Stringable> interface.
 
   use DBI::Data;
 
-  # Create a new data container
-  my $data = DBI::Data->new;
-  $data->set_type_id(DBI::Data->TYPE_ID_BIG_INT);
-  $data->set_value("123456789012345678901234567890");
+  # Create a new data container for a high-precision decimal
+  my $data = DBI::Data->big_decimal("123.45678901234567890");
+  
+  # Check the type ID
+  my $type_id = $data->type_id; # DBI::Data->TYPE_ID_BIG_DECIMAL
   
   # Stringification
   my $string_value = $data->to_string;
@@ -54,6 +55,10 @@ The data is a large integer (e.g., C<Math::BigInt> in Perl).
 
 The data is a high-precision floating-point number (e.g., C<Math::BigFloat> in Perl).
 
+=item * C<TYPE_ID_BIG_DECIMAL> (4)
+
+The data is a high-precision fixed-point decimal (e.g., C<Math::BigInt> with scale).
+
 =back
 
 =head1 Fields
@@ -77,6 +82,30 @@ The data value represented as a string.
 C<static method new : L<DBI::Data|SPVM::DBI::Data> ()>
 
 Creates a new L<DBI::Data|SPVM::DBI::Data> object.
+
+=head2 blob
+
+C<static method blob : L<DBI::Data|SPVM::DBI::Data> ($value : string)>
+
+Creates a new L<DBI::Data|SPVM::DBI::Data> object with C<TYPE_ID_BLOB>.
+
+=head2 big_int
+
+C<static method big_int : L<DBI::Data|SPVM::DBI::Data> ($value : string)>
+
+Creates a new L<DBI::Data|SPVM::DBI::Data> object with C<TYPE_ID_BIG_INT>.
+
+=head2 big_float
+
+C<static method big_float : L<DBI::Data|SPVM::DBI::Data> ($value : string)>
+
+Creates a new L<DBI::Data|SPVM::DBI::Data> object with C<TYPE_ID_BIG_FLOAT>.
+
+=head2 big_decimal
+
+C<static method big_decimal : L<DBI::Data|SPVM::DBI::Data> ($value : string)>
+
+Creates a new L<DBI::Data|SPVM::DBI::Data> object with C<TYPE_ID_BIG_DECIMAL>.
 
 =head1 Instance Methods
 
