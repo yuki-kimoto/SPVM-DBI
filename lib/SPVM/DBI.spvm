@@ -22,17 +22,17 @@ class DBI {
   
   has InactiveDestroy : rw byte;
   
-  has IdleTimeoutDurationNsec : rw long; 
+  has IdleTimeout : rw double; 
   
-  has ConnectTimeoutDurationNsec : rw long; 
+  has ConnectTimeout : rw double; 
   
-  has ReadTimeoutDurationNsec : rw long; 
+  has ReadTimeout : rw double; 
   
-  has WriteTimeoutDurationNsec : rw long; 
+  has WriteTimeout : rw double; 
   
   has SocketKeepAlive : rw byte;
   
-  has TCPKeepIdle : rw long;
+  has TCPKeepIdle : rw int;
   
   has TCPNoDelay : rw byte;
   
@@ -74,20 +74,20 @@ class DBI {
       $self->{InactiveDestroy} = $options->get("InactiveDestroy")->(byte);
     }
     
-    if ($options->exists("IdleTimeoutDurationNsec")) {
-      $self->{IdleTimeoutDurationNsec} = $options->get("IdleTimeoutDurationNsec")->(long);
+    if ($options->exists("IdleTimeout")) {
+      $self->{IdleTimeout} = $options->get("IdleTimeout")->(double);
     }
     
-    if ($options->exists("ConnectTimeoutDurationNsec")) {
-      $self->{ConnectTimeoutDurationNsec} = $options->get("ConnectTimeoutDurationNsec")->(long);
+    if ($options->exists("ConnectTimeout")) {
+      $self->{ConnectTimeout} = $options->get("ConnectTimeout")->(double);
     }
     
-    if ($options->exists("ReadTimeoutDurationNsec")) {
-      $self->{ReadTimeoutDurationNsec} = $options->get("ReadTimeoutDurationNsec")->(long);
+    if ($options->exists("ReadTimeout")) {
+      $self->{ReadTimeout} = $options->get("ReadTimeout")->(double);
     }
     
-    if ($options->exists("WriteTimeoutDurationNsec")) {
-      $self->{WriteTimeoutDurationNsec} = $options->get("WriteTimeoutDurationNsec")->(long);
+    if ($options->exists("WriteTimeout")) {
+      $self->{WriteTimeout} = $options->get("WriteTimeout")->(double);
     }
     
     if ($options->exists("SocketKeepAlive")) {
@@ -95,7 +95,7 @@ class DBI {
     }
     
     if ($options->exists("TCPKeepIdle")) {
-      $self->{TCPKeepIdle} = $options->get("TCPKeepIdle")->(long);
+      $self->{TCPKeepIdle} = $options->get("TCPKeepIdle")->(int);
     }
     
     if ($options->exists("TCPNoDelay")) {
@@ -111,10 +111,10 @@ class DBI {
       "Port",
       "Database",
       "InactiveDestroy",
-      "IdleTimeoutDurationNsec",
-      "ConnectTimeoutDurationNsec",
-      "ReadTimeoutDurationNsec",
-      "WriteTimeoutDurationNsec",
+      "IdleTimeout",
+      "ConnectTimeout",
+      "ReadTimeout",
+      "WriteTimeout",
       "SocketKeepAlive",
       "TCPKeepIdle",
       "TCPNoDelay"

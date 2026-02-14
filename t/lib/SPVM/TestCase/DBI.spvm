@@ -16,10 +16,10 @@ class TestCase::DBI {
       Port => 3306,
       Database => "test_db",
       InactiveDestroy => (byte)1,
-      IdleTimeoutDurationNsec => 1000L,
-      ConnectTimeoutDurationNsec => 2000L,
-      ReadTimeoutDurationNsec => 3000L,
-      WriteTimeoutDurationNsec => 4000L,
+      IdleTimeout => 1000.5,
+      ConnectTimeout => 2000.5,
+      ReadTimeout => 3000.5,
+      WriteTimeout => 4000.5,
       SocketKeepAlive => (byte)1,
       TCPKeepIdle => 5000,
       TCPNoDelay => (byte)1
@@ -54,23 +54,23 @@ class TestCase::DBI {
         return 0;
       }
 
-      unless ($dbh->IdleTimeoutDurationNsec == 1000L) {
-        diag (string)$dbh->IdleTimeoutDurationNsec;
+      unless ($dbh->IdleTimeout == 1000.5) {
+        diag (string)$dbh->IdleTimeout;
         return 0;
       }
 
-      unless ($dbh->ConnectTimeoutDurationNsec == 2000L) {
-        diag (string)$dbh->ConnectTimeoutDurationNsec;
+      unless ($dbh->ConnectTimeout == 2000.5) {
+        diag (string)$dbh->ConnectTimeout;
         return 0;
       }
 
-      unless ($dbh->ReadTimeoutDurationNsec == 3000L) {
-        diag (string)$dbh->ReadTimeoutDurationNsec;
+      unless ($dbh->ReadTimeout == 3000.5) {
+        diag (string)$dbh->ReadTimeout;
         return 0;
       }
 
-      unless ($dbh->WriteTimeoutDurationNsec == 4000L) {
-        diag (string)$dbh->WriteTimeoutDurationNsec;
+      unless ($dbh->WriteTimeout == 4000.5) {
+        diag (string)$dbh->WriteTimeout;
         return 0;
       }
 
@@ -79,7 +79,7 @@ class TestCase::DBI {
         return 0;
       }
 
-      unless ($dbh->TCPKeepIdle == 5000L) {
+      unless ($dbh->TCPKeepIdle == 5000) {
         diag (string)$dbh->TCPKeepIdle;
         return 0;
       }
@@ -100,23 +100,23 @@ class TestCase::DBI {
         return 0;
       }
 
-      $dbh->set_IdleTimeoutDurationNsec(9001L);
-      unless ($dbh->IdleTimeoutDurationNsec == 9001L) {
+      $dbh->set_IdleTimeout(9001L);
+      unless ($dbh->IdleTimeout == 9001L) {
         return 0;
       }
 
-      $dbh->set_ConnectTimeoutDurationNsec(9002L);
-      unless ($dbh->ConnectTimeoutDurationNsec == 9002L) {
+      $dbh->set_ConnectTimeout(9002L);
+      unless ($dbh->ConnectTimeout == 9002L) {
         return 0;
       }
 
-      $dbh->set_ReadTimeoutDurationNsec(9003L);
-      unless ($dbh->ReadTimeoutDurationNsec == 9003L) {
+      $dbh->set_ReadTimeout(9003L);
+      unless ($dbh->ReadTimeout == 9003L) {
         return 0;
       }
 
-      $dbh->set_WriteTimeoutDurationNsec(9004L);
-      unless ($dbh->WriteTimeoutDurationNsec == 9004L) {
+      $dbh->set_WriteTimeout(9004.5);
+      unless ($dbh->WriteTimeout == 9004.5) {
         return 0;
       }
       

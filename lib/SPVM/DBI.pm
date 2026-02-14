@@ -146,29 +146,29 @@ C<has InactiveDestroy : rw byte;>
 
 The InactiveDestroy status.
 
-=head2 IdleTimeoutDurationNsec
+=head2 IdleTimeout
 
-C<has IdleTimeoutDurationNsec : rw long;>
+C<has IdleTimeout : rw double;>
 
-The maximum duration that a connection can remain idle, in nanoseconds.
+The maximum duration that a connection can remain idle, in seconds.
 
-=head2 ConnectTimeoutDurationNsec
+=head2 ConnectTimeout
 
-C<has ConnectTimeoutDurationNsec : rw long;>
+C<has ConnectTimeout : rw double;>
 
-The timeout value for establishing a new database connection, in nanoseconds.
+The timeout value for establishing a new database connection, in seconds.
 
-=head2 ReadTimeoutDurationNsec
+=head2 ReadTimeout
 
-C<has ReadTimeoutDurationNsec : rw long;>
+C<has ReadTimeout : rw double;>
 
-The timeout value for read operations, in nanoseconds.
+The timeout value for read operations, in seconds.
 
-=head2 WriteTimeoutDurationNsec
+=head2 WriteTimeout
 
-C<has WriteTimeoutDurationNsec : rw long;>
+C<has WriteTimeout : rw double;>
 
-The timeout value for write operations, in nanoseconds.
+The timeout value for write operations, in seconds.
 
 =head2 SocketKeepAlive
 
@@ -336,7 +336,7 @@ The following options can be specified in C<$options>.
 
 =over 4
 
-=item * C<ConnectTimeoutDurationNsec>
+=item * C<ConnectTimeout>
 
 The maximum time to wait for the database connection to be established, specified in nanoseconds.
 
@@ -344,11 +344,11 @@ The maximum time to wait for the database connection to be established, specifie
 
 A boolean value (0 or 1) to disable Nagle's algorithm. Set to 1 to reduce latency for small packets by sending them immediately.
 
-=item * C<SocketKeepAliveDurationNsec>
+=item * C<SocketKeepAlive>
 
 The interval for TCP keep-alive probes, specified in nanoseconds. This is useful for maintaining long-lived connections through firewalls or load balancers.
 
-=item * C<IdleTimeoutDurationNsec>
+=item * C<IdleTimeout>
 
 The duration a connection can remain idle before it is considered expired and closed by the driver, specified in nanoseconds.
 
@@ -402,9 +402,9 @@ Always set to 1.
 
 Set to the values of C<InactiveDestroy> and C<TCPNoDelay> from C<$options> if they exist.
 
-=item * C<IdleTimeoutDurationNsec>, C<ConnectTimeoutDurationNsec>, C<ReadTimeoutDurationNsec>, C<WriteTimeoutDurationNsec>, C<SocketKeepAliveDurationNsec>
+=item * C<IdleTimeout>, C<ConnectTimeout>, C<ReadTimeout>, C<WriteTimeout>, C<SocketKeepAlive>
 
-Set to the respective duration values (as C<long>) from C<$options> if they exist.
+Set to the seconds (as C<double>) from C<$options> if they exist.
 
 =back
 
@@ -448,7 +448,7 @@ Set the L<DBI::St#Statement|SPVM::DBI::St/"Statement"> field to the SQL string p
 
 C<protected method option_names : string[] ();>
 
-Returns an array of supported option names for the database handle. In the base class, this returns default options like C<InactiveDestroy>, C<TCPNoDelay>, and several C<*DurationNsec> options.
+Returns an array of supported option names for the database handle. In the base class, this returns default options like C<InactiveDestroy>, C<TCPNoDelay> options.
 
 Driver authors can override this method to add driver-specific options. These names are used by L</"connect_common"> or L<prepare_common|SPVM::DBI/"prepare_common"> via L<Fn#check_option_names|SPVM::Fn/"check_option_names">.
 
