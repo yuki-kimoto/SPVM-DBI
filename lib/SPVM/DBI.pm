@@ -179,11 +179,11 @@ If set to 1, C<SO_KEEPALIVE> is enabled on the socket.
 
 If this is not specified, the default value of the underlying L<IO::Socket|SPVM::IO::Socket> is used.
 
-=head2 TCPKeepIdleDurationNsec
+=head2 TCPKeepIdle
 
-C<has TCPKeepIdleDurationNsec : rw long;>
+C<has TCPKeepIdle : rw int;>
 
-The duration for TCP keep-alive idle time (C<TCP_KEEPIDLE>), in nanoseconds. 
+The duration for TCP keep-alive idle time (C<TCP_KEEPIDLE>), in seconds. 
 Note that this setting only takes effect when L</"SocketKeepAlive"> is set to 1.
 
 If this is not specified, the default value of the underlying L<IO::Socket|SPVM::IO::Socket> is used.
