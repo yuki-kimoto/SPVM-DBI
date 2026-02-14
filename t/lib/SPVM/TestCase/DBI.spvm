@@ -21,7 +21,7 @@ class TestCase::DBI {
       ReadTimeoutDurationNsec => 3000L,
       WriteTimeoutDurationNsec => 4000L,
       SocketKeepAlive => (byte)1,
-      TCPKeepAliveDurationNsec => 5000L,
+      TCPKeepIdleDurationNsec => 5000L,
       TCPNoDelay => (byte)1
     };
     
@@ -79,8 +79,8 @@ class TestCase::DBI {
         return 0;
       }
 
-      unless ($dbh->TCPKeepAliveDurationNsec == 5000L) {
-        diag (string)$dbh->TCPKeepAliveDurationNsec;
+      unless ($dbh->TCPKeepIdleDurationNsec == 5000L) {
+        diag (string)$dbh->TCPKeepIdleDurationNsec;
         return 0;
       }
 
@@ -125,8 +125,8 @@ class TestCase::DBI {
         return 0;
       }
       
-      $dbh->set_TCPKeepAliveDurationNsec(9000L);
-      unless ($dbh->TCPKeepAliveDurationNsec == 9000L) {
+      $dbh->set_TCPKeepIdleDurationNsec(9000L);
+      unless ($dbh->TCPKeepIdleDurationNsec == 9000L) {
         return 0;
       }
       

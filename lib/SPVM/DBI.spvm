@@ -32,7 +32,7 @@ class DBI {
   
   has SocketKeepAlive : rw byte;
   
-  has TCPKeepAliveDurationNsec : rw long;
+  has TCPKeepIdleDurationNsec : rw long;
   
   has TCPNoDelay : rw byte;
   
@@ -94,8 +94,8 @@ class DBI {
       $self->{SocketKeepAlive} = $options->get("SocketKeepAlive")->(byte);
     }
     
-    if ($options->exists("TCPKeepAliveDurationNsec")) {
-      $self->{TCPKeepAliveDurationNsec} = $options->get("TCPKeepAliveDurationNsec")->(long);
+    if ($options->exists("TCPKeepIdleDurationNsec")) {
+      $self->{TCPKeepIdleDurationNsec} = $options->get("TCPKeepIdleDurationNsec")->(long);
     }
     
     if ($options->exists("TCPNoDelay")) {
@@ -116,7 +116,7 @@ class DBI {
       "ReadTimeoutDurationNsec",
       "WriteTimeoutDurationNsec",
       "SocketKeepAlive",
-      "TCPKeepAliveDurationNsec",
+      "TCPKeepIdleDurationNsec",
       "TCPNoDelay"
     ];
     
