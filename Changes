@@ -1,5 +1,9 @@
 Revision history for SPVM::DBI
   
+0.008 2026-02-14
+  [Incompatible Changes]
+    * Change timeout properties to use seconds as double, following Perl's convention of using fractional seconds for time durations.
+  
 0.007 2026-02-14
   [Incompatible Changes]
     * Rename SocketKeepAliveDurationNsec to TCPKeepAliveDurationNsec.
