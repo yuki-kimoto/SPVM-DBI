@@ -14,7 +14,15 @@ class TestCase::DBI {
     my $options = {
       Host => "localhost",
       Port => 3306,
-      Database => "test_db"
+      Database => "test_db",
+      InactiveDestroy => (byte)1,
+      IdleTimeoutDurationNsec => 1000L,
+      ConnectTimeoutDurationNsec => 2000L,
+      ReadTimeoutDurationNsec => 3000L,
+      WriteTimeoutDurationNsec => 4000L,
+      SocketKeepAlive => (byte)1,
+      TCPKeepAliveDurationNsec => 5000L,
+      TCPNoDelay => (byte)1
     };
     
     my $dbh = DBD::TestCaseMinimal->connect($ctx, $user, $pass, $options);
@@ -38,6 +46,92 @@ class TestCase::DBI {
       
       unless ($dbh->Username eq $user) {
         diag $dbh->Username;
+        return 0;
+      }
+
+      unless ($dbh->InactiveDestroy == 1) {
+        diag (string)(int)$dbh->InactiveDestroy;
+        return 0;
+      }
+
+      unless ($dbh->IdleTimeoutDurationNsec == 1000L) {
+        diag (string)$dbh->IdleTimeoutDurationNsec;
+        return 0;
+      }
+
+      unless ($dbh->ConnectTimeoutDurationNsec == 2000L) {
+        diag (string)$dbh->ConnectTimeoutDurationNsec;
+        return 0;
+      }
+
+      unless ($dbh->ReadTimeoutDurationNsec == 3000L) {
+        diag (string)$dbh->ReadTimeoutDurationNsec;
+        return 0;
+      }
+
+      unless ($dbh->WriteTimeoutDurationNsec == 4000L) {
+        diag (string)$dbh->WriteTimeoutDurationNsec;
+        return 0;
+      }
+
+      unless ($dbh->SocketKeepAlive == 1) {
+        diag (string)(int)$dbh->SocketKeepAlive;
+        return 0;
+      }
+
+      unless ($dbh->TCPKeepAliveDurationNsec == 5000L) {
+        diag (string)$dbh->TCPKeepAliveDurationNsec;
+        return 0;
+      }
+
+      unless ($dbh->TCPNoDelay == 1) {
+        diag (string)(int)$dbh->TCPNoDelay;
+        return 0;
+      }
+
+      unless ($dbh->AutoCommit == 1) {
+        diag (string)(int)$dbh->AutoCommit;
+        return 0;
+      }
+
+      # Test Read-Write Accessors
+      $dbh->set_InactiveDestroy(0);
+      unless ($dbh->InactiveDestroy == 0) {
+        return 0;
+      }
+
+      $dbh->set_IdleTimeoutDurationNsec(9001L);
+      unless ($dbh->IdleTimeoutDurationNsec == 9001L) {
+        return 0;
+      }
+
+      $dbh->set_ConnectTimeoutDurationNsec(9002L);
+      unless ($dbh->ConnectTimeoutDurationNsec == 9002L) {
+        return 0;
+      }
+
+      $dbh->set_ReadTimeoutDurationNsec(9003L);
+      unless ($dbh->ReadTimeoutDurationNsec == 9003L) {
+        return 0;
+      }
+
+      $dbh->set_WriteTimeoutDurationNsec(9004L);
+      unless ($dbh->WriteTimeoutDurationNsec == 9004L) {
+        return 0;
+      }
+      
+      $dbh->set_SocketKeepAlive(0);
+      unless ($dbh->SocketKeepAlive == 0) {
+        return 0;
+      }
+      
+      $dbh->set_TCPKeepAliveDurationNsec(9000L);
+      unless ($dbh->TCPKeepAliveDurationNsec == 9000L) {
+        return 0;
+      }
+      
+      $dbh->set_TCPNoDelay(0);
+      unless ($dbh->TCPNoDelay == 0) {
         return 0;
       }
     }

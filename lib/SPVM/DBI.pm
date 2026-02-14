@@ -170,11 +170,23 @@ C<has WriteTimeoutDurationNsec : rw long;>
 
 The timeout value for write operations, in nanoseconds.
 
-=head2 SocketKeepAliveDurationNsec
+=head2 SocketKeepAlive
 
-C<has SocketKeepAliveDurationNsec : rw long;>
+C<has SocketKeepAlive : rw byte;>
 
-The duration for TCP keep-alive idle time, in nanoseconds.
+A boolean value that indicates whether the TCP keep-alive is enabled. 
+If set to 1, C<SO_KEEPALIVE> is enabled on the socket.
+
+If this is not specified, the default value of the underlying L<IO::Socket|SPVM::IO::Socket> is used.
+
+=head2 TCPKeepAliveDurationNsec
+
+C<has TCPKeepAliveDurationNsec : rw long;>
+
+The duration for TCP keep-alive idle time (C<TCP_KEEPIDLE>), in nanoseconds. 
+Note that this setting only takes effect when L</"SocketKeepAlive"> is set to 1.
+
+If this is not specified, the default value of the underlying L<IO::Socket|SPVM::IO::Socket> is used.
 
 =head2 TCPNoDelay
 
