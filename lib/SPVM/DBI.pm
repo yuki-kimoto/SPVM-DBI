@@ -150,7 +150,7 @@ The InactiveDestroy status.
 
 C<has IdleTimeout : rw double;>
 
-The maximum duration that a connection can remain idle, in seconds.
+The maximum time in seconds that a connection can remain idle before being closed.
 
 =head2 ConnectTimeout
 
@@ -183,7 +183,7 @@ If this is not specified, the default value of the underlying L<IO::Socket|SPVM:
 
 C<has TCPKeepIdle : rw int;>
 
-The duration for TCP keep-alive idle time (C<TCP_KEEPIDLE>), in seconds. 
+The time in seconds that a connection must be idle before TCP starts sending keep-alive probes.
 Note that this setting only takes effect when L</"SocketKeepAlive"> is set to 1.
 
 If this is not specified, the default value of the underlying L<IO::Socket|SPVM::IO::Socket> is used.
@@ -350,7 +350,7 @@ The interval for TCP keep-alive probes, specified in nanoseconds. This is useful
 
 =item * C<IdleTimeout>
 
-The duration a connection can remain idle before it is considered expired and closed by the driver, specified in nanoseconds.
+The time in seconds a connection can remain idle before it is considered expired and closed by the driver.
 
 =item * C<InactiveDestroy>
 
